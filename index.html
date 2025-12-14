@@ -9,72 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
 </head>
-    <!-- Add this script to load saved data -->
-<script>
-// Load admin-saved data
-document.addEventListener('DOMContentLoaded', function() {
-    const savedData = localStorage.getItem('portfolioData');
-    if(savedData) {
-        const data = JSON.parse(savedData);
-        
-        // Update homepage content
-        if(data.heroTitle) document.querySelector('.hero-title').textContent = data.heroTitle;
-        if(data.heroSubtitle) document.querySelector('.hero-subtitle').textContent = data.heroSubtitle;
-        if(data.heroDescription) document.querySelector('.hero-description').textContent = data.heroDescription;
-        
-        // Update profile photo
-        if(data.profilePhoto) {
-            const heroImage = document.querySelector('.hero-image');
-            heroImage.innerHTML = `<img src="${data.profilePhoto}" alt="Profile Photo" style="border-radius: 10px; width: 100%;">`;
-        }
-        
-        // Update about section
-        if(data.aboutText1) document.querySelectorAll('.about-text p')[0].textContent = data.aboutText1;
-        if(data.aboutText2) document.querySelectorAll('.about-text p')[1].innerHTML = `<strong>My unique value:</strong> ${data.aboutText2.replace('My unique value:', '')}`;
-        
-        // Update stats
-        if(data.stats) {
-            const statCards = document.querySelectorAll('.stat-card h3');
-            if(statCards[0]) statCards[0].textContent = data.stats.years + '+';
-            if(statCards[1]) statCards[1].textContent = data.stats.students + '+';
-            if(statCards[2]) statCards[2].textContent = data.stats.community + '+';
-            if(statCards[3]) statCards[3].textContent = data.stats.satisfaction + '%';
-        }
-        
-        // Update contact info
-        if(data.email) document.querySelector('a[href^="mailto"]').textContent = data.email;
-        if(data.phone) document.querySelector('a[href^="tel"]').textContent = data.phone;
-        if(data.location) document.querySelector('.contact-item:last-child p').textContent = data.location;
-        
-        // Update social links
-        if(data.social) {
-            const socialLinks = document.querySelectorAll('.footer-social a');
-            if(data.social.linkedin) socialLinks[0].href = data.social.linkedin;
-            if(data.social.github) socialLinks[1].href = data.social.github;
-            if(data.social.twitter) socialLinks[2].href = data.social.twitter;
-        }
-        
-        // Update colors
-        if(data.colors) {
-            const root = document.documentElement;
-            root.style.setProperty('--primary', data.colors.primary);
-            root.style.setProperty('--secondary', data.colors.secondary);
-        }
-        
-        // Update font
-        if(data.fontFamily) {
-            document.body.style.fontFamily = `'${data.fontFamily}', sans-serif`;
-        }
-        
-        // Apply custom CSS
-        if(data.customCSS) {
-            const style = document.createElement('style');
-            style.textContent = data.customCSS;
-            document.head.appendChild(style);
-        }
-    }
-});
-</script>
 <body>
     <!-- Navigation -->
     <nav class="navbar">
@@ -439,5 +373,154 @@ document.addEventListener('DOMContentLoaded', function() {
     </footer>
 
     <script src="script.js"></script>
+    
+    <!-- Add this script here - RIGHT BEFORE </body> -->
+    <script>
+    // Load admin-saved data
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedData = localStorage.getItem('portfolioData');
+        if(savedData) {
+            const data = JSON.parse(savedData);
+            
+            // Debug: Log what we found
+            console.log('Loading saved data:', data);
+            
+            // Update homepage content - WITH NULL CHECKS
+            try {
+                // Hero Title
+                const heroTitle = document.querySelector('.hero-title');
+                if(heroTitle && data.heroTitle) {
+                    heroTitle.textContent = data.heroTitle;
+                }
+                
+                // Hero Subtitle
+                const heroSubtitle = document.querySelector('.hero-subtitle');
+                if(heroSubtitle && data.heroSubtitle) {
+                    heroSubtitle.textContent = data.heroSubtitle;
+                }
+                
+                // Hero Description
+                const heroDescription = document.querySelector('.hero-description');
+                if(heroDescription && data.heroDescription) {
+                    heroDescription.textContent = data.heroDescription;
+                }
+                
+                // Profile Photo
+                if(data.profilePhoto && data.profilePhoto.trim() !== '') {
+                    const heroImage = document.querySelector('.hero-image');
+                    if(heroImage) {
+                        // Check if it's already an img or placeholder
+                        const existingImg = heroImage.querySelector('img');
+                        if(existingImg) {
+                            existingImg.src = data.profilePhoto;
+                        } else {
+                            // Replace placeholder with image
+                            heroImage.innerHTML = `
+                                <div class="profile-photo-container">
+                                    <img src="${data.profilePhoto}" alt="Profile Photo" style="border-radius: 10px; width: 100%; max-width: 400px; border: 5px solid white; box-shadow: var(--shadow);">
+                                </div>
+                            `;
+                        }
+                    }
+                }
+                
+                // About Section
+                const aboutParagraphs = document.querySelectorAll('.about-text p');
+                if(aboutParagraphs.length >= 1 && data.aboutText1) {
+                    aboutParagraphs[0].textContent = data.aboutText1;
+                }
+                if(aboutParagraphs.length >= 2 && data.aboutText2) {
+                    // Check if "My unique value:" is already in the text
+                    let aboutText2 = data.aboutText2;
+                    if(!aboutText2.includes('My unique value:')) {
+                        aboutText2 = 'My unique value: ' + aboutText2;
+                    }
+                    aboutParagraphs[1].innerHTML = `<strong>${aboutText2.split(':')[0]}:</strong> ${aboutText2.split(':')[1] ? aboutText2.split(':')[1].trim() : ''}`;
+                }
+                
+                // Stats Section
+                if(data.stats) {
+                    const statCards = document.querySelectorAll('.stat-card h3');
+                    if(statCards.length >= 1 && data.stats.years) {
+                        statCards[0].textContent = data.stats.years + '+';
+                    }
+                    if(statCards.length >= 2 && data.stats.students) {
+                        statCards[1].textContent = data.stats.students + '+';
+                    }
+                    if(statCards.length >= 3 && data.stats.community) {
+                        statCards[2].textContent = data.stats.community + '+';
+                    }
+                    if(statCards.length >= 4 && data.stats.satisfaction) {
+                        statCards[3].textContent = data.stats.satisfaction + '%';
+                    }
+                }
+                
+                // Contact Information
+                // Email
+                const emailLinks = document.querySelectorAll('a[href^="mailto"]');
+                if(emailLinks.length > 0 && data.email) {
+                    emailLinks[0].textContent = data.email;
+                    emailLinks[0].href = `mailto:${data.email}`;
+                }
+                
+                // Phone
+                const phoneLinks = document.querySelectorAll('a[href^="tel"]');
+                if(phoneLinks.length > 0 && data.phone) {
+                    phoneLinks[0].textContent = data.phone;
+                    phoneLinks[0].href = `tel:${data.phone.replace(/\s/g, '')}`;
+                }
+                
+                // Location - Find the contact item with location text
+                const contactItems = document.querySelectorAll('.contact-item');
+                contactItems.forEach(item => {
+                    if(item.textContent.includes('Nakuru') || item.querySelector('p')) {
+                        const pElement = item.querySelector('p');
+                        if(pElement && data.location) {
+                            pElement.textContent = data.location;
+                        }
+                    }
+                });
+                
+                // Social Links
+                if(data.social) {
+                    const socialLinks = document.querySelectorAll('.footer-social a');
+                    if(socialLinks.length >= 1 && data.social.linkedin) {
+                        socialLinks[0].href = data.social.linkedin;
+                    }
+                    if(socialLinks.length >= 2 && data.social.github) {
+                        socialLinks[1].href = data.social.github;
+                    }
+                    if(socialLinks.length >= 3 && data.social.twitter) {
+                        socialLinks[2].href = data.social.twitter;
+                    }
+                }
+                
+                // Update colors
+                if(data.colors) {
+                    const root = document.documentElement;
+                    if(data.colors.primary) root.style.setProperty('--primary', data.colors.primary);
+                    if(data.colors.secondary) root.style.setProperty('--secondary', data.colors.secondary);
+                }
+                
+                // Update font
+                if(data.fontFamily) {
+                    document.body.style.fontFamily = `'${data.fontFamily}', sans-serif`;
+                }
+                
+                // Apply custom CSS
+                if(data.customCSS) {
+                    const style = document.createElement('style');
+                    style.textContent = data.customCSS;
+                    document.head.appendChild(style);
+                }
+                
+                console.log('Data loaded successfully!');
+                
+            } catch(error) {
+                console.error('Error loading saved data:', error);
+            }
+        }
+    });
+    </script>
 </body>
-  </html>
+</html>
