@@ -8,12 +8,169 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Additional styles for dynamic project editing */
-        .projects-editor {
+        /* Complete Admin Styles */
+        
+        /* === IMAGE UPLOAD === */
+        .upload-container {
+            margin-top: 1rem;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            background: #f9f9f9;
+        }
+        
+        .upload-area {
+            cursor: pointer;
+            padding: 2rem;
+        }
+        
+        .upload-area:hover {
+            background: #f0f0f0;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: #2a6e7a;
+            margin-bottom: 1rem;
+        }
+        
+        .upload-text {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .upload-input {
+            display: none;
+        }
+        
+        .upload-preview {
+            margin-top: 1rem;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .upload-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+        }
+        
+        .upload-progress {
+            margin-top: 1rem;
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .upload-progress-bar {
+            height: 100%;
+            background: #2a6e7a;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .uploaded-url {
+            margin-top: 1rem;
+            padding: 10px;
+            background: #e8f5e9;
+            border-radius: 4px;
+            word-break: break-all;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .uploaded-url a {
+            color: #2a6e7a;
+            text-decoration: none;
+        }
+        
+        .btn-upload {
+            background: #2a6e7a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .upload-instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        /* === MEDIA LIBRARY === */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .gallery-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+            height: 150px;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        .gallery-btn {
+            background: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* === DYNAMIC EDITORS === */
+        .dynamic-editor {
             margin-top: 2rem;
         }
         
-        .project-editor-item {
+        .editor-item {
             background: white;
             border: 1px solid #e1e5e9;
             border-radius: 8px;
@@ -22,7 +179,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         
-        .project-editor-header {
+        .editor-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -31,40 +188,42 @@
             border-bottom: 1px solid #e1e5e9;
         }
         
-        .project-title-input {
+        .editor-title-input {
             flex: 1;
             font-size: 1.2rem;
             font-weight: 600;
-            border: none;
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
+            margin-right: 1rem;
         }
         
-        .project-meta {
+        .editor-meta {
             display: flex;
             gap: 1rem;
             margin-bottom: 1rem;
         }
         
-        .project-meta input {
+        .editor-meta input, .editor-meta select {
             flex: 1;
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
         }
         
-        .project-description-input {
+        .editor-textarea-large {
             width: 100%;
-            min-height: 100px;
-            padding: 10px;
+            min-height: 120px;
+            padding: 12px;
             border: 1px solid #ddd;
             border-radius: 4px;
             margin-bottom: 1rem;
             font-family: inherit;
+            font-size: 14px;
+            line-height: 1.5;
         }
         
-        .project-outcomes-input {
+        .editor-textarea-small {
             width: 100%;
             min-height: 80px;
             padding: 10px;
@@ -72,17 +231,40 @@
             border-radius: 4px;
             margin-bottom: 1rem;
             font-family: inherit;
+            font-size: 14px;
         }
         
-        .project-tags-input {
+        .editor-tags-input {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
             margin-bottom: 1rem;
         }
         
-        .btn-add-project, .btn-remove-project {
+        /* === BUTTONS === */
+        .btn-add-item {
+            background: #2a6e7a;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+        
+        .btn-add-item:hover {
+            background: #1a4850;
+        }
+        
+        .btn-remove-item {
+            background: #e63946;
+            color: white;
             padding: 8px 16px;
             border: none;
             border-radius: 4px;
@@ -91,33 +273,123 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: background 0.3s;
         }
         
-        .btn-add-project {
-            background: #2a6e7a;
-            color: white;
+        .btn-remove-item:hover {
+            background: #c1121f;
+        }
+        
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+        
+        /* === SKILLS EDITOR === */
+        .skills-categories-container {
+            margin-top: 2rem;
+        }
+        
+        .skill-category-editor {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e1e5e9;
+        }
+        
+        .category-header {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+        
+        .category-header input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .category-header select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        .skills-list-container {
             margin-top: 1rem;
         }
         
-        .btn-remove-project {
-            background: #e63946;
-            color: white;
+        .skill-item-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e1e5e9;
+            align-items: center;
         }
         
-        .btn-save-projects {
-            background: #4CAF50;
-            color: white;
-            padding: 12px 24px;
-            border: none;
+        .skill-item-row input {
+            flex: 2;
+            padding: 8px;
+            border: 1px solid #ddd;
             border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            margin-top: 2rem;
+        }
+        
+        .skill-item-row select {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        /* === CAREER EDITOR === */
+        .career-item-editor {
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .career-dates {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .career-dates input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .current-position {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            margin: 1rem 0;
         }
         
+        /* === PROJECTS EDITOR === */
+        .project-image-upload {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px dashed #ddd;
+        }
+        
+        /* === UTILITIES === */
         .hint-text {
             color: #666;
             font-size: 0.9rem;
@@ -125,11 +397,49 @@
             font-style: italic;
         }
         
-        .icon-select {
-            padding: 8px;
-            border: 1px solid #ddd;
+        .section-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e1e5e9;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        .loading i {
+            margin-right: 10px;
+            color: #2a6e7a;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
             border-radius: 4px;
-            margin-bottom: 1rem;
+            margin: 1rem 0;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            border: 1px solid #c3e6cb;
+        }
+        
+        /* === PREVIEW === */
+        .preview-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
         }
     </style>
 </head>
@@ -159,7 +469,7 @@
                     <i class="fas fa-eye"></i> Preview
                 </button>
                 <button id="saveBtn" class="btn-save">
-                    <i class="fas fa-save"></i> Save All Changes
+                    <i class="fas fa-save"></i> Save All
                 </button>
                 <button id="logoutBtn" class="btn-logout">
                     <i class="fas fa-sign-out-alt"></i> Logout
@@ -187,20 +497,29 @@
                     <a href="#section-career" class="nav-item">
                         <i class="fas fa-briefcase"></i> Career
                     </a>
+                    <a href="#section-media" class="nav-item">
+                        <i class="fas fa-images"></i> Media
+                    </a>
                     <a href="#section-contact" class="nav-item">
                         <i class="fas fa-envelope"></i> Contact
                     </a>
                     <a href="#section-settings" class="nav-item">
-                        <i class="fas fa-palette"></i> Colors & Style
+                        <i class="fas fa-palette"></i> Style
                     </a>
                 </nav>
             </aside>
 
             <!-- Content Area -->
             <div class="admin-content">
-                <!-- HOME Section Editor -->
+                <!-- ===== HOME SECTION ===== -->
                 <section id="section-home" class="editor-section active">
-                    <h2><i class="fas fa-home"></i> Home Section</h2>
+                    <div class="section-actions">
+                        <h2><i class="fas fa-home"></i> Home Section</h2>
+                        <button class="btn-save" onclick="saveSection('home')">
+                            <i class="fas fa-save"></i> Save Home
+                        </button>
+                    </div>
+                    
                     <div class="editor-grid">
                         <div class="editor-card">
                             <h3>Hero Title</h3>
@@ -216,18 +535,52 @@
                         </div>
                         <div class="editor-card">
                             <h3>Profile Photo</h3>
-                            <input type="text" id="edit-profile-photo" class="editor-input" placeholder="https://example.com/your-photo.jpg">
-                            <small class="hint-text">Enter full URL of your profile photo</small>
-                            <div class="image-preview" id="photoPreview">
-                                <p>No photo selected</p>
+                            <div class="upload-container">
+                                <div class="upload-instructions">
+                                    <h4>Upload Profile Photo</h4>
+                                    <p>Recommended: Square image, at least 400x400 pixels, JPG or PNG format.</p>
+                                </div>
+                                
+                                <div class="upload-area" onclick="document.getElementById('profilePhotoInput').click()">
+                                    <div class="upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <div class="upload-text">Click to upload profile photo</div>
+                                    <div class="upload-text" style="font-size: 0.8rem;">or drag and drop</div>
+                                    <input type="file" id="profilePhotoInput" class="upload-input" accept="image/*">
+                                </div>
+                                
+                                <div class="upload-progress" id="profilePhotoProgress">
+                                    <div class="upload-progress-bar" id="profilePhotoProgressBar"></div>
+                                </div>
+                                
+                                <div class="upload-preview" id="profilePhotoPreview">
+                                    <p>No photo selected</p>
+                                </div>
+                                
+                                <div class="uploaded-url" id="profilePhotoUrl">
+                                    URL: <a href="" target="_blank" id="profilePhotoLink"></a>
+                                    <button onclick="copyToClipboard('profilePhotoLink')" class="btn-small">Copy</button>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 1rem;">
+                                <label>Or enter URL manually:</label>
+                                <input type="text" id="edit-profile-photo" class="editor-input" placeholder="https://example.com/your-photo.jpg">
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- ABOUT Section Editor -->
+                <!-- ===== ABOUT SECTION ===== -->
                 <section id="section-about" class="editor-section">
-                    <h2><i class="fas fa-user"></i> About Section</h2>
+                    <div class="section-actions">
+                        <h2><i class="fas fa-user"></i> About Section</h2>
+                        <button class="btn-save" onclick="saveSection('about')">
+                            <i class="fas fa-save"></i> Save About
+                        </button>
+                    </div>
+                    
                     <div class="editor-grid">
                         <div class="editor-card">
                             <h3>About Text 1</h3>
@@ -243,7 +596,7 @@
                             <textarea id="edit-about3" class="editor-textarea" rows="3">Certified in Basic Life Support (BLS), Advanced Trauma Life Support (ATLS), Advanced Cardiovascular Life Support (ACLS), and Cybersecurity Essentials.</textarea>
                         </div>
                         <div class="editor-card">
-                            <h3>Stats</h3>
+                            <h3>Stats & Numbers</h3>
                             <div class="stats-grid">
                                 <div class="stat-input">
                                     <label>Years Experience:</label>
@@ -262,36 +615,159 @@
                                     <input type="number" id="edit-stat4" value="98" min="0" max="100">
                                 </div>
                             </div>
+                            <small class="hint-text">The "+" and "%" will be added automatically</small>
                         </div>
                     </div>
                 </section>
 
-                <!-- PROJECTS Section Editor -->
-                <section id="section-projects" class="editor-section">
-                    <h2><i class="fas fa-project-diagram"></i> Projects Section</h2>
-                    
-                    <div class="projects-editor" id="projectsEditor">
-                        <div class="editor-card">
-                            <h3>Current Projects</h3>
-                            <p class="hint-text">Add, edit, or remove your projects below. Changes will be saved when you click "Save All Changes".</p>
-                            
-                            <div id="projectsContainer">
-                                <!-- Projects will be loaded here dynamically -->
-                                <div class="loading-projects">
-                                    <i class="fas fa-spinner fa-spin"></i> Loading projects...
-                                </div>
-                            </div>
-                            
-                            <button id="addProjectBtn" class="btn-add-project">
-                                <i class="fas fa-plus"></i> Add New Project
+                <!-- ===== SKILLS SECTION ===== -->
+                <section id="section-skills" class="editor-section">
+                    <div class="section-actions">
+                        <h2><i class="fas fa-star"></i> Skills & Expertise</h2>
+                        <div>
+                            <button class="btn-add-item" id="addSkillCategoryBtn">
+                                <i class="fas fa-plus"></i> Add Category
+                            </button>
+                            <button class="btn-save" onclick="saveSkills()">
+                                <i class="fas fa-save"></i> Save Skills
                             </button>
                         </div>
                     </div>
+                    
+                    <div class="editor-card">
+                        <h3>Skills by Category</h3>
+                        <p class="hint-text">Organize your skills into categories. Each skill can have a name and proficiency level.</p>
+                        
+                        <div class="skills-categories-container" id="skillsContainer">
+                            <div class="loading">
+                                <i class="fas fa-spinner fa-spin"></i> Loading skills...
+                            </div>
+                        </div>
+                        
+                        <div class="hint-text">
+                            <p><strong>Tips:</strong></p>
+                            <ul style="margin-left: 1.5rem;">
+                                <li>Add relevant skills for each category</li>
+                                <li>Use proficiency levels consistently</li>
+                                <li>Keep categories clear and organized</li>
+                            </ul>
+                        </div>
+                    </div>
                 </section>
 
-                <!-- CONTACT Section Editor -->
+                <!-- ===== PROJECTS SECTION ===== -->
+                <section id="section-projects" class="editor-section">
+                    <div class="section-actions">
+                        <h2><i class="fas fa-project-diagram"></i> Projects & Impact</h2>
+                        <div>
+                            <button class="btn-add-item" id="addProjectBtn">
+                                <i class="fas fa-plus"></i> Add Project
+                            </button>
+                            <button class="btn-save" onclick="saveProjects()">
+                                <i class="fas fa-save"></i> Save Projects
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="editor-card">
+                        <h3>Your Projects</h3>
+                        <p class="hint-text">Showcase your most impactful projects. Add images, descriptions, and outcomes.</p>
+                        
+                        <div id="projectsContainer">
+                            <div class="loading">
+                                <i class="fas fa-spinner fa-spin"></i> Loading projects...
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== CAREER SECTION ===== -->
+                <section id="section-career" class="editor-section">
+                    <div class="section-actions">
+                        <h2><i class="fas fa-briefcase"></i> Career Journey</h2>
+                        <div>
+                            <button class="btn-add-item" id="addCareerBtn">
+                                <i class="fas fa-plus"></i> Add Experience
+                            </button>
+                            <button class="btn-save" onclick="saveCareer()">
+                                <i class="fas fa-save"></i> Save Career
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="editor-card">
+                        <h3>Career Timeline</h3>
+                        <p class="hint-text">Add your work experience, education, and certifications in chronological order (most recent first).</p>
+                        
+                        <div id="careerContainer">
+                            <div class="loading">
+                                <i class="fas fa-spinner fa-spin"></i> Loading career timeline...
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== MEDIA LIBRARY ===== -->
+                <section id="section-media" class="editor-section">
+                    <div class="section-actions">
+                        <h2><i class="fas fa-images"></i> Media Library</h2>
+                        <button class="btn-upload" onclick="document.getElementById('mediaFileInput').click()">
+                            <i class="fas fa-upload"></i> Upload Images
+                        </button>
+                    </div>
+                    
+                    <div class="editor-grid">
+                        <div class="editor-card">
+                            <h3>Upload Images</h3>
+                            <div class="upload-container">
+                                <div class="upload-instructions">
+                                    <h4>Upload to Media Library</h4>
+                                    <p>Upload images for your portfolio. All uploaded images will be stored in Supabase Storage.</p>
+                                    <ul>
+                                        <li>Supported: JPG, PNG, GIF, WebP</li>
+                                        <li>Max size: 5MB per file</li>
+                                        <li>Images are publicly accessible</li>
+                                    </ul>
+                                </div>
+                                
+                                <input type="file" id="mediaFileInput" class="upload-input" accept="image/*" multiple>
+                                
+                                <div class="upload-progress" id="mediaUploadProgress">
+                                    <div class="upload-progress-bar" id="mediaUploadProgressBar"></div>
+                                </div>
+                                
+                                <button id="uploadMediaBtn" class="btn-upload" disabled>
+                                    <i class="fas fa-upload"></i> Upload Selected Files
+                                </button>
+                                
+                                <div id="selectedFilesInfo" style="margin-top: 1rem; display: none;">
+                                    <p><span id="selectedFilesCount">0</span> file(s) selected</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="editor-card">
+                            <h3>Your Images</h3>
+                            <p class="hint-text">Click "Copy URL" to use images in your portfolio sections.</p>
+                            
+                            <div class="image-gallery" id="mediaGallery">
+                                <div class="loading">
+                                    <i class="fas fa-spinner fa-spin"></i> Loading media library...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== CONTACT SECTION ===== -->
                 <section id="section-contact" class="editor-section">
-                    <h2><i class="fas fa-envelope"></i> Contact Section</h2>
+                    <div class="section-actions">
+                        <h2><i class="fas fa-envelope"></i> Contact Information</h2>
+                        <button class="btn-save" onclick="saveSection('contact')">
+                            <i class="fas fa-save"></i> Save Contact
+                        </button>
+                    </div>
+                    
                     <div class="editor-grid">
                         <div class="editor-card">
                             <h3>Email Address</h3>
@@ -320,59 +796,82 @@
                                     <label><i class="fab fa-twitter"></i> Twitter:</label>
                                     <input type="text" id="edit-twitter" class="editor-input" placeholder="https://twitter.com/yourusername">
                                 </div>
+                                <div class="social-input">
+                                    <label><i class="fab fa-instagram"></i> Instagram:</label>
+                                    <input type="text" id="edit-instagram" class="editor-input" placeholder="https://instagram.com/yourprofile">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- COLORS & STYLE Editor -->
+                <!-- ===== STYLE SETTINGS ===== -->
                 <section id="section-settings" class="editor-section">
-                    <h2><i class="fas fa-palette"></i> Color & Style Settings</h2>
+                    <div class="section-actions">
+                        <h2><i class="fas fa-palette"></i> Style & Appearance</h2>
+                        <button class="btn-save" onclick="saveSection('settings')">
+                            <i class="fas fa-save"></i> Save Style
+                        </button>
+                    </div>
+                    
                     <div class="editor-grid">
                         <div class="editor-card">
                             <h3>Primary Color</h3>
-                            <div style="display: flex; gap: 10px; align-items: center;">
+                            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
                                 <input type="color" id="edit-color-primary" value="#2a6e7a">
-                                <input type="text" id="edit-color-primary-text" value="#2a6e7a" class="editor-input" style="flex: 1;">
+                                <input type="text" id="edit-color-primary-text" value="#2a6e7a" class="editor-input">
                             </div>
-                            <small class="hint-text">Main brand color for headers, buttons, etc.</small>
+                            <small class="hint-text">Main brand color for headers, buttons, links</small>
                         </div>
                         <div class="editor-card">
                             <h3>Secondary Color</h3>
-                            <div style="display: flex; gap: 10px; align-items: center;">
+                            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
                                 <input type="color" id="edit-color-secondary" value="#e63946">
-                                <input type="text" id="edit-color-secondary-text" value="#e63946" class="editor-input" style="flex: 1;">
+                                <input type="text" id="edit-color-secondary-text" value="#e63946" class="editor-input">
                             </div>
                             <small class="hint-text">Accent color for highlights, hover effects</small>
                         </div>
                         <div class="editor-card">
                             <h3>Font Family</h3>
                             <select id="edit-font-family" class="editor-select">
-                                <option value="Poppins">Poppins</option>
-                                <option value="Roboto">Roboto</option>
-                                <option value="Open Sans">Open Sans</option>
-                                <option value="Montserrat">Montserrat</option>
-                                <option value="Arial">Arial</option>
+                                <option value="Poppins">Poppins (Modern)</option>
+                                <option value="Roboto">Roboto (Clean)</option>
+                                <option value="Open Sans">Open Sans (Readable)</option>
+                                <option value="Montserrat">Montserrat (Bold)</option>
+                                <option value="Arial">Arial (Standard)</option>
+                                <option value="Georgia">Georgia (Serif)</option>
                             </select>
+                            <small class="hint-text">Font for all text on your portfolio</small>
                         </div>
                         <div class="editor-card">
                             <h3>Custom CSS</h3>
-                            <textarea id="edit-custom-css" class="editor-textarea" rows="6" placeholder="Add custom CSS here..."></textarea>
-                            <small class="hint-text">Add any custom CSS rules to override styles</small>
+                            <textarea id="edit-custom-css" class="editor-textarea" rows="6" placeholder="Add custom CSS rules here..."></textarea>
+                            <small class="hint-text">Advanced: Add custom CSS to override styles</small>
                         </div>
                     </div>
                 </section>
 
-                <!-- Live Preview -->
+                <!-- ===== LIVE PREVIEW ===== -->
                 <section class="preview-section">
-                    <h2><i class="fas fa-desktop"></i> Live Preview</h2>
-                    <div class="preview-container">
-                        <iframe id="livePreview" src="index.html" width="100%" height="500"></iframe>
+                    <div class="section-actions">
+                        <h2><i class="fas fa-desktop"></i> Live Preview</h2>
+                        <div class="preview-actions">
+                            <button id="refreshPreviewBtn" class="btn-preview">
+                                <i class="fas fa-redo"></i> Refresh
+                            </button>
+                            <button id="openPreviewBtn" class="btn-preview">
+                                <i class="fas fa-external-link-alt"></i> Open New Tab
+                            </button>
+                        </div>
                     </div>
-                    <div style="margin-top: 1rem; text-align: center;">
-                        <button id="refreshPreviewBtn" class="btn-preview" style="padding: 8px 16px;">
-                            <i class="fas fa-redo"></i> Refresh Preview
-                        </button>
+                    
+                    <div class="preview-container">
+                        <iframe id="livePreview" src="index.html" width="100%" height="600"></iframe>
+                    </div>
+                    
+                    <div class="hint-text" style="text-align: center; margin-top: 1rem;">
+                        <p>The preview shows how your portfolio looks with current changes.</p>
+                        <p><strong>Remember to click "Save All" or section-specific save buttons to apply changes.</strong></p>
                     </div>
                 </section>
             </div>
@@ -385,52 +884,167 @@
                     <i class="fas fa-check-circle"></i> All changes saved
                 </span>
                 <span class="last-saved">Last saved: <span id="lastSavedTime">Never</span></span>
+                <span class="auto-save">
+                    <i class="fas fa-history"></i> Auto-save: <span id="autoSaveStatus">OFF</span>
+                </span>
             </div>
         </footer>
     </div>
 
-    <!-- Project Template (hidden) -->
+    <!-- ===== TEMPLATES ===== -->
+    
+    <!-- Project Template -->
     <template id="projectTemplate">
-        <div class="project-editor-item" data-id="">
-            <div class="project-editor-header">
-                <input type="text" class="project-title-input" placeholder="Project Title" value="">
-                <button class="btn-remove-project" type="button">
+        <div class="editor-item" data-id="">
+            <div class="editor-header">
+                <input type="text" class="editor-title-input" placeholder="Project Title" value="">
+                <button class="btn-remove-item" type="button">
                     <i class="fas fa-trash"></i> Remove
                 </button>
             </div>
-            <div class="project-meta">
-                <input type="text" class="project-role-input" placeholder="Your Role (e.g., Project Lead)" value="">
-                <select class="icon-select">
-                    <option value="fas fa-syringe">Syringe Icon</option>
-                    <option value="fas fa-shield-alt">Shield Icon</option>
-                    <option value="fas fa-code">Code Icon</option>
-                    <option value="fas fa-heartbeat">Heartbeat Icon</option>
-                    <option value="fas fa-laptop-medical">Medical Laptop</option>
-                    <option value="fas fa-project-diagram">Project Diagram</option>
-                    <option value="fas fa-chart-line">Chart Line</option>
-                    <option value="fas fa-users">Users</option>
+            
+            <div class="editor-meta">
+                <input type="text" class="project-role" placeholder="Your Role (e.g., Project Lead)" value="">
+                <select class="project-icon">
+                    <option value="fas fa-syringe">Medical (Syringe)</option>
+                    <option value="fas fa-shield-alt">Security (Shield)</option>
+                    <option value="fas fa-code">Development (Code)</option>
+                    <option value="fas fa-heartbeat">Healthcare (Heartbeat)</option>
+                    <option value="fas fa-laptop-medical">Medical Tech</option>
+                    <option value="fas fa-project-diagram">Project</option>
+                    <option value="fas fa-chart-line">Analytics</option>
+                    <option value="fas fa-users">Community</option>
+                    <option value="fas fa-graduation-cap">Education</option>
+                    <option value="fas fa-flask">Research</option>
                 </select>
             </div>
-            <textarea class="project-description-input" placeholder="Project description..."></textarea>
-            <textarea class="project-outcomes-input" placeholder="Key outcomes (one per line)"></textarea>
-            <input type="text" class="project-tags-input" placeholder="Tags (comma separated, e.g., Public Health, Leadership)">
-            <small class="hint-text">Display order: <input type="number" class="display-order" value="0" min="0" style="width: 60px;"> (Lower numbers show first)</small>
+            
+            <textarea class="editor-textarea-large project-description" placeholder="Project description... What was the project about? What problems did it solve?"></textarea>
+            
+            <div>
+                <label>Key Outcomes/Achievements:</label>
+                <textarea class="editor-textarea-small project-outcomes" placeholder="Enter each outcome on a new line. They will display as bullet points."></textarea>
+                <small class="hint-text">One outcome per line. Will display as bullet points.</small>
+            </div>
+            
+            <div>
+                <label>Technologies/Tags:</label>
+                <input type="text" class="editor-tags-input project-tags" placeholder="Public Health, Leadership, Database Management, etc.">
+                <small class="hint-text">Comma separated tags for categorization</small>
+            </div>
+            
+            <div class="project-image-upload">
+                <label>Project Image (Optional):</label>
+                <input type="text" class="project-image-url" placeholder="https://example.com/project-image.jpg" style="width: 100%; margin-top: 5px;">
+                <small class="hint-text">Enter URL or use image from Media Library</small>
+            </div>
+            
+            <div style="margin-top: 1rem;">
+                <small class="hint-text">Display order: 
+                    <input type="number" class="display-order" value="0" min="0" style="width: 60px; margin-left: 5px;">
+                    (Lower numbers show first)
+                </small>
+            </div>
+        </div>
+    </template>
+
+    <!-- Skill Category Template -->
+    <template id="skillCategoryTemplate">
+        <div class="skill-category-editor" data-id="">
+            <div class="category-header">
+                <input type="text" class="category-name" placeholder="Category Name (e.g., Clinical Skills)" value="">
+                <select class="category-icon">
+                    <option value="fas fa-heartbeat">Clinical</option>
+                    <option value="fas fa-laptop-code">Technology</option>
+                    <option value="fas fa-chalkboard-teacher">Education</option>
+                    <option value="fas fa-users">Public Health</option>
+                    <option value="fas fa-flask">Research</option>
+                    <option value="fas fa-chart-line">Analytics</option>
+                    <option value="fas fa-language">Languages</option>
+                    <option value="fas fa-tools">Technical</option>
+                    <option value="fas fa-star">General</option>
+                </select>
+                <button class="btn-remove-item" type="button">
+                    <i class="fas fa-trash"></i> Remove Category
+                </button>
+            </div>
+            
+            <div class="skills-list-container" data-category-id="">
+                <!-- Skill items will be added here -->
+                <div class="skill-item-row">
+                    <input type="text" class="skill-name" placeholder="Skill Name (e.g., Basic Life Support)">
+                    <select class="skill-level">
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate" selected>Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                        <option value="Expert">Expert</option>
+                    </select>
+                    <button class="btn-remove-item btn-small" type="button">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <button class="btn-add-item add-skill-btn" type="button" style="margin-top: 10px; padding: 8px 16px;">
+                <i class="fas fa-plus"></i> Add Skill to this Category
+            </button>
+            
+            <div style="margin-top: 1rem;">
+                <small class="hint-text">Category order: 
+                    <input type="number" class="category-order" value="0" min="0" style="width: 60px; margin-left: 5px;">
+                    (Lower numbers show first)
+                </small>
+            </div>
+        </div>
+    </template>
+
+    <!-- Career Item Template -->
+    <template id="careerTemplate">
+        <div class="career-item-editor" data-id="">
+            <div class="editor-header">
+                <input type="text" class="editor-title-input" placeholder="Position/Title" value="">
+                <button class="btn-remove-item" type="button">
+                    <i class="fas fa-trash"></i> Remove
+                </button>
+            </div>
+            
+            <input type="text" class="career-organization" placeholder="Organization/Institution" style="width: 100%; margin: 1rem 0; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+            
+            <div class="career-dates">
+                <input type="text" class="career-start-date" placeholder="Start Date (e.g., Oct 2023)" style="flex: 1;">
+                <input type="text" class="career-end-date" placeholder="End Date (e.g., Present)" style="flex: 1;">
+            </div>
+            
+            <div class="current-position">
+                <input type="checkbox" class="career-current" id="career-current-{id}">
+                <label for="career-current-{id}">This is my current position</label>
+            </div>
+            
+            <textarea class="editor-textarea-large career-description" placeholder="Description of role, responsibilities, and achievements..."></textarea>
+            
+            <div style="margin-top: 1rem;">
+                <small class="hint-text">Timeline order: 
+                    <input type="number" class="career-order" value="0" min="0" style="width: 60px; margin-left: 5px;">
+                    (Higher numbers = more recent, shows first)
+                </small>
+            </div>
         </div>
     </template>
 
     <script>
-        // Supabase Configuration
+        // ===== CONFIGURATION =====
         const SUPABASE_URL = 'https://uhqoihahmocwjgzpiivd.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
         
         // Initialize Supabase
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
-        // Simple password protection
+        // Admin configuration
         const ADMIN_PASSWORD = 'admin123';
         let isAuthenticated = localStorage.getItem('portfolio_admin_auth') === 'true';
+        let selectedFiles = [];
         
-        // DOM Elements
+        // ===== DOM ELEMENTS =====
         const loginScreen = document.getElementById('loginScreen');
         const dashboard = document.getElementById('dashboard');
         const adminPassword = document.getElementById('adminPassword');
@@ -438,22 +1052,27 @@
         const logoutBtn = document.getElementById('logoutBtn');
         const saveBtn = document.getElementById('saveBtn');
         const previewBtn = document.getElementById('previewBtn');
+        const openPreviewBtn = document.getElementById('openPreviewBtn');
         const refreshPreviewBtn = document.getElementById('refreshPreviewBtn');
         const saveStatus = document.getElementById('saveStatus');
         const lastSavedTime = document.getElementById('lastSavedTime');
         const addProjectBtn = document.getElementById('addProjectBtn');
-        const projectsContainer = document.getElementById('projectsContainer');
+        const addSkillCategoryBtn = document.getElementById('addSkillCategoryBtn');
+        const addCareerBtn = document.getElementById('addCareerBtn');
+        const uploadMediaBtn = document.getElementById('uploadMediaBtn');
+        const mediaFileInput = document.getElementById('mediaFileInput');
         
-        // Initialize
+        // ===== INITIALIZATION =====
         document.addEventListener('DOMContentLoaded', function() {
             if (isAuthenticated) {
                 showDashboard();
-                loadCurrentData();
+                loadAllData();
             } else {
                 showLoginScreen();
             }
             
             setupEventListeners();
+            setupUploadHandlers();
         });
         
         function showLoginScreen() {
@@ -466,36 +1085,62 @@
             dashboard.style.display = 'block';
         }
         
-        async function loadCurrentData() {
+        // ===== LOAD ALL DATA =====
+        async function loadAllData() {
             try {
-                // Load portfolio content
-                const { data: contentData, error: contentError } = await supabase
+                console.log('Loading all portfolio data...');
+                
+                // Load basic content
+                await loadBasicContent();
+                
+                // Load skills
+                await loadSkillsData();
+                
+                // Load projects
+                await loadProjectsData();
+                
+                // Load career
+                await loadCareerData();
+                
+                // Load media library
+                await loadMediaLibrary();
+                
+                console.log('✅ All data loaded successfully');
+                
+            } catch (error) {
+                console.error('❌ Error loading data:', error);
+                showMessage('error', 'Failed to load data. Please refresh.');
+            }
+        }
+        
+        async function loadBasicContent() {
+            try {
+                const { data, error } = await supabase
                     .from('portfolio_content')
                     .select('*');
                     
-                if (contentError) throw contentError;
+                if (error) throw error;
                 
-                if (contentData && contentData.length > 0) {
-                    // Organize data
-                    const content = {};
-                    contentData.forEach(item => {
-                        if (!content[item.section]) {
-                            content[item.section] = {};
-                        }
-                        content[item.section][item.field] = item.content;
-                    });
-                    
-                    // Populate form fields
+                if (data && data.length > 0) {
+                    const content = organizeContent(data);
                     populateFormFields(content);
                 }
                 
-                // Load projects
-                await loadProjects();
-                
             } catch (error) {
-                console.error('Error loading current data:', error);
-                alert('Failed to load current data. Using default values.');
+                console.error('Error loading basic content:', error);
+                throw error;
             }
+        }
+        
+        function organizeContent(contentData) {
+            const content = {};
+            contentData.forEach(item => {
+                if (!content[item.section]) {
+                    content[item.section] = {};
+                }
+                content[item.section][item.field] = item.content;
+            });
+            return content;
         }
         
         function populateFormFields(content) {
@@ -514,7 +1159,6 @@
             if (content.about) {
                 if (content.about.about1) document.getElementById('edit-about1').value = content.about.about1;
                 if (content.about.about2) {
-                    // Remove "My unique value:" prefix if present
                     const about2 = content.about.about2.replace('My unique value:', '').trim();
                     document.getElementById('edit-about2').value = about2;
                 }
@@ -533,6 +1177,7 @@
                 if (content.contact.linkedin) document.getElementById('edit-linkedin').value = content.contact.linkedin;
                 if (content.contact.github) document.getElementById('edit-github').value = content.contact.github;
                 if (content.contact.twitter) document.getElementById('edit-twitter').value = content.contact.twitter;
+                if (content.contact.instagram) document.getElementById('edit-instagram').value = content.contact.instagram;
             }
             
             // Settings section
@@ -554,87 +1199,251 @@
             }
         }
         
-        async function loadProjects() {
+        // ===== SKILLS MANAGEMENT =====
+        async function loadSkillsData() {
             try {
-                const { data: projectsData, error } = await supabase
+                const { data, error } = await supabase
+                    .from('skills')
+                    .select('*')
+                    .order('display_order', { ascending: true });
+                    
+                if (error) throw error;
+                
+                const container = document.getElementById('skillsContainer');
+                container.innerHTML = '';
+                
+                if (data && data.length > 0) {
+                    // Group skills by category
+                    const skillsByCategory = {};
+                    data.forEach(skill => {
+                        if (!skillsByCategory[skill.category]) {
+                            skillsByCategory[skill.category] = [];
+                        }
+                        skillsByCategory[skill.category].push(skill);
+                    });
+                    
+                    // Create category editors
+                    Object.entries(skillsByCategory).forEach(([category, skills], index) => {
+                        createSkillCategory(category, skills, index);
+                    });
+                } else {
+                    // Add default categories
+                    createDefaultSkillCategories();
+                }
+                
+            } catch (error) {
+                console.error('Error loading skills:', error);
+                document.getElementById('skillsContainer').innerHTML = 
+                    '<div class="error-message">Failed to load skills. Please try again.</div>';
+            }
+        }
+        
+        function createSkillCategory(categoryName, skills = [], order = 0) {
+            const template = document.getElementById('skillCategoryTemplate');
+            const categoryElement = template.content.cloneNode(true);
+            const categoryDiv = categoryElement.querySelector('.skill-category-editor');
+            
+            // Set category name
+            categoryDiv.querySelector('.category-name').value = categoryName;
+            categoryDiv.querySelector('.category-order').value = order;
+            
+            // Set icon based on category
+            const iconSelect = categoryDiv.querySelector('.category-icon');
+            if (categoryName.includes('Clinical')) iconSelect.value = 'fas fa-heartbeat';
+            else if (categoryName.includes('Technology')) iconSelect.value = 'fas fa-laptop-code';
+            else if (categoryName.includes('Education')) iconSelect.value = 'fas fa-chalkboard-teacher';
+            else if (categoryName.includes('Public Health')) iconSelect.value = 'fas fa-users';
+            
+            // Clear default skill and add actual skills
+            const skillsContainer = categoryDiv.querySelector('.skills-list-container');
+            skillsContainer.innerHTML = '';
+            
+            skills.forEach(skill => {
+                addSkillToCategory(skillsContainer, skill);
+            });
+            
+            // Add event listeners
+            const addSkillBtn = categoryDiv.querySelector('.add-skill-btn');
+            addSkillBtn.addEventListener('click', () => {
+                addSkillToCategory(skillsContainer);
+            });
+            
+            const removeCategoryBtn = categoryDiv.querySelector('.btn-remove-item');
+            removeCategoryBtn.addEventListener('click', () => {
+                if (confirm('Remove this category and all its skills?')) {
+                    categoryDiv.remove();
+                }
+            });
+            
+            document.getElementById('skillsContainer').appendChild(categoryDiv);
+        }
+        
+        function addSkillToCategory(container, skillData = {}) {
+            const skillDiv = document.createElement('div');
+            skillDiv.className = 'skill-item-row';
+            
+            skillDiv.innerHTML = `
+                <input type="text" class="skill-name" placeholder="Skill Name" value="${skillData.skill_name || ''}">
+                <select class="skill-level">
+                    <option value="Beginner" ${skillData.skill_level === 'Beginner' ? 'selected' : ''}>Beginner</option>
+                    <option value="Intermediate" ${(!skillData.skill_level || skillData.skill_level === 'Intermediate') ? 'selected' : ''}>Intermediate</option>
+                    <option value="Advanced" ${skillData.skill_level === 'Advanced' ? 'selected' : ''}>Advanced</option>
+                    <option value="Expert" ${skillData.skill_level === 'Expert' ? 'selected' : ''}>Expert</option>
+                </select>
+                <button class="btn-remove-item btn-small" type="button">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            skillDiv.querySelector('.btn-remove-item').addEventListener('click', () => {
+                skillDiv.remove();
+            });
+            
+            container.appendChild(skillDiv);
+        }
+        
+        function createDefaultSkillCategories() {
+            const defaultCategories = [
+                {
+                    name: "Clinical & Emergency Care",
+                    skills: [
+                        { skill_name: "Basic Life Support (BLS)", skill_level: "Expert" },
+                        { skill_name: "Advanced Cardiac Life Support (ACLS)", skill_level: "Advanced" }
+                    ]
+                },
+                {
+                    name: "Healthcare Technology",
+                    skills: [
+                        { skill_name: "Software Engineering", skill_level: "Intermediate" },
+                        { skill_name: "Database Management", skill_level: "Intermediate" }
+                    ]
+                }
+            ];
+            
+            defaultCategories.forEach((category, index) => {
+                createSkillCategory(category.name, category.skills, index);
+            });
+        }
+        
+        async function saveSkills() {
+            try {
+                const categoryElements = document.querySelectorAll('.skill-category-editor');
+                const skills = [];
+                let categoryIndex = 0;
+                
+                categoryElements.forEach(categoryDiv => {
+                    const categoryName = categoryDiv.querySelector('.category-name').value;
+                    const skillItems = categoryDiv.querySelectorAll('.skill-item-row');
+                    let skillIndex = 0;
+                    
+                    skillItems.forEach(skillDiv => {
+                        const skillName = skillDiv.querySelector('.skill-name').value;
+                        const skillLevel = skillDiv.querySelector('.skill-level').value;
+                        
+                        if (skillName.trim() !== '') {
+                            skills.push({
+                                category: categoryName,
+                                skill_name: skillName,
+                                skill_level: skillLevel,
+                                display_order: skillIndex
+                            });
+                            skillIndex++;
+                        }
+                    });
+                    
+                    categoryIndex++;
+                });
+                
+                // Clear existing skills
+                const { error: deleteError } = await supabase
+                    .from('skills')
+                    .delete()
+                    .neq('id', '00000000-0000-0000-0000-000000000000');
+                
+                if (deleteError) throw deleteError;
+                
+                // Insert new skills
+                if (skills.length > 0) {
+                    const { error: insertError } = await supabase
+                        .from('skills')
+                        .insert(skills);
+                    
+                    if (insertError) throw insertError;
+                }
+                
+                showMessage('success', 'Skills saved successfully!');
+                updateSaveStatus(true);
+                
+            } catch (error) {
+                console.error('Error saving skills:', error);
+                showMessage('error', 'Failed to save skills: ' + error.message);
+            }
+        }
+        
+        // ===== PROJECTS MANAGEMENT =====
+        async function loadProjectsData() {
+            try {
+                const { data, error } = await supabase
                     .from('projects')
                     .select('*')
                     .order('display_order', { ascending: true });
                     
                 if (error) throw error;
                 
-                projectsContainer.innerHTML = '';
+                const container = document.getElementById('projectsContainer');
+                container.innerHTML = '';
                 
-                if (projectsData && projectsData.length > 0) {
-                    projectsData.forEach(project => {
-                        addProjectToEditor(project);
+                if (data && data.length > 0) {
+                    data.forEach(project => {
+                        createProjectEditor(project);
                     });
                 } else {
-                    // Add default projects if none exist
-                    addDefaultProjects();
+                    createDefaultProjects();
                 }
                 
             } catch (error) {
                 console.error('Error loading projects:', error);
-                projectsContainer.innerHTML = '<p class="error">Failed to load projects</p>';
+                container.innerHTML = '<div class="error-message">Failed to load projects</div>';
             }
         }
         
-        function addProjectToEditor(projectData = {}) {
+        function createProjectEditor(projectData = {}) {
             const template = document.getElementById('projectTemplate');
             const projectElement = template.content.cloneNode(true);
-            const projectDiv = projectElement.querySelector('.project-editor-item');
+            const projectDiv = projectElement.querySelector('.editor-item');
             
-            // Set data-id for existing projects
             if (projectData.id) {
                 projectDiv.setAttribute('data-id', projectData.id);
             }
             
-            // Fill in data
-            if (projectData.title) {
-                projectDiv.querySelector('.project-title-input').value = projectData.title;
-            }
+            // Fill data
+            const fields = {
+                '.editor-title-input': projectData.title,
+                '.project-role': projectData.role,
+                '.project-icon': projectData.icon || 'fas fa-project-diagram',
+                '.project-description': projectData.description,
+                '.project-outcomes': Array.isArray(projectData.outcomes) ? projectData.outcomes.join('\n') : (projectData.outcomes || ''),
+                '.project-tags': Array.isArray(projectData.tags) ? projectData.tags.join(', ') : (projectData.tags || ''),
+                '.project-image-url': projectData.image_url || '',
+                '.display-order': projectData.display_order || 0
+            };
             
-            if (projectData.role) {
-                projectDiv.querySelector('.project-role-input').value = projectData.role;
-            }
+            Object.entries(fields).forEach(([selector, value]) => {
+                const element = projectDiv.querySelector(selector);
+                if (element && value !== undefined) element.value = value;
+            });
             
-            if (projectData.icon) {
-                projectDiv.querySelector('.icon-select').value = projectData.icon;
-            }
-            
-            if (projectData.description) {
-                projectDiv.querySelector('.project-description-input').value = projectData.description;
-            }
-            
-            if (projectData.outcomes && Array.isArray(projectData.outcomes)) {
-                projectDiv.querySelector('.project-outcomes-input').value = projectData.outcomes.join('\n');
-            } else if (projectData.outcomes) {
-                projectDiv.querySelector('.project-outcomes-input').value = projectData.outcomes;
-            }
-            
-            if (projectData.tags && Array.isArray(projectData.tags)) {
-                projectDiv.querySelector('.project-tags-input').value = projectData.tags.join(', ');
-            } else if (projectData.tags) {
-                projectDiv.querySelector('.project-tags-input').value = projectData.tags;
-            }
-            
-            if (projectData.display_order !== undefined) {
-                projectDiv.querySelector('.display-order').value = projectData.display_order;
-            }
-            
-            // Add remove button functionality
-            const removeBtn = projectDiv.querySelector('.btn-remove-project');
-            removeBtn.addEventListener('click', function() {
-                if (confirm('Are you sure you want to remove this project?')) {
+            // Remove button
+            projectDiv.querySelector('.btn-remove-item').addEventListener('click', () => {
+                if (confirm('Remove this project?')) {
                     projectDiv.remove();
                 }
             });
             
-            projectsContainer.appendChild(projectDiv);
+            document.getElementById('projectsContainer').appendChild(projectDiv);
         }
         
-        function addDefaultProjects() {
+        function createDefaultProjects() {
             const defaultProjects = [
                 {
                     title: "County-Wide Vaccine Campaign",
@@ -648,318 +1457,650 @@
                     ],
                     tags: ["Public Health", "Leadership", "Database Management"],
                     display_order: 1
-                },
-                {
-                    title: "Healthcare Cybersecurity Initiative",
-                    role: "Cybersecurity Advocate",
-                    icon: "fas fa-shield-alt",
-                    description: "Applied cybersecurity principles to enhance data protection in clinical and educational settings.",
-                    outcomes: [
-                        "Increased awareness of data security protocols",
-                        "Contributed to secure system practices",
-                        "Integrated security best practices in training"
-                    ],
-                    tags: ["Cybersecurity", "Systems Management", "Training"],
-                    display_order: 2
-                },
-                {
-                    title: "Portfolio Website Development",
-                    role: "Developer & Designer",
-                    icon: "fas fa-code",
-                    description: "Designed and built this responsive portfolio website to showcase multidisciplinary expertise.",
-                    outcomes: [
-                        "Built with HTML5, CSS3, JavaScript",
-                        "Responsive design for all devices",
-                        "Clean, professional UX/UI"
-                    ],
-                    tags: ["Software Engineering", "Web Development", "UX Design"],
-                    display_order: 3
                 }
             ];
             
             defaultProjects.forEach(project => {
-                addProjectToEditor(project);
+                createProjectEditor(project);
             });
-        }
-        
-        function updatePhotoPreview(photoUrl) {
-            const preview = document.getElementById('photoPreview');
-            if (photoUrl && photoUrl.trim() !== '') {
-                preview.innerHTML = `<img src="${photoUrl}" alt="Preview" style="max-width: 100%; max-height: 150px; border-radius: 4px;">`;
-            } else {
-                preview.innerHTML = '<p>No photo selected</p>';
-            }
-        }
-        
-        async function saveAllChanges() {
-            try {
-                // 1. Save portfolio content
-                await savePortfolioContent();
-                
-                // 2. Save projects
-                await saveProjects();
-                
-                // Update status
-                updateSaveStatus(true);
-                
-                // Refresh preview
-                document.getElementById('livePreview').contentWindow.location.reload();
-                
-                return true;
-                
-            } catch (error) {
-                console.error('Error saving changes:', error);
-                updateSaveStatus(false, error.message);
-                return false;
-            }
-        }
-        
-        async function savePortfolioContent() {
-            try {
-                const updates = [];
-                
-                // Home section
-                updates.push({
-                    section: 'home',
-                    field: 'hero_title',
-                    content: document.getElementById('edit-hero-title').value
-                });
-                updates.push({
-                    section: 'home',
-                    field: 'hero_subtitle',
-                    content: document.getElementById('edit-hero-subtitle').value
-                });
-                updates.push({
-                    section: 'home',
-                    field: 'hero_description',
-                    content: document.getElementById('edit-hero-description').value
-                });
-                updates.push({
-                    section: 'home',
-                    field: 'profile_photo',
-                    content: document.getElementById('edit-profile-photo').value
-                });
-                
-                // About section
-                updates.push({
-                    section: 'about',
-                    field: 'about1',
-                    content: document.getElementById('edit-about1').value
-                });
-                updates.push({
-                    section: 'about',
-                    field: 'about2',
-                    content: 'My unique value: ' + document.getElementById('edit-about2').value
-                });
-                updates.push({
-                    section: 'about',
-                    field: 'about3',
-                    content: document.getElementById('edit-about3').value
-                });
-                updates.push({
-                    section: 'about',
-                    field: 'stat_years',
-                    content: document.getElementById('edit-stat1').value
-                });
-                updates.push({
-                    section: 'about',
-                    field: 'stat_students',
-                    content: document.getElementById('edit-stat2').value
-                });
-                updates.push({
-                    section: 'about',
-                    field: 'stat_community',
-                    content: document.getElementById('edit-stat3').value
-                });
-                updates.push({
-                    section: 'about',
-                    field: 'stat_satisfaction',
-                    content: document.getElementById('edit-stat4').value
-                });
-                
-                // Contact section
-                updates.push({
-                    section: 'contact',
-                    field: 'email',
-                    content: document.getElementById('edit-contact-email').value
-                });
-                updates.push({
-                    section: 'contact',
-                    field: 'phone',
-                    content: document.getElementById('edit-contact-phone').value
-                });
-                updates.push({
-                    section: 'contact',
-                    field: 'location',
-                    content: document.getElementById('edit-contact-location').value
-                });
-                updates.push({
-                    section: 'contact',
-                    field: 'linkedin',
-                    content: document.getElementById('edit-linkedin').value
-                });
-                updates.push({
-                    section: 'contact',
-                    field: 'github',
-                    content: document.getElementById('edit-github').value
-                });
-                updates.push({
-                    section: 'contact',
-                    field: 'twitter',
-                    content: document.getElementById('edit-twitter').value
-                });
-                
-                // Settings section
-                updates.push({
-                    section: 'settings',
-                    field: 'primary_color',
-                    content: document.getElementById('edit-color-primary').value
-                });
-                updates.push({
-                    section: 'settings',
-                    field: 'secondary_color',
-                    content: document.getElementById('edit-color-secondary').value
-                });
-                updates.push({
-                    section: 'settings',
-                    field: 'font_family',
-                    content: document.getElementById('edit-font-family').value
-                });
-                updates.push({
-                    section: 'settings',
-                    field: 'custom_css',
-                    content: document.getElementById('edit-custom-css').value
-                });
-                
-                // Save to Supabase
-                const { error } = await supabase
-                    .from('portfolio_content')
-                    .upsert(updates, {
-                        onConflict: 'section,field'
-                    });
-                
-                if (error) throw error;
-                
-            } catch (error) {
-                console.error('Error saving portfolio content:', error);
-                throw error;
-            }
         }
         
         async function saveProjects() {
             try {
-                const projectElements = projectsContainer.querySelectorAll('.project-editor-item');
+                const projectElements = document.querySelectorAll('#projectsContainer .editor-item');
                 const projects = [];
                 
                 projectElements.forEach((element, index) => {
                     const project = {
                         id: element.getAttribute('data-id') || undefined,
-                        title: element.querySelector('.project-title-input').value,
-                        role: element.querySelector('.project-role-input').value,
-                        icon: element.querySelector('.icon-select').value,
-                        description: element.querySelector('.project-description-input').value,
-                        outcomes: element.querySelector('.project-outcomes-input').value
+                        title: element.querySelector('.editor-title-input').value,
+                        role: element.querySelector('.project-role').value,
+                        icon: element.querySelector('.project-icon').value,
+                        description: element.querySelector('.project-description').value,
+                        outcomes: element.querySelector('.project-outcomes').value
                             .split('\n')
                             .filter(line => line.trim() !== ''),
-                        tags: element.querySelector('.project-tags-input').value
+                        tags: element.querySelector('.project-tags').value
                             .split(',')
                             .map(tag => tag.trim())
                             .filter(tag => tag !== ''),
+                        image_url: element.querySelector('.project-image-url').value,
                         display_order: parseInt(element.querySelector('.display-order').value) || index
                     };
                     
                     projects.push(project);
                 });
                 
-                // Save all projects to Supabase
                 const { error } = await supabase
                     .from('projects')
-                    .upsert(projects, {
-                        onConflict: 'id'
+                    .upsert(projects, { onConflict: 'id' });
+                
+                if (error) throw error;
+                
+                showMessage('success', 'Projects saved successfully!');
+                updateSaveStatus(true);
+                
+            } catch (error) {
+                console.error('Error saving projects:', error);
+                showMessage('error', 'Failed to save projects: ' + error.message);
+            }
+        }
+        
+        // ===== CAREER MANAGEMENT =====
+        async function loadCareerData() {
+            try {
+                const { data, error } = await supabase
+                    .from('career')
+                    .select('*')
+                    .order('display_order', { ascending: false });
+                    
+                if (error) throw error;
+                
+                const container = document.getElementById('careerContainer');
+                container.innerHTML = '';
+                
+                if (data && data.length > 0) {
+                    data.forEach(item => {
+                        createCareerEditor(item);
+                    });
+                } else {
+                    createDefaultCareer();
+                }
+                
+            } catch (error) {
+                console.error('Error loading career:', error);
+                container.innerHTML = '<div class="error-message">Failed to load career</div>';
+            }
+        }
+        
+        function createCareerEditor(careerData = {}) {
+            const template = document.getElementById('careerTemplate');
+            const careerElement = template.content.cloneNode(true);
+            const careerDiv = careerElement.querySelector('.career-item-editor');
+            
+            if (careerData.id) {
+                careerDiv.setAttribute('data-id', careerData.id);
+            }
+            
+            // Fill data
+            const fields = {
+                '.editor-title-input': careerData.position,
+                '.career-organization': careerData.organization,
+                '.career-start-date': careerData.start_date,
+                '.career-end-date': careerData.end_date,
+                '.career-description': careerData.description,
+                '.career-order': careerData.display_order || 0
+            };
+            
+            Object.entries(fields).forEach(([selector, value]) => {
+                const element = careerDiv.querySelector(selector);
+                if (element && value !== undefined) element.value = value;
+            });
+            
+            // Current position checkbox
+            if (careerData.current) {
+                careerDiv.querySelector('.career-current').checked = true;
+            }
+            
+            // Remove button
+            careerDiv.querySelector('.btn-remove-item').addEventListener('click', () => {
+                if (confirm('Remove this career item?')) {
+                    careerDiv.remove();
+                }
+            });
+            
+            document.getElementById('careerContainer').appendChild(careerDiv);
+        }
+        
+        function createDefaultCareer() {
+            const defaultCareer = [
+                {
+                    position: "Head of Department – School of Nursing",
+                    organization: "Nakuru College of Health Science & Management",
+                    start_date: "Oct 2025",
+                    end_date: "Present",
+                    current: true,
+                    description: "Academic leadership, curriculum development, faculty mentorship",
+                    display_order: 1
+                }
+            ];
+            
+            defaultCareer.forEach(item => {
+                createCareerEditor(item);
+            });
+        }
+        
+        async function saveCareer() {
+            try {
+                const careerElements = document.querySelectorAll('#careerContainer .career-item-editor');
+                const careerItems = [];
+                
+                careerElements.forEach((element, index) => {
+                    const item = {
+                        id: element.getAttribute('data-id') || undefined,
+                        position: element.querySelector('.editor-title-input').value,
+                        organization: element.querySelector('.career-organization').value,
+                        start_date: element.querySelector('.career-start-date').value,
+                        end_date: element.querySelector('.career-end-date').value,
+                        current: element.querySelector('.career-current').checked,
+                        description: element.querySelector('.career-description').value,
+                        display_order: parseInt(element.querySelector('.career-order').value) || index
+                    };
+                    
+                    careerItems.push(item);
+                });
+                
+                const { error } = await supabase
+                    .from('career')
+                    .upsert(careerItems, { onConflict: 'id' });
+                
+                if (error) throw error;
+                
+                showMessage('success', 'Career saved successfully!');
+                updateSaveStatus(true);
+                
+            } catch (error) {
+                console.error('Error saving career:', error);
+                showMessage('error', 'Failed to save career: ' + error.message);
+            }
+        }
+        
+        // ===== MEDIA LIBRARY =====
+        function setupUploadHandlers() {
+            // Profile photo upload
+            document.getElementById('profilePhotoInput').addEventListener('change', (e) => {
+                handleProfilePhotoUpload(e.target.files[0]);
+            });
+            
+            // Media library upload
+            mediaFileInput.addEventListener('change', (e) => {
+                selectedFiles = Array.from(e.target.files);
+                updateSelectedFilesInfo();
+            });
+            
+            uploadMediaBtn.addEventListener('click', uploadMediaFiles);
+            
+            // Drag and drop
+            setupDragAndDrop();
+        }
+        
+        function updateSelectedFilesInfo() {
+            const infoDiv = document.getElementById('selectedFilesInfo');
+            const countSpan = document.getElementById('selectedFilesCount');
+            
+            if (selectedFiles.length > 0) {
+                countSpan.textContent = selectedFiles.length;
+                infoDiv.style.display = 'block';
+                uploadMediaBtn.disabled = false;
+                uploadMediaBtn.innerHTML = `<i class="fas fa-upload"></i> Upload ${selectedFiles.length} File(s)`;
+            } else {
+                infoDiv.style.display = 'none';
+                uploadMediaBtn.disabled = true;
+                uploadMediaBtn.innerHTML = `<i class="fas fa-upload"></i> Upload Selected Files`;
+            }
+        }
+        
+        function setupDragAndDrop() {
+            const uploadAreas = document.querySelectorAll('.upload-area');
+            
+            uploadAreas.forEach(area => {
+                area.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    area.style.background = '#f0f0f0';
+                });
+                
+                area.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    area.style.background = '';
+                });
+                
+                area.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    area.style.background = '';
+                    
+                    const files = e.dataTransfer.files;
+                    if (area.closest('#profilePhotoUpload')) {
+                        handleProfilePhotoUpload(files[0]);
+                    } else {
+                        selectedFiles = Array.from(files);
+                        updateSelectedFilesInfo();
+                    }
+                });
+            });
+        }
+        
+        async function handleProfilePhotoUpload(file) {
+            if (!file || !file.type.startsWith('image/')) {
+                alert('Please select a valid image file');
+                return;
+            }
+            
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File must be less than 5MB');
+                return;
+            }
+            
+            // Show preview
+            const preview = document.getElementById('profilePhotoPreview');
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+            };
+            reader.readAsDataURL(file);
+            
+            // Upload progress
+            const progressBar = document.getElementById('profilePhotoProgress');
+            const progressBarInner = document.getElementById('profilePhotoProgressBar');
+            progressBar.style.display = 'block';
+            progressBarInner.style.width = '0%';
+            
+            try {
+                // Generate unique filename
+                const fileExt = file.name.split('.').pop();
+                const fileName = `profile-${Date.now()}.${fileExt}`;
+                const filePath = `profile/${fileName}`;
+                
+                // Upload to Supabase
+                const { data, error } = await supabase.storage
+                    .from('portfolio-images')
+                    .upload(filePath, file, {
+                        cacheControl: '3600',
+                        upsert: true
                     });
                 
                 if (error) throw error;
                 
+                // Get public URL
+                const { data: urlData } = supabase.storage
+                    .from('portfolio-images')
+                    .getPublicUrl(filePath);
+                
+                // Update UI
+                progressBarInner.style.width = '100%';
+                document.getElementById('edit-profile-photo').value = urlData.publicUrl;
+                
+                const urlContainer = document.getElementById('profilePhotoUrl');
+                const urlLink = document.getElementById('profilePhotoLink');
+                urlLink.href = urlData.publicUrl;
+                urlLink.textContent = urlData.publicUrl;
+                urlContainer.style.display = 'block';
+                
+                // Hide progress bar
+                setTimeout(() => {
+                    progressBar.style.display = 'none';
+                }, 1000);
+                
+                showMessage('success', 'Profile photo uploaded successfully!');
+                
             } catch (error) {
-                console.error('Error saving projects:', error);
-                throw error;
+                console.error('Upload error:', error);
+                alert('Upload failed: ' + error.message);
+                progressBar.style.display = 'none';
             }
         }
         
-        function updateSaveStatus(success, message = '') {
+        async function uploadMediaFiles() {
+            if (selectedFiles.length === 0) return;
+            
+            const progressBar = document.getElementById('mediaUploadProgress');
+            const progressBarInner = document.getElementById('mediaUploadProgressBar');
+            progressBar.style.display = 'block';
+            progressBarInner.style.width = '0%';
+            
+            uploadMediaBtn.disabled = true;
+            uploadMediaBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Uploading...`;
+            
+            let uploaded = 0;
+            const total = selectedFiles.length;
+            
+            for (const file of selectedFiles) {
+                if (!file.type.startsWith('image/')) {
+                    console.warn(`Skipping non-image: ${file.name}`);
+                    uploaded++;
+                    continue;
+                }
+                
+                try {
+                    const fileExt = file.name.split('.').pop();
+                    const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+                    const filePath = `media/${fileName}`;
+                    
+                    await supabase.storage
+                        .from('portfolio-images')
+                        .upload(filePath, file, {
+                            cacheControl: '3600',
+                            upsert: false
+                        });
+                    
+                    uploaded++;
+                    const progress = (uploaded / total) * 100;
+                    progressBarInner.style.width = `${progress}%`;
+                    
+                } catch (error) {
+                    console.error(`Failed to upload ${file.name}:`, error);
+                }
+            }
+            
+            // Reset
+            setTimeout(() => {
+                progressBar.style.display = 'none';
+                uploadMediaBtn.disabled = false;
+                uploadMediaBtn.innerHTML = `<i class="fas fa-upload"></i> Upload Selected Files`;
+                selectedFiles = [];
+                updateSelectedFilesInfo();
+                mediaFileInput.value = '';
+                
+                // Reload gallery
+                loadMediaLibrary();
+                
+                showMessage('success', `Uploaded ${uploaded} of ${total} files successfully!`);
+            }, 1000);
+        }
+        
+        async function loadMediaLibrary() {
+            try {
+                const { data: files, error } = await supabase.storage
+                    .from('portfolio-images')
+                    .list('media', {
+                        limit: 50,
+                        offset: 0,
+                        sortBy: { column: 'created_at', order: 'desc' }
+                    });
+                
+                if (error) throw error;
+                
+                const gallery = document.getElementById('mediaGallery');
+                gallery.innerHTML = '';
+                
+                if (files && files.length > 0) {
+                    files.forEach(file => {
+                        if (!file.name) return;
+                        
+                        const { data: urlData } = supabase.storage
+                            .from('portfolio-images')
+                            .getPublicUrl(`media/${file.name}`);
+                        
+                        const item = document.createElement('div');
+                        item.className = 'gallery-item';
+                        item.innerHTML = `
+                            <img src="${urlData.publicUrl}" alt="${file.name}" loading="lazy">
+                            <div class="gallery-overlay">
+                                <button class="gallery-btn" onclick="copyUrlToClipboard('${urlData.publicUrl}')">
+                                    <i class="fas fa-copy"></i> Copy URL
+                                </button>
+                                <button class="gallery-btn" onclick="deleteMediaFile('${file.name}')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        `;
+                        
+                        gallery.appendChild(item);
+                    });
+                } else {
+                    gallery.innerHTML = '<p class="hint-text">No images uploaded yet.</p>';
+                }
+                
+            } catch (error) {
+                console.error('Error loading media:', error);
+                gallery.innerHTML = '<div class="error-message">Failed to load media</div>';
+            }
+        }
+        
+        function copyUrlToClipboard(url) {
+            navigator.clipboard.writeText(url).then(() => {
+                showMessage('success', 'URL copied to clipboard!');
+            });
+        }
+        
+        async function deleteMediaFile(filename) {
+            if (!confirm('Delete this image?')) return;
+            
+            try {
+                const { error } = await supabase.storage
+                    .from('portfolio-images')
+                    .remove([`media/${filename}`]);
+                
+                if (error) throw error;
+                
+                loadMediaLibrary();
+                showMessage('success', 'Image deleted successfully!');
+                
+            } catch (error) {
+                console.error('Delete error:', error);
+                showMessage('error', 'Failed to delete image');
+            }
+        }
+        
+        // ===== SAVE FUNCTIONS =====
+        async function saveSection(section) {
+            try {
+                const updates = getSectionUpdates(section);
+                
+                const { error } = await supabase
+                    .from('portfolio_content')
+                    .upsert(updates, { onConflict: 'section,field' });
+                
+                if (error) throw error;
+                
+                showMessage('success', `${section.charAt(0).toUpperCase() + section.slice(1)} saved successfully!`);
+                updateSaveStatus(true);
+                
+            } catch (error) {
+                console.error(`Error saving ${section}:`, error);
+                showMessage('error', `Failed to save ${section}: ${error.message}`);
+            }
+        }
+        
+        function getSectionUpdates(section) {
+            const updates = [];
+            
+            switch(section) {
+                case 'home':
+                    updates.push(
+                        { section: 'home', field: 'hero_title', content: document.getElementById('edit-hero-title').value },
+                        { section: 'home', field: 'hero_subtitle', content: document.getElementById('edit-hero-subtitle').value },
+                        { section: 'home', field: 'hero_description', content: document.getElementById('edit-hero-description').value },
+                        { section: 'home', field: 'profile_photo', content: document.getElementById('edit-profile-photo').value }
+                    );
+                    break;
+                    
+                case 'about':
+                    updates.push(
+                        { section: 'about', field: 'about1', content: document.getElementById('edit-about1').value },
+                        { section: 'about', field: 'about2', content: 'My unique value: ' + document.getElementById('edit-about2').value },
+                        { section: 'about', field: 'about3', content: document.getElementById('edit-about3').value },
+                        { section: 'about', field: 'stat_years', content: document.getElementById('edit-stat1').value },
+                        { section: 'about', field: 'stat_students', content: document.getElementById('edit-stat2').value },
+                        { section: 'about', field: 'stat_community', content: document.getElementById('edit-stat3').value },
+                        { section: 'about', field: 'stat_satisfaction', content: document.getElementById('edit-stat4').value }
+                    );
+                    break;
+                    
+                case 'contact':
+                    updates.push(
+                        { section: 'contact', field: 'email', content: document.getElementById('edit-contact-email').value },
+                        { section: 'contact', field: 'phone', content: document.getElementById('edit-contact-phone').value },
+                        { section: 'contact', field: 'location', content: document.getElementById('edit-contact-location').value },
+                        { section: 'contact', field: 'linkedin', content: document.getElementById('edit-linkedin').value },
+                        { section: 'contact', field: 'github', content: document.getElementById('edit-github').value },
+                        { section: 'contact', field: 'twitter', content: document.getElementById('edit-twitter').value },
+                        { section: 'contact', field: 'instagram', content: document.getElementById('edit-instagram').value }
+                    );
+                    break;
+                    
+                case 'settings':
+                    updates.push(
+                        { section: 'settings', field: 'primary_color', content: document.getElementById('edit-color-primary').value },
+                        { section: 'settings', field: 'secondary_color', content: document.getElementById('edit-color-secondary').value },
+                        { section: 'settings', field: 'font_family', content: document.getElementById('edit-font-family').value },
+                        { section: 'settings', field: 'custom_css', content: document.getElementById('edit-custom-css').value }
+                    );
+                    break;
+            }
+            
+            return updates;
+        }
+        
+        async function saveAllChanges() {
+            try {
+                // Save all sections
+                await saveSection('home');
+                await saveSection('about');
+                await saveSection('contact');
+                await saveSection('settings');
+                await saveSkills();
+                await saveProjects();
+                await saveCareer();
+                
+                showMessage('success', 'All changes saved successfully!');
+                updateSaveStatus(true);
+                
+                // Refresh preview
+                document.getElementById('livePreview').contentWindow.location.reload();
+                
+            } catch (error) {
+                console.error('Error saving all:', error);
+                showMessage('error', 'Failed to save all changes: ' + error.message);
+            }
+        }
+        
+        // ===== UTILITY FUNCTIONS =====
+        function updatePhotoPreview(url) {
+            const preview = document.getElementById('profilePhotoPreview');
+            if (url && url.trim() !== '') {
+                preview.innerHTML = `<img src="${url}" alt="Preview">`;
+            }
+        }
+        
+        function updateSaveStatus(success) {
             const now = new Date();
             lastSavedTime.textContent = now.toLocaleTimeString();
             
             if (success) {
                 saveStatus.className = 'status-saved';
-                saveStatus.innerHTML = '<i class="fas fa-check-circle"></i> All changes saved to Supabase';
+                saveStatus.innerHTML = '<i class="fas fa-check-circle"></i> Changes saved';
             } else {
                 saveStatus.className = 'status-error';
-                saveStatus.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message || 'Save Failed'}`;
+                saveStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> Save failed';
             }
             
-            // Reset status after 5 seconds
             setTimeout(() => {
                 saveStatus.className = 'status-saved';
                 saveStatus.innerHTML = '<i class="fas fa-check-circle"></i> All changes saved';
+            }, 3000);
+        }
+        
+        function showMessage(type, text) {
+            // Remove existing messages
+            const existing = document.querySelector('.success-message, .error-message');
+            if (existing) existing.remove();
+            
+            const message = document.createElement('div');
+            message.className = type === 'success' ? 'success-message' : 'error-message';
+            message.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : 'exclamation'}"></i> ${text}`;
+            
+            document.querySelector('.admin-content').prepend(message);
+            
+            setTimeout(() => {
+                message.remove();
             }, 5000);
         }
         
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.href || element.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showMessage('success', 'URL copied to clipboard!');
+            });
+        }
+        
+        // ===== EVENT LISTENERS =====
         function setupEventListeners() {
             // Login
-            loginBtn.addEventListener('click', function() {
+            loginBtn.addEventListener('click', () => {
                 const password = adminPassword.value.trim();
                 if (password === ADMIN_PASSWORD) {
                     localStorage.setItem('portfolio_admin_auth', 'true');
                     isAuthenticated = true;
                     showDashboard();
-                    loadCurrentData();
+                    loadAllData();
                 } else {
-                    alert('Incorrect password. Try again.');
+                    alert('Incorrect password');
                 }
             });
             
             // Logout
-            logoutBtn.addEventListener('click', function() {
+            logoutBtn.addEventListener('click', () => {
                 localStorage.removeItem('portfolio_admin_auth');
                 isAuthenticated = false;
                 showLoginScreen();
             });
             
-            // Save button
+            // Save all
             saveBtn.addEventListener('click', saveAllChanges);
             
-            // Preview buttons
-            previewBtn.addEventListener('click', function() {
+            // Preview
+            previewBtn.addEventListener('click', () => {
                 window.open('index.html', '_blank');
             });
             
-            refreshPreviewBtn.addEventListener('click', function() {
+            openPreviewBtn.addEventListener('click', () => {
+                window.open('index.html', '_blank');
+            });
+            
+            refreshPreviewBtn.addEventListener('click', () => {
                 document.getElementById('livePreview').contentWindow.location.reload();
             });
             
-            // Photo preview
-            document.getElementById('edit-profile-photo').addEventListener('input', function() {
-                updatePhotoPreview(this.value);
+            // Add buttons
+            addProjectBtn.addEventListener('click', () => {
+                createProjectEditor();
             });
             
-            // Color inputs sync
-            document.getElementById('edit-color-primary').addEventListener('input', function() {
-                document.getElementById('edit-color-primary-text').value = this.value;
-            });
-            document.getElementById('edit-color-primary-text').addEventListener('input', function() {
-                document.getElementById('edit-color-primary').value = this.value;
-            });
-            document.getElementById('edit-color-secondary').addEventListener('input', function() {
-                document.getElementById('edit-color-secondary-text').value = this.value;
-            });
-            document.getElementById('edit-color-secondary-text').addEventListener('input', function() {
-                document.getElementById('edit-color-secondary').value = this.value;
+            addSkillCategoryBtn.addEventListener('click', () => {
+                const count = document.querySelectorAll('.skill-category-editor').length;
+                createSkillCategory('New Category', [], count);
             });
             
-            // Add project button
-            addProjectBtn.addEventListener('click', function() {
-                addProjectToEditor();
+            addCareerBtn.addEventListener('click', () => {
+                createCareerEditor();
+            });
+            
+            // Color sync
+            document.getElementById('edit-color-primary').addEventListener('input', (e) => {
+                document.getElementById('edit-color-primary-text').value = e.target.value;
+            });
+            
+            document.getElementById('edit-color-primary-text').addEventListener('input', (e) => {
+                document.getElementById('edit-color-primary').value = e.target.value;
+            });
+            
+            document.getElementById('edit-color-secondary').addEventListener('input', (e) => {
+                document.getElementById('edit-color-secondary-text').value = e.target.value;
+            });
+            
+            document.getElementById('edit-color-secondary-text').addEventListener('input', (e) => {
+                document.getElementById('edit-color-secondary').value = e.target.value;
             });
             
             // Navigation
@@ -967,15 +2108,13 @@
             const sections = document.querySelectorAll('.editor-section');
             
             navItems.forEach(item => {
-                item.addEventListener('click', function(e) {
+                item.addEventListener('click', (e) => {
                     e.preventDefault();
                     
-                    // Update active nav
                     navItems.forEach(nav => nav.classList.remove('active'));
-                    this.classList.add('active');
+                    item.classList.add('active');
                     
-                    // Show section
-                    const targetId = this.getAttribute('href');
+                    const targetId = item.getAttribute('href');
                     sections.forEach(section => {
                         section.classList.remove('active');
                         if (section.id === targetId.substring(1)) {
@@ -985,17 +2124,17 @@
                 });
             });
             
-            // Auto-save indicator on changes
+            // Input change detection
             const inputs = document.querySelectorAll('textarea, input, select');
             inputs.forEach(input => {
-                input.addEventListener('input', function() {
+                input.addEventListener('input', () => {
                     saveStatus.className = 'status-unsaved';
                     saveStatus.innerHTML = '<i class="fas fa-pencil-alt"></i> Unsaved changes';
                 });
             });
             
-            // Enter key to login
-            adminPassword.addEventListener('keypress', function(e) {
+            // Enter key login
+            adminPassword.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     loginBtn.click();
                 }
@@ -1003,4 +2142,4 @@
         }
     </script>
 </body>
-                                                   </html>
+</html>
