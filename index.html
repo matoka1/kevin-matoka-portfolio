@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
+    <!-- Add Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -24,6 +26,7 @@
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#career">Career</a></li>
                 <li><a href="#contact">Contact</a></li>
+                <li><a href="admin.html" class="admin-link"><i class="fas fa-cog"></i> Admin</a></li>
             </ul>
         </div>
     </nav>
@@ -45,8 +48,8 @@
             </div>
             <div class="hero-image">
                 <div class="image-placeholder">
-                    <!-- Add your professional photo here -->
-                    <i class="fas fa-user-md"></i>
+                    <!-- Profile photo will be loaded dynamically -->
+                    <i class="fas fa-user-md" id="profilePlaceholder"></i>
                     <p>Professional Photo</p>
                 </div>
             </div>
@@ -59,18 +62,18 @@
             <h2 class="section-title">About Me</h2>
             <div class="about-content">
                 <div class="about-text">
-                    <p>
+                    <p id="about-text-1">
                         I am a detail-oriented and results-driven Nursing Officer with over 2 years of progressive 
                         clinical and leadership experience across diverse healthcare settings. Currently serving as 
                         Head of Department, School of Nursing at Nakuru College of Health Science and Management.
                     </p>
-                    <p>
+                    <p id="about-text-2">
                         <strong>My unique value:</strong> I combine hands-on clinical expertise with technical skills 
                         in software engineering, database management, and cybersecurity. This dual competency allows me 
                         to translate clinical workflows into technical requirements, design secure health applications, 
                         and implement systems that improve patient care and healthcare delivery.
                     </p>
-                    <p>
+                    <p id="about-text-3">
                         Certified in Basic Life Support (BLS), Advanced Trauma Life Support (ATLS), Advanced 
                         Cardiovascular Life Support (ACLS), and Cybersecurity Essentials.
                     </p>
@@ -91,19 +94,19 @@
                 </div>
                 <div class="about-stats">
                     <div class="stat-card">
-                        <h3>2+</h3>
+                        <h3 id="stat-years">2+</h3>
                         <p>Years Clinical Experience</p>
                     </div>
                     <div class="stat-card">
-                        <h3>500+</h3>
+                        <h3 id="stat-students">500+</h3>
                         <p>Students Mentored</p>
                     </div>
                     <div class="stat-card">
-                        <h3>1000+</h3>
+                        <h3 id="stat-community">1000+</h3>
                         <p>Community Members Served</p>
                     </div>
                     <div class="stat-card">
-                        <h3>98%</h3>
+                        <h3 id="stat-satisfaction">98%</h3>
                         <p>Patient Satisfaction</p>
                     </div>
                 </div>
@@ -115,57 +118,10 @@
     <section id="skills" class="section skills">
         <div class="container">
             <h2 class="section-title">Areas of Expertise</h2>
-            <div class="skills-grid">
-                <!-- Clinical Skills -->
-                <div class="skill-category">
-                    <h3><i class="fas fa-heartbeat"></i> Clinical & Emergency Care</h3>
-                    <ul class="skill-list">
-                        <li>Basic Life Support (BLS)</li>
-                        <li>Advanced Cardiac Life Support (ACLS)</li>
-                        <li>Advanced Trauma Life Support (ATLS)</li>
-                        <li>Obstetric Safe Surgery (OSS)</li>
-                        <li>Patient-Centered Care</li>
-                        <li>Emergency Response Protocols</li>
-                    </ul>
-                </div>
-
-                <!-- Tech Skills -->
-                <div class="skill-category">
-                    <h3><i class="fas fa-laptop-code"></i> Healthcare Technology</h3>
-                    <ul class="skill-list">
-                        <li>Software Engineering Fundamentals</li>
-                        <li>Database Management & Design</li>
-                        <li>Cybersecurity for Healthcare Systems</li>
-                        <li>Web & Application Development</li>
-                        <li>Systems Analysis & Implementation</li>
-                        <li>Clinical Workflow Optimization</li>
-                    </ul>
-                </div>
-
-                <!-- Leadership Skills -->
-                <div class="skill-category">
-                    <h3><i class="fas fa-chalkboard-teacher"></i> Education & Leadership</h3>
-                    <ul class="skill-list">
-                        <li>Curriculum Development</li>
-                        <li>Faculty Mentorship & Training</li>
-                        <li>Academic Administration</li>
-                        <li>Policy Implementation</li>
-                        <li>Quality Improvement</li>
-                        <li>Strategic Planning</li>
-                    </ul>
-                </div>
-
-                <!-- Public Health Skills -->
-                <div class="skill-category">
-                    <h3><i class="fas fa-users"></i> Public Health</h3>
-                    <ul class="skill-list">
-                        <li>Vaccination Campaign Management</li>
-                        <li>Community Health Outreach</li>
-                        <li>Health Education Programs</li>
-                        <li>Medical Camp Coordination</li>
-                        <li>Multidisciplinary Collaboration</li>
-                        <li>Data Collection & Analysis</li>
-                    </ul>
+            <div class="skills-grid" id="skills-grid">
+                <!-- Skills will be loaded dynamically from Supabase -->
+                <div class="loading-skills">
+                    <i class="fas fa-spinner fa-spin"></i> Loading skills...
                 </div>
             </div>
         </div>
@@ -175,80 +131,10 @@
     <section id="projects" class="section projects">
         <div class="container">
             <h2 class="section-title">Projects & Impact</h2>
-            <div class="projects-grid">
-                <!-- Project 1 -->
-                <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fas fa-syringe"></i>
-                    </div>
-                    <h3>County-Wide Vaccine Campaign</h3>
-                    <p class="project-role">County TOT & Campaign Lead</p>
-                    <p class="project-desc">
-                        Led comprehensive Measles-Rubella and Tetanus vaccination campaign across Nakuru County facilities.
-                    </p>
-                    <div class="project-outcome">
-                        <h4>Key Outcomes:</h4>
-                        <ul>
-                            <li>Improved immunization coverage across the county</li>
-                            <li>Trained healthcare workers on cold-chain management</li>
-                            <li>Enhanced data collection and monitoring systems</li>
-                        </ul>
-                    </div>
-                    <div class="project-tags">
-                        <span class="tag">Public Health</span>
-                        <span class="tag">Leadership</span>
-                        <span class="tag">Database Management</span>
-                    </div>
-                </div>
-
-                <!-- Project 2 -->
-                <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Healthcare Cybersecurity Initiative</h3>
-                    <p class="project-role">Cybersecurity Advocate</p>
-                    <p class="project-desc">
-                        Applied cybersecurity principles to enhance data protection in clinical and educational settings.
-                    </p>
-                    <div class="project-outcome">
-                        <h4>Key Outcomes:</h4>
-                        <ul>
-                            <li>Increased awareness of data security protocols</li>
-                            <li>Contributed to secure system practices</li>
-                            <li>Integrated security best practices in training</li>
-                        </ul>
-                    </div>
-                    <div class="project-tags">
-                        <span class="tag">Cybersecurity</span>
-                        <span class="tag">Systems Management</span>
-                        <span class="tag">Training</span>
-                    </div>
-                </div>
-
-                <!-- Project 3 -->
-                <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3>Portfolio Website Development</h3>
-                    <p class="project-role">Developer & Designer</p>
-                    <p class="project-desc">
-                        Designed and built this responsive portfolio website to showcase multidisciplinary expertise.
-                    </p>
-                    <div class="project-outcome">
-                        <h4>Technical Implementation:</h4>
-                        <ul>
-                            <li>Built with HTML5, CSS3, JavaScript</li>
-                            <li>Responsive design for all devices</li>
-                            <li>Clean, professional UX/UI</li>
-                        </ul>
-                    </div>
-                    <div class="project-tags">
-                        <span class="tag">Software Engineering</span>
-                        <span class="tag">Web Development</span>
-                        <span class="tag">UX Design</span>
-                    </div>
+            <div class="projects-grid" id="projects-grid">
+                <!-- Projects will be loaded dynamically from Supabase -->
+                <div class="loading-projects">
+                    <i class="fas fa-spinner fa-spin"></i> Loading projects...
                 </div>
             </div>
         </div>
@@ -258,38 +144,10 @@
     <section id="career" class="section career">
         <div class="container">
             <h2 class="section-title">Career Journey</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">Oct 2025 - Present</div>
-                    <div class="timeline-content">
-                        <h3>Head of Department – School of Nursing</h3>
-                        <p class="timeline-org">Nakuru College of Health Science & Management</p>
-                        <p>Academic leadership, curriculum development, faculty mentorship</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">Feb 2025 - Oct 2025</div>
-                    <div class="timeline-content">
-                        <h3>Nurse Intern</h3>
-                        <p class="timeline-org">Office of the Nakuru County Chief Nursing Officer</p>
-                        <p>Policy support, quality improvement, nursing service coordination</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">Nov 2025</div>
-                    <div class="timeline-content">
-                        <h3>Cybersecurity Essentials Certification</h3>
-                        <p class="timeline-org">Cisco Networking Academy</p>
-                        <p>Enhanced technical skills in healthcare system security</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">Aug 2024 - Aug 2025</div>
-                    <div class="timeline-content">
-                        <h3>Nurse Officer Intern & Clinical Instructor</h3>
-                        <p class="timeline-org">Nakuru County Teaching and Referral Hospital</p>
-                        <p>Clinical training, mentorship, emergency care</p>
-                    </div>
+            <div class="timeline" id="career-timeline">
+                <!-- Career items will be loaded dynamically from Supabase -->
+                <div class="loading-career">
+                    <i class="fas fa-spinner fa-spin"></i> Loading career timeline...
                 </div>
             </div>
         </div>
@@ -305,21 +163,21 @@
                         <i class="fas fa-envelope"></i>
                         <div>
                             <h3>Email</h3>
-                            <a href="mailto:matokakevin98@gmail.com">matokakevin98@gmail.com</a>
+                            <a href="mailto:matokakevin98@gmail.com" id="contact-email">matokakevin98@gmail.com</a>
                         </div>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-phone"></i>
                         <div>
                             <h3>Phone</h3>
-                            <a href="tel:+254790969743">+254 790 969 743</a>
+                            <a href="tel:+254790969743" id="contact-phone">+254 790 969 743</a>
                         </div>
                     </div>
                     <div class="contact-item">
                         <i class="fas fa-map-marker-alt"></i>
                         <div>
                             <h3>Location</h3>
-                            <p>Nakuru, Kenya</p>
+                            <p id="contact-location">Nakuru, Kenya</p>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -358,9 +216,9 @@
                 <div class="footer-logo">Kevin<span>Matoka</span></div>
                 <p class="footer-tagline">Clinical Leader & Healthcare Technologist</p>
                 <div class="footer-social">
-                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="LinkedIn" id="social-linkedin"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" title="GitHub" id="social-github"><i class="fab fa-github"></i></a>
+                    <a href="#" title="Twitter" id="social-twitter"><i class="fab fa-twitter"></i></a>
                 </div>
                 <p class="footer-copyright">
                     &copy; <span id="currentYear"></span> Kevin Matoka Tiong'i. All rights reserved.
@@ -374,153 +232,439 @@
 
     <script src="script.js"></script>
     
-    <!-- Add this script here - RIGHT BEFORE </body> -->
+    <!-- Supabase Integration Script -->
     <script>
-    // Load admin-saved data
-    document.addEventListener('DOMContentLoaded', function() {
-        const savedData = localStorage.getItem('portfolioData');
-        if(savedData) {
-            const data = JSON.parse(savedData);
-            
-            // Debug: Log what we found
-            console.log('Loading saved data:', data);
-            
-            // Update homepage content - WITH NULL CHECKS
+        // Supabase Configuration with YOUR credentials
+        const SUPABASE_URL = 'https://uhqoihahmocwjgzpiivd.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
+        
+        // Initialize Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Main function to load all data
+        async function loadPortfolioData() {
             try {
-                // Hero Title
-                const heroTitle = document.querySelector('.hero-title');
-                if(heroTitle && data.heroTitle) {
-                    heroTitle.textContent = data.heroTitle;
+                console.log('Loading portfolio data from Supabase...');
+                
+                // 1. Load portfolio content (text fields)
+                await loadPortfolioContent();
+                
+                // 2. Load skills
+                await loadSkills();
+                
+                // 3. Load projects
+                await loadProjects();
+                
+                // 4. Load career timeline
+                await loadCareer();
+                
+                // 5. Apply custom styles
+                await applyCustomStyles();
+                
+                console.log('✅ All data loaded successfully!');
+                
+            } catch (error) {
+                console.error('❌ Error loading portfolio data:', error);
+                showErrorMessage();
+            }
+        }
+        
+        async function loadPortfolioContent() {
+            try {
+                const { data, error } = await supabase
+                    .from('portfolio_content')
+                    .select('*');
+                    
+                if (error) throw error;
+                
+                if (data && data.length > 0) {
+                    // Convert array to object for easy access
+                    const content = {};
+                    data.forEach(item => {
+                        if (!content[item.section]) {
+                            content[item.section] = {};
+                        }
+                        content[item.section][item.field] = item.content;
+                    });
+                    
+                    // Update Home Section
+                    updateHomeSection(content.home || {});
+                    
+                    // Update About Section
+                    updateAboutSection(content.about || {});
+                    
+                    // Update Contact Section
+                    updateContactSection(content.contact || {});
                 }
                 
-                // Hero Subtitle
-                const heroSubtitle = document.querySelector('.hero-subtitle');
-                if(heroSubtitle && data.heroSubtitle) {
-                    heroSubtitle.textContent = data.heroSubtitle;
+            } catch (error) {
+                console.error('Error loading portfolio content:', error);
+            }
+        }
+        
+        function updateHomeSection(homeData) {
+            // Hero Title
+            if (homeData.hero_title) {
+                document.querySelector('.hero-title').textContent = homeData.hero_title;
+            }
+            
+            // Hero Subtitle
+            if (homeData.hero_subtitle) {
+                document.querySelector('.hero-subtitle').textContent = homeData.hero_subtitle;
+            }
+            
+            // Hero Description
+            if (homeData.hero_description) {
+                document.querySelector('.hero-description').textContent = homeData.hero_description;
+            }
+            
+            // Profile Photo
+            if (homeData.profile_photo && homeData.profile_photo.trim() !== '') {
+                const heroImage = document.querySelector('.hero-image');
+                heroImage.innerHTML = `
+                    <div class="profile-photo-container">
+                        <img src="${homeData.profile_photo}" 
+                             alt="Profile Photo of Kevin Matoka" 
+                             class="profile-photo"
+                             onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 400\"><rect width=\"400\" height=\"400\" fill=\"%232a6e7a\"/><text x=\"50%\" y=\"50%\" font-family=\"Arial\" font-size=\"80\" fill=\"white\" text-anchor=\"middle\" dy=\".3em\">KM</text></svg>'">
+                    </div>
+                `;
+            }
+        }
+        
+        function updateAboutSection(aboutData) {
+            // About Text 1
+            if (aboutData.about1) {
+                document.getElementById('about-text-1').textContent = aboutData.about1;
+            }
+            
+            // About Text 2
+            if (aboutData.about2) {
+                const about2Element = document.getElementById('about-text-2');
+                if (aboutData.about2.includes('My unique value:')) {
+                    about2Element.innerHTML = `<strong>My unique value:</strong> ${aboutData.about2.replace('My unique value:', '').trim()}`;
+                } else {
+                    about2Element.innerHTML = `<strong>My unique value:</strong> ${aboutData.about2}`;
+                }
+            }
+            
+            // About Text 3
+            if (aboutData.about3) {
+                document.getElementById('about-text-3').textContent = aboutData.about3;
+            }
+            
+            // Stats
+            if (aboutData.stat_years) {
+                document.getElementById('stat-years').textContent = aboutData.stat_years + '+';
+            }
+            if (aboutData.stat_students) {
+                document.getElementById('stat-students').textContent = aboutData.stat_students + '+';
+            }
+            if (aboutData.stat_community) {
+                document.getElementById('stat-community').textContent = aboutData.stat_community + '+';
+            }
+            if (aboutData.stat_satisfaction) {
+                document.getElementById('stat-satisfaction').textContent = aboutData.stat_satisfaction + '%';
+            }
+        }
+        
+        function updateContactSection(contactData) {
+            // Email
+            if (contactData.email) {
+                const emailElement = document.getElementById('contact-email');
+                emailElement.textContent = contactData.email;
+                emailElement.href = `mailto:${contactData.email}`;
+            }
+            
+            // Phone
+            if (contactData.phone) {
+                const phoneElement = document.getElementById('contact-phone');
+                phoneElement.textContent = contactData.phone;
+                phoneElement.href = `tel:${contactData.phone.replace(/\s/g, '')}`;
+            }
+            
+            // Location
+            if (contactData.location) {
+                document.getElementById('contact-location').textContent = contactData.location;
+            }
+            
+            // Social Links
+            if (contactData.linkedin) {
+                const linkedinElement = document.getElementById('social-linkedin');
+                linkedinElement.href = contactData.linkedin;
+                linkedinElement.title = 'LinkedIn Profile';
+            }
+            if (contactData.github) {
+                const githubElement = document.getElementById('social-github');
+                githubElement.href = contactData.github;
+                githubElement.title = 'GitHub Profile';
+            }
+            if (contactData.twitter) {
+                const twitterElement = document.getElementById('social-twitter');
+                twitterElement.href = contactData.twitter;
+                twitterElement.title = 'Twitter Profile';
+            }
+        }
+        
+        async function loadSkills() {
+            try {
+                const { data, error } = await supabase
+                    .from('skills')
+                    .select('*')
+                    .order('display_order', { ascending: true });
+                    
+                if (error) throw error;
+                
+                const skillsGrid = document.getElementById('skills-grid');
+                
+                if (data && data.length > 0) {
+                    // Group skills by category
+                    const skillsByCategory = {};
+                    data.forEach(skill => {
+                        if (!skillsByCategory[skill.category]) {
+                            skillsByCategory[skill.category] = [];
+                        }
+                        skillsByCategory[skill.category].push(skill);
+                    });
+                    
+                    // Clear loading message
+                    skillsGrid.innerHTML = '';
+                    
+                    // Create skill categories
+                    Object.entries(skillsByCategory).forEach(([category, skills]) => {
+                        const categoryDiv = document.createElement('div');
+                        categoryDiv.className = 'skill-category';
+                        
+                        // Determine icon based on category
+                        let iconClass = 'fas fa-star';
+                        if (category.includes('Clinical')) iconClass = 'fas fa-heartbeat';
+                        else if (category.includes('Technology')) iconClass = 'fas fa-laptop-code';
+                        else if (category.includes('Education')) iconClass = 'fas fa-chalkboard-teacher';
+                        else if (category.includes('Public Health')) iconClass = 'fas fa-users';
+                        
+                        let skillsHTML = '';
+                        skills.forEach(skill => {
+                            skillsHTML += `<li>${skill.skill_name} <span class="skill-level">(${skill.skill_level})</span></li>`;
+                        });
+                        
+                        categoryDiv.innerHTML = `
+                            <h3><i class="${iconClass}"></i> ${category}</h3>
+                            <ul class="skill-list">
+                                ${skillsHTML}
+                            </ul>
+                        `;
+                        
+                        skillsGrid.appendChild(categoryDiv);
+                    });
+                } else {
+                    skillsGrid.innerHTML = '<p class="no-data">No skills data available.</p>';
                 }
                 
-                // Hero Description
-                const heroDescription = document.querySelector('.hero-description');
-                if(heroDescription && data.heroDescription) {
-                    heroDescription.textContent = data.heroDescription;
-                }
+            } catch (error) {
+                console.error('Error loading skills:', error);
+                document.getElementById('skills-grid').innerHTML = '<p class="error">Failed to load skills.</p>';
+            }
+        }
+        
+        async function loadProjects() {
+            try {
+                const { data, error } = await supabase
+                    .from('projects')
+                    .select('*')
+                    .order('display_order', { ascending: true });
+                    
+                if (error) throw error;
                 
-                // Profile Photo
-                if(data.profilePhoto && data.profilePhoto.trim() !== '') {
-                    const heroImage = document.querySelector('.hero-image');
-                    if(heroImage) {
-                        // Check if it's already an img or placeholder
-                        const existingImg = heroImage.querySelector('img');
-                        if(existingImg) {
-                            existingImg.src = data.profilePhoto;
-                        } else {
-                            // Replace placeholder with image
-                            heroImage.innerHTML = `
-                                <div class="profile-photo-container">
-                                    <img src="${data.profilePhoto}" alt="Profile Photo" style="border-radius: 10px; width: 100%; max-width: 400px; border: 5px solid white; box-shadow: var(--shadow);">
+                const projectsGrid = document.getElementById('projects-grid');
+                
+                if (data && data.length > 0) {
+                    // Clear loading message
+                    projectsGrid.innerHTML = '';
+                    
+                    // Create project cards
+                    data.forEach(project => {
+                        const projectCard = document.createElement('div');
+                        projectCard.className = 'project-card';
+                        
+                        // Parse tags (if stored as array)
+                        let tagsHTML = '';
+                        if (project.tags && Array.isArray(project.tags) && project.tags.length > 0) {
+                            tagsHTML = project.tags.map(tag => 
+                                `<span class="tag">${tag}</span>`
+                            ).join('');
+                        } else if (typeof project.tags === 'string' && project.tags.trim() !== '') {
+                            tagsHTML = `<span class="tag">${project.tags}</span>`;
+                        }
+                        
+                        // Parse outcomes
+                        let outcomesHTML = '';
+                        if (project.outcomes && Array.isArray(project.outcomes) && project.outcomes.length > 0) {
+                            outcomesHTML = `
+                                <div class="project-outcome">
+                                    <h4>Key Outcomes:</h4>
+                                    <ul>
+                                        ${project.outcomes.map(outcome => `<li>${outcome}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            `;
+                        } else if (typeof project.outcomes === 'string' && project.outcomes.trim() !== '') {
+                            outcomesHTML = `
+                                <div class="project-outcome">
+                                    <h4>Key Outcomes:</h4>
+                                    <p>${project.outcomes}</p>
                                 </div>
                             `;
                         }
-                    }
+                        
+                        projectCard.innerHTML = `
+                            <div class="project-icon">
+                                <i class="${project.icon || 'fas fa-project-diagram'}"></i>
+                            </div>
+                            <h3>${project.title || 'Project Title'}</h3>
+                            ${project.role ? `<p class="project-role">${project.role}</p>` : ''}
+                            <p class="project-desc">${project.description || 'Project description goes here.'}</p>
+                            ${outcomesHTML}
+                            ${tagsHTML ? `<div class="project-tags">${tagsHTML}</div>` : ''}
+                        `;
+                        
+                        projectsGrid.appendChild(projectCard);
+                    });
+                } else {
+                    projectsGrid.innerHTML = '<p class="no-data">No projects data available.</p>';
                 }
                 
-                // About Section
-                const aboutParagraphs = document.querySelectorAll('.about-text p');
-                if(aboutParagraphs.length >= 1 && data.aboutText1) {
-                    aboutParagraphs[0].textContent = data.aboutText1;
-                }
-                if(aboutParagraphs.length >= 2 && data.aboutText2) {
-                    // Check if "My unique value:" is already in the text
-                    let aboutText2 = data.aboutText2;
-                    if(!aboutText2.includes('My unique value:')) {
-                        aboutText2 = 'My unique value: ' + aboutText2;
-                    }
-                    aboutParagraphs[1].innerHTML = `<strong>${aboutText2.split(':')[0]}:</strong> ${aboutText2.split(':')[1] ? aboutText2.split(':')[1].trim() : ''}`;
-                }
-                
-                // Stats Section
-                if(data.stats) {
-                    const statCards = document.querySelectorAll('.stat-card h3');
-                    if(statCards.length >= 1 && data.stats.years) {
-                        statCards[0].textContent = data.stats.years + '+';
-                    }
-                    if(statCards.length >= 2 && data.stats.students) {
-                        statCards[1].textContent = data.stats.students + '+';
-                    }
-                    if(statCards.length >= 3 && data.stats.community) {
-                        statCards[2].textContent = data.stats.community + '+';
-                    }
-                    if(statCards.length >= 4 && data.stats.satisfaction) {
-                        statCards[3].textContent = data.stats.satisfaction + '%';
-                    }
-                }
-                
-                // Contact Information
-                // Email
-                const emailLinks = document.querySelectorAll('a[href^="mailto"]');
-                if(emailLinks.length > 0 && data.email) {
-                    emailLinks[0].textContent = data.email;
-                    emailLinks[0].href = `mailto:${data.email}`;
-                }
-                
-                // Phone
-                const phoneLinks = document.querySelectorAll('a[href^="tel"]');
-                if(phoneLinks.length > 0 && data.phone) {
-                    phoneLinks[0].textContent = data.phone;
-                    phoneLinks[0].href = `tel:${data.phone.replace(/\s/g, '')}`;
-                }
-                
-                // Location - Find the contact item with location text
-                const contactItems = document.querySelectorAll('.contact-item');
-                contactItems.forEach(item => {
-                    if(item.textContent.includes('Nakuru') || item.querySelector('p')) {
-                        const pElement = item.querySelector('p');
-                        if(pElement && data.location) {
-                            pElement.textContent = data.location;
-                        }
-                    }
-                });
-                
-                // Social Links
-                if(data.social) {
-                    const socialLinks = document.querySelectorAll('.footer-social a');
-                    if(socialLinks.length >= 1 && data.social.linkedin) {
-                        socialLinks[0].href = data.social.linkedin;
-                    }
-                    if(socialLinks.length >= 2 && data.social.github) {
-                        socialLinks[1].href = data.social.github;
-                    }
-                    if(socialLinks.length >= 3 && data.social.twitter) {
-                        socialLinks[2].href = data.social.twitter;
-                    }
-                }
-                
-                // Update colors
-                if(data.colors) {
-                    const root = document.documentElement;
-                    if(data.colors.primary) root.style.setProperty('--primary', data.colors.primary);
-                    if(data.colors.secondary) root.style.setProperty('--secondary', data.colors.secondary);
-                }
-                
-                // Update font
-                if(data.fontFamily) {
-                    document.body.style.fontFamily = `'${data.fontFamily}', sans-serif`;
-                }
-                
-                // Apply custom CSS
-                if(data.customCSS) {
-                    const style = document.createElement('style');
-                    style.textContent = data.customCSS;
-                    document.head.appendChild(style);
-                }
-                
-                console.log('Data loaded successfully!');
-                
-            } catch(error) {
-                console.error('Error loading saved data:', error);
+            } catch (error) {
+                console.error('Error loading projects:', error);
+                document.getElementById('projects-grid').innerHTML = '<p class="error">Failed to load projects.</p>';
             }
         }
-    });
+        
+        async function loadCareer() {
+            try {
+                const { data, error } = await supabase
+                    .from('career')
+                    .select('*')
+                    .order('display_order', { ascending: true });
+                    
+                if (error) throw error;
+                
+                const careerTimeline = document.getElementById('career-timeline');
+                
+                if (data && data.length > 0) {
+                    // Clear loading message
+                    careerTimeline.innerHTML = '';
+                    
+                    // Create career timeline items
+                    data.forEach(item => {
+                        const timelineItem = document.createElement('div');
+                        timelineItem.className = 'timeline-item';
+                        
+                        let dateText = '';
+                        if (item.start_date && item.end_date) {
+                            dateText = `${item.start_date} - ${item.end_date}`;
+                        } else if (item.start_date) {
+                            dateText = `${item.start_date}${item.current ? ' - Present' : ''}`;
+                        } else if (item.end_date) {
+                            dateText = `${item.end_date}`;
+                        }
+                        
+                        timelineItem.innerHTML = `
+                            <div class="timeline-date">${dateText}</div>
+                            <div class="timeline-content">
+                                <h3>${item.position || 'Position'}</h3>
+                                <p class="timeline-org">${item.organization || 'Organization'}</p>
+                                <p>${item.description || 'Description of role and responsibilities.'}</p>
+                            </div>
+                        `;
+                        
+                        careerTimeline.appendChild(timelineItem);
+                    });
+                } else {
+                    careerTimeline.innerHTML = '<p class="no-data">No career data available.</p>';
+                }
+                
+            } catch (error) {
+                console.error('Error loading career:', error);
+                document.getElementById('career-timeline').innerHTML = '<p class="error">Failed to load career timeline.</p>';
+            }
+        }
+        
+        async function applyCustomStyles() {
+            try {
+                // Load settings
+                const { data, error } = await supabase
+                    .from('portfolio_content')
+                    .select('*')
+                    .eq('section', 'settings');
+                    
+                if (error) throw error;
+                
+                if (data && data.length > 0) {
+                    const settings = {};
+                    data.forEach(item => {
+                        settings[item.field] = item.content;
+                    });
+                    
+                    const root = document.documentElement;
+                    
+                    // Apply primary color
+                    if (settings.primary_color) {
+                        root.style.setProperty('--primary', settings.primary_color);
+                    }
+                    
+                    // Apply secondary color
+                    if (settings.secondary_color) {
+                        root.style.setProperty('--secondary', settings.secondary_color);
+                    }
+                    
+                    // Apply font family
+                    if (settings.font_family) {
+                        document.body.style.fontFamily = `${settings.font_family}, sans-serif`;
+                    }
+                    
+                    // Apply custom CSS
+                    if (settings.custom_css && settings.custom_css.trim() !== '') {
+                        const style = document.createElement('style');
+                        style.textContent = settings.custom_css;
+                        document.head.appendChild(style);
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        }
+        
+        function showErrorMessage() {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'data-error';
+            errorDiv.style.cssText = `
+                background: #f8d7da;
+                color: #721c24;
+                padding: 10px;
+                border: 1px solid #f5c6cb;
+                border-radius: 4px;
+                margin: 10px;
+                text-align: center;
+            `;
+            errorDiv.innerHTML = `
+                <p><i class="fas fa-exclamation-triangle"></i> Unable to load portfolio data.</p>
+                <small>Showing default content. Please check your internet connection.</small>
+            `;
+            document.body.insertBefore(errorDiv, document.body.firstChild);
+        }
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Load data from Supabase
+            loadPortfolioData();
+            
+            // Auto-refresh data every 5 minutes (optional)
+            // setInterval(loadPortfolioData, 300000);
+        });
     </script>
 </body>
-</html>
+                    </html>
