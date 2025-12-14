@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Portfolio Editor</title>
+    <link rel="stylesheet" href="admin-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <h2><i class="fas fa-lock"></i> Portfolio Admin</h2>
+            <div class="login-form">
+                <input type="password" id="adminPassword" placeholder="Enter Admin Password" autocomplete="off">
+                <button id="loginBtn" class="btn-login">Login</button>
+                <p class="hint">Default password: admin123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="dashboard" class="dashboard-container" style="display: none;">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-left">
+                <h1><i class="fas fa-cogs"></i> Portfolio Admin</h1>
+                <p>Edit your portfolio content visually</p>
+            </div>
+            <div class="header-right">
+                <button id="previewBtn" class="btn-preview">
+                    <i class="fas fa-eye"></i> Preview
+                </button>
+                <button id="saveBtn" class="btn-save">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <button id="logoutBtn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Sidebar Navigation -->
+            <aside class="admin-sidebar">
+                <nav class="sidebar-nav">
+                    <a href="#section-home" class="nav-item active">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="#section-about" class="nav-item">
+                        <i class="fas fa-user"></i> About
+                    </a>
+                    <a href="#section-skills" class="nav-item">
+                        <i class="fas fa-star"></i> Skills
+                    </a>
+                    <a href="#section-projects" class="nav-item">
+                        <i class="fas fa-project-diagram"></i> Projects
+                    </a>
+                    <a href="#section-career" class="nav-item">
+                        <i class="fas fa-briefcase"></i> Career
+                    </a>
+                    <a href="#section-contact" class="nav-item">
+                        <i class="fas fa-envelope"></i> Contact
+                    </a>
+                    <a href="#section-settings" class="nav-item">
+                        <i class="fas fa-palette"></i> Colors & Style
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="admin-content">
+                <!-- HOME Section Editor -->
+                <section id="section-home" class="editor-section active">
+                    <h2><i class="fas fa-home"></i> Home Section</h2>
+                    <div class="editor-grid">
+                        <div class="editor-card">
+                            <h3>Hero Title</h3>
+                            <textarea id="edit-hero-title" class="editor-textarea" rows="2">Kevin Matoka Tiong'i</textarea>
+                        </div>
+                        <div class="editor-card">
+                            <h3>Hero Subtitle</h3>
+                            <textarea id="edit-hero-subtitle" class="editor-textarea" rows="2">Nursing Officer | Healthcare Technologist | Educator</textarea>
+                        </div>
+                        <div class="editor-card">
+                            <h3>Hero Description</h3>
+                            <textarea id="edit-hero-description" class="editor-textarea" rows="4">Bridging clinical excellence with technical innovation to build safer, more efficient, and data-driven healthcare systems in Kenya and beyond.</textarea>
+                        </div>
+                        <div class="editor-card">
+                            <h3>Profile Photo</h3>
+                            <input type="text" id="edit-profile-photo" class="editor-input" placeholder="Photo URL or path">
+                            <small>Enter URL or local path (e.g., images/profile.jpg)</small>
+                            <div class="image-preview" id="photoPreview"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ABOUT Section Editor -->
+                <section id="section-about" class="editor-section">
+                    <h2><i class="fas fa-user"></i> About Section</h2>
+                    <div class="editor-grid">
+                        <div class="editor-card">
+                            <h3>About Text 1</h3>
+                            <textarea id="edit-about1" class="editor-textarea" rows="4">I am a detail-oriented and results-driven Nursing Officer with over 2 years of progressive clinical and leadership experience across diverse healthcare settings. Currently serving as Head of Department, School of Nursing at Nakuru College of Health Science and Management.</textarea>
+                        </div>
+                        <div class="editor-card">
+                            <h3>About Text 2</h3>
+                            <textarea id="edit-about2" class="editor-textarea" rows="4">My unique value: I combine hands-on clinical expertise with technical skills in software engineering, database management, and cybersecurity. This dual competency allows me to translate clinical workflows into technical requirements, design secure health applications, and implement systems that improve patient care and healthcare delivery.</textarea>
+                        </div>
+                        <div class="editor-card">
+                            <h3>Stats</h3>
+                            <div class="stats-grid">
+                                <div class="stat-input">
+                                    <label>Years Experience:</label>
+                                    <input type="number" id="edit-stat1" value="2" min="0">
+                                </div>
+                                <div class="stat-input">
+                                    <label>Students Mentored:</label>
+                                    <input type="number" id="edit-stat2" value="500" min="0">
+                                </div>
+                                <div class="stat-input">
+                                    <label>Community Served:</label>
+                                    <input type="number" id="edit-stat3" value="1000" min="0">
+                                </div>
+                                <div class="stat-input">
+                                    <label>Satisfaction %:</label>
+                                    <input type="number" id="edit-stat4" value="98" min="0" max="100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CONTACT Section Editor -->
+                <section id="section-contact" class="editor-section">
+                    <h2><i class="fas fa-envelope"></i> Contact Section</h2>
+                    <div class="editor-grid">
+                        <div class="editor-card">
+                            <h3>Email Address</h3>
+                            <input type="email" id="edit-contact-email" class="editor-input" value="matokakevin98@gmail.com">
+                        </div>
+                        <div class="editor-card">
+                            <h3>Phone Number</h3>
+                            <input type="text" id="edit-contact-phone" class="editor-input" value="+254 790 969 743">
+                        </div>
+                        <div class="editor-card">
+                            <h3>Location</h3>
+                            <input type="text" id="edit-contact-location" class="editor-input" value="Nakuru, Kenya">
+                        </div>
+                        <div class="editor-card">
+                            <h3>Social Links</h3>
+                            <div class="social-inputs">
+                                <div class="social-input">
+                                    <label><i class="fab fa-linkedin"></i> LinkedIn:</label>
+                                    <input type="text" id="edit-linkedin" class="editor-input" placeholder="LinkedIn profile URL">
+                                </div>
+                                <div class="social-input">
+                                    <label><i class="fab fa-github"></i> GitHub:</label>
+                                    <input type="text" id="edit-github" class="editor-input" placeholder="GitHub profile URL">
+                                </div>
+                                <div class="social-input">
+                                    <label><i class="fab fa-twitter"></i> Twitter:</label>
+                                    <input type="text" id="edit-twitter" class="editor-input" placeholder="Twitter profile URL">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- COLORS & STYLE Editor -->
+                <section id="section-settings" class="editor-section">
+                    <h2><i class="fas fa-palette"></i> Color & Style Settings</h2>
+                    <div class="editor-grid">
+                        <div class="editor-card">
+                            <h3>Primary Color</h3>
+                            <input type="color" id="edit-color-primary" value="#2a6e7a">
+                            <input type="text" id="edit-color-primary-text" value="#2a6e7a">
+                        </div>
+                        <div class="editor-card">
+                            <h3>Secondary Color</h3>
+                            <input type="color" id="edit-color-secondary" value="#e63946">
+                            <input type="text" id="edit-color-secondary-text" value="#e63946">
+                        </div>
+                        <div class="editor-card">
+                            <h3>Font Family</h3>
+                            <select id="edit-font-family" class="editor-select">
+                                <option value="Poppins">Poppins</option>
+                                <option value="Roboto">Roboto</option>
+                                <option value="Open Sans">Open Sans</option>
+                                <option value="Montserrat">Montserrat</option>
+                                <option value="Arial">Arial</option>
+                            </select>
+                        </div>
+                        <div class="editor-card">
+                            <h3>Custom CSS</h3>
+                            <textarea id="edit-custom-css" class="editor-textarea" rows="6" placeholder="Add custom CSS here..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Live Preview -->
+                <section class="preview-section">
+                    <h2><i class="fas fa-desktop"></i> Live Preview</h2>
+                    <div class="preview-container">
+                        <iframe id="livePreview" src="index.html" width="100%" height="500"></iframe>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Status Bar -->
+        <footer class="admin-footer">
+            <div class="status-bar">
+                <span id="saveStatus" class="status-saved">
+                    <i class="fas fa-check-circle"></i> All changes saved
+                </span>
+                <span class="last-saved">Last saved: <span id="lastSavedTime">Just now</span></span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>
