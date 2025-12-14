@@ -7,6 +7,131 @@
     <link rel="stylesheet" href="admin-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Additional styles for dynamic project editing */
+        .projects-editor {
+            margin-top: 2rem;
+        }
+        
+        .project-editor-item {
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .project-editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e1e5e9;
+        }
+        
+        .project-title-input {
+            flex: 1;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .project-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .project-meta input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .project-description-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            font-family: inherit;
+        }
+        
+        .project-outcomes-input {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            font-family: inherit;
+        }
+        
+        .project-tags-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-add-project, .btn-remove-project {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-add-project {
+            background: #2a6e7a;
+            color: white;
+            margin-top: 1rem;
+        }
+        
+        .btn-remove-project {
+            background: #e63946;
+            color: white;
+        }
+        
+        .btn-save-projects {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .hint-text {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+        
+        .icon-select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body>
     <!-- Login Screen -->
@@ -34,7 +159,7 @@
                     <i class="fas fa-eye"></i> Preview
                 </button>
                 <button id="saveBtn" class="btn-save">
-                    <i class="fas fa-save"></i> Save Changes
+                    <i class="fas fa-save"></i> Save All Changes
                 </button>
                 <button id="logoutBtn" class="btn-logout">
                     <i class="fas fa-sign-out-alt"></i> Logout
@@ -91,9 +216,11 @@
                         </div>
                         <div class="editor-card">
                             <h3>Profile Photo</h3>
-                            <input type="text" id="edit-profile-photo" class="editor-input" placeholder="Photo URL or path">
-                            <small>Enter URL or local path (e.g., images/profile.jpg)</small>
-                            <div class="image-preview" id="photoPreview"></div>
+                            <input type="text" id="edit-profile-photo" class="editor-input" placeholder="https://example.com/your-photo.jpg">
+                            <small class="hint-text">Enter full URL of your profile photo</small>
+                            <div class="image-preview" id="photoPreview">
+                                <p>No photo selected</p>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -108,7 +235,12 @@
                         </div>
                         <div class="editor-card">
                             <h3>About Text 2</h3>
-                            <textarea id="edit-about2" class="editor-textarea" rows="4">My unique value: I combine hands-on clinical expertise with technical skills in software engineering, database management, and cybersecurity. This dual competency allows me to translate clinical workflows into technical requirements, design secure health applications, and implement systems that improve patient care and healthcare delivery.</textarea>
+                            <textarea id="edit-about2" class="editor-textarea" rows="4">I combine hands-on clinical expertise with technical skills in software engineering, database management, and cybersecurity. This dual competency allows me to translate clinical workflows into technical requirements, design secure health applications, and implement systems that improve patient care and healthcare delivery.</textarea>
+                            <small class="hint-text">"My unique value:" will be automatically added</small>
+                        </div>
+                        <div class="editor-card">
+                            <h3>About Text 3</h3>
+                            <textarea id="edit-about3" class="editor-textarea" rows="3">Certified in Basic Life Support (BLS), Advanced Trauma Life Support (ATLS), Advanced Cardiovascular Life Support (ACLS), and Cybersecurity Essentials.</textarea>
                         </div>
                         <div class="editor-card">
                             <h3>Stats</h3>
@@ -134,6 +266,29 @@
                     </div>
                 </section>
 
+                <!-- PROJECTS Section Editor -->
+                <section id="section-projects" class="editor-section">
+                    <h2><i class="fas fa-project-diagram"></i> Projects Section</h2>
+                    
+                    <div class="projects-editor" id="projectsEditor">
+                        <div class="editor-card">
+                            <h3>Current Projects</h3>
+                            <p class="hint-text">Add, edit, or remove your projects below. Changes will be saved when you click "Save All Changes".</p>
+                            
+                            <div id="projectsContainer">
+                                <!-- Projects will be loaded here dynamically -->
+                                <div class="loading-projects">
+                                    <i class="fas fa-spinner fa-spin"></i> Loading projects...
+                                </div>
+                            </div>
+                            
+                            <button id="addProjectBtn" class="btn-add-project">
+                                <i class="fas fa-plus"></i> Add New Project
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- CONTACT Section Editor -->
                 <section id="section-contact" class="editor-section">
                     <h2><i class="fas fa-envelope"></i> Contact Section</h2>
@@ -155,15 +310,15 @@
                             <div class="social-inputs">
                                 <div class="social-input">
                                     <label><i class="fab fa-linkedin"></i> LinkedIn:</label>
-                                    <input type="text" id="edit-linkedin" class="editor-input" placeholder="LinkedIn profile URL">
+                                    <input type="text" id="edit-linkedin" class="editor-input" placeholder="https://linkedin.com/in/yourprofile">
                                 </div>
                                 <div class="social-input">
                                     <label><i class="fab fa-github"></i> GitHub:</label>
-                                    <input type="text" id="edit-github" class="editor-input" placeholder="GitHub profile URL">
+                                    <input type="text" id="edit-github" class="editor-input" placeholder="https://github.com/yourusername">
                                 </div>
                                 <div class="social-input">
                                     <label><i class="fab fa-twitter"></i> Twitter:</label>
-                                    <input type="text" id="edit-twitter" class="editor-input" placeholder="Twitter profile URL">
+                                    <input type="text" id="edit-twitter" class="editor-input" placeholder="https://twitter.com/yourusername">
                                 </div>
                             </div>
                         </div>
@@ -176,13 +331,19 @@
                     <div class="editor-grid">
                         <div class="editor-card">
                             <h3>Primary Color</h3>
-                            <input type="color" id="edit-color-primary" value="#2a6e7a">
-                            <input type="text" id="edit-color-primary-text" value="#2a6e7a">
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <input type="color" id="edit-color-primary" value="#2a6e7a">
+                                <input type="text" id="edit-color-primary-text" value="#2a6e7a" class="editor-input" style="flex: 1;">
+                            </div>
+                            <small class="hint-text">Main brand color for headers, buttons, etc.</small>
                         </div>
                         <div class="editor-card">
                             <h3>Secondary Color</h3>
-                            <input type="color" id="edit-color-secondary" value="#e63946">
-                            <input type="text" id="edit-color-secondary-text" value="#e63946">
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <input type="color" id="edit-color-secondary" value="#e63946">
+                                <input type="text" id="edit-color-secondary-text" value="#e63946" class="editor-input" style="flex: 1;">
+                            </div>
+                            <small class="hint-text">Accent color for highlights, hover effects</small>
                         </div>
                         <div class="editor-card">
                             <h3>Font Family</h3>
@@ -197,6 +358,7 @@
                         <div class="editor-card">
                             <h3>Custom CSS</h3>
                             <textarea id="edit-custom-css" class="editor-textarea" rows="6" placeholder="Add custom CSS here..."></textarea>
+                            <small class="hint-text">Add any custom CSS rules to override styles</small>
                         </div>
                     </div>
                 </section>
@@ -206,6 +368,11 @@
                     <h2><i class="fas fa-desktop"></i> Live Preview</h2>
                     <div class="preview-container">
                         <iframe id="livePreview" src="index.html" width="100%" height="500"></iframe>
+                    </div>
+                    <div style="margin-top: 1rem; text-align: center;">
+                        <button id="refreshPreviewBtn" class="btn-preview" style="padding: 8px 16px;">
+                            <i class="fas fa-redo"></i> Refresh Preview
+                        </button>
                     </div>
                 </section>
             </div>
@@ -217,10 +384,39 @@
                 <span id="saveStatus" class="status-saved">
                     <i class="fas fa-check-circle"></i> All changes saved
                 </span>
-                <span class="last-saved">Last saved: <span id="lastSavedTime">Just now</span></span>
+                <span class="last-saved">Last saved: <span id="lastSavedTime">Never</span></span>
             </div>
         </footer>
     </div>
+
+    <!-- Project Template (hidden) -->
+    <template id="projectTemplate">
+        <div class="project-editor-item" data-id="">
+            <div class="project-editor-header">
+                <input type="text" class="project-title-input" placeholder="Project Title" value="">
+                <button class="btn-remove-project" type="button">
+                    <i class="fas fa-trash"></i> Remove
+                </button>
+            </div>
+            <div class="project-meta">
+                <input type="text" class="project-role-input" placeholder="Your Role (e.g., Project Lead)" value="">
+                <select class="icon-select">
+                    <option value="fas fa-syringe">Syringe Icon</option>
+                    <option value="fas fa-shield-alt">Shield Icon</option>
+                    <option value="fas fa-code">Code Icon</option>
+                    <option value="fas fa-heartbeat">Heartbeat Icon</option>
+                    <option value="fas fa-laptop-medical">Medical Laptop</option>
+                    <option value="fas fa-project-diagram">Project Diagram</option>
+                    <option value="fas fa-chart-line">Chart Line</option>
+                    <option value="fas fa-users">Users</option>
+                </select>
+            </div>
+            <textarea class="project-description-input" placeholder="Project description..."></textarea>
+            <textarea class="project-outcomes-input" placeholder="Key outcomes (one per line)"></textarea>
+            <input type="text" class="project-tags-input" placeholder="Tags (comma separated, e.g., Public Health, Leadership)">
+            <small class="hint-text">Display order: <input type="number" class="display-order" value="0" min="0" style="width: 60px;"> (Lower numbers show first)</small>
+        </div>
+    </template>
 
     <script>
         // Supabase Configuration
@@ -242,8 +438,11 @@
         const logoutBtn = document.getElementById('logoutBtn');
         const saveBtn = document.getElementById('saveBtn');
         const previewBtn = document.getElementById('previewBtn');
+        const refreshPreviewBtn = document.getElementById('refreshPreviewBtn');
         const saveStatus = document.getElementById('saveStatus');
         const lastSavedTime = document.getElementById('lastSavedTime');
+        const addProjectBtn = document.getElementById('addProjectBtn');
+        const projectsContainer = document.getElementById('projectsContainer');
         
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -269,17 +468,17 @@
         
         async function loadCurrentData() {
             try {
-                // Load current data from Supabase to populate the form
-                const { data, error } = await supabase
+                // Load portfolio content
+                const { data: contentData, error: contentError } = await supabase
                     .from('portfolio_content')
                     .select('*');
                     
-                if (error) throw error;
+                if (contentError) throw contentError;
                 
-                if (data && data.length > 0) {
+                if (contentData && contentData.length > 0) {
                     // Organize data
                     const content = {};
-                    data.forEach(item => {
+                    contentData.forEach(item => {
                         if (!content[item.section]) {
                             content[item.section] = {};
                         }
@@ -289,6 +488,9 @@
                     // Populate form fields
                     populateFormFields(content);
                 }
+                
+                // Load projects
+                await loadProjects();
                 
             } catch (error) {
                 console.error('Error loading current data:', error);
@@ -316,6 +518,7 @@
                     const about2 = content.about.about2.replace('My unique value:', '').trim();
                     document.getElementById('edit-about2').value = about2;
                 }
+                if (content.about.about3) document.getElementById('edit-about3').value = content.about.about3;
                 if (content.about.stat_years) document.getElementById('edit-stat1').value = content.about.stat_years;
                 if (content.about.stat_students) document.getElementById('edit-stat2').value = content.about.stat_students;
                 if (content.about.stat_community) document.getElementById('edit-stat3').value = content.about.stat_community;
@@ -351,10 +554,138 @@
             }
         }
         
+        async function loadProjects() {
+            try {
+                const { data: projectsData, error } = await supabase
+                    .from('projects')
+                    .select('*')
+                    .order('display_order', { ascending: true });
+                    
+                if (error) throw error;
+                
+                projectsContainer.innerHTML = '';
+                
+                if (projectsData && projectsData.length > 0) {
+                    projectsData.forEach(project => {
+                        addProjectToEditor(project);
+                    });
+                } else {
+                    // Add default projects if none exist
+                    addDefaultProjects();
+                }
+                
+            } catch (error) {
+                console.error('Error loading projects:', error);
+                projectsContainer.innerHTML = '<p class="error">Failed to load projects</p>';
+            }
+        }
+        
+        function addProjectToEditor(projectData = {}) {
+            const template = document.getElementById('projectTemplate');
+            const projectElement = template.content.cloneNode(true);
+            const projectDiv = projectElement.querySelector('.project-editor-item');
+            
+            // Set data-id for existing projects
+            if (projectData.id) {
+                projectDiv.setAttribute('data-id', projectData.id);
+            }
+            
+            // Fill in data
+            if (projectData.title) {
+                projectDiv.querySelector('.project-title-input').value = projectData.title;
+            }
+            
+            if (projectData.role) {
+                projectDiv.querySelector('.project-role-input').value = projectData.role;
+            }
+            
+            if (projectData.icon) {
+                projectDiv.querySelector('.icon-select').value = projectData.icon;
+            }
+            
+            if (projectData.description) {
+                projectDiv.querySelector('.project-description-input').value = projectData.description;
+            }
+            
+            if (projectData.outcomes && Array.isArray(projectData.outcomes)) {
+                projectDiv.querySelector('.project-outcomes-input').value = projectData.outcomes.join('\n');
+            } else if (projectData.outcomes) {
+                projectDiv.querySelector('.project-outcomes-input').value = projectData.outcomes;
+            }
+            
+            if (projectData.tags && Array.isArray(projectData.tags)) {
+                projectDiv.querySelector('.project-tags-input').value = projectData.tags.join(', ');
+            } else if (projectData.tags) {
+                projectDiv.querySelector('.project-tags-input').value = projectData.tags;
+            }
+            
+            if (projectData.display_order !== undefined) {
+                projectDiv.querySelector('.display-order').value = projectData.display_order;
+            }
+            
+            // Add remove button functionality
+            const removeBtn = projectDiv.querySelector('.btn-remove-project');
+            removeBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to remove this project?')) {
+                    projectDiv.remove();
+                }
+            });
+            
+            projectsContainer.appendChild(projectDiv);
+        }
+        
+        function addDefaultProjects() {
+            const defaultProjects = [
+                {
+                    title: "County-Wide Vaccine Campaign",
+                    role: "County TOT & Campaign Lead",
+                    icon: "fas fa-syringe",
+                    description: "Led comprehensive Measles-Rubella and Tetanus vaccination campaign across Nakuru County facilities.",
+                    outcomes: [
+                        "Improved immunization coverage across the county",
+                        "Trained healthcare workers on cold-chain management",
+                        "Enhanced data collection and monitoring systems"
+                    ],
+                    tags: ["Public Health", "Leadership", "Database Management"],
+                    display_order: 1
+                },
+                {
+                    title: "Healthcare Cybersecurity Initiative",
+                    role: "Cybersecurity Advocate",
+                    icon: "fas fa-shield-alt",
+                    description: "Applied cybersecurity principles to enhance data protection in clinical and educational settings.",
+                    outcomes: [
+                        "Increased awareness of data security protocols",
+                        "Contributed to secure system practices",
+                        "Integrated security best practices in training"
+                    ],
+                    tags: ["Cybersecurity", "Systems Management", "Training"],
+                    display_order: 2
+                },
+                {
+                    title: "Portfolio Website Development",
+                    role: "Developer & Designer",
+                    icon: "fas fa-code",
+                    description: "Designed and built this responsive portfolio website to showcase multidisciplinary expertise.",
+                    outcomes: [
+                        "Built with HTML5, CSS3, JavaScript",
+                        "Responsive design for all devices",
+                        "Clean, professional UX/UI"
+                    ],
+                    tags: ["Software Engineering", "Web Development", "UX Design"],
+                    display_order: 3
+                }
+            ];
+            
+            defaultProjects.forEach(project => {
+                addProjectToEditor(project);
+            });
+        }
+        
         function updatePhotoPreview(photoUrl) {
             const preview = document.getElementById('photoPreview');
             if (photoUrl && photoUrl.trim() !== '') {
-                preview.innerHTML = `<img src="${photoUrl}" alt="Preview" style="max-width: 100%; max-height: 150px;">`;
+                preview.innerHTML = `<img src="${photoUrl}" alt="Preview" style="max-width: 100%; max-height: 150px; border-radius: 4px;">`;
             } else {
                 preview.innerHTML = '<p>No photo selected</p>';
             }
@@ -362,7 +693,29 @@
         
         async function saveAllChanges() {
             try {
-                // Collect all data
+                // 1. Save portfolio content
+                await savePortfolioContent();
+                
+                // 2. Save projects
+                await saveProjects();
+                
+                // Update status
+                updateSaveStatus(true);
+                
+                // Refresh preview
+                document.getElementById('livePreview').contentWindow.location.reload();
+                
+                return true;
+                
+            } catch (error) {
+                console.error('Error saving changes:', error);
+                updateSaveStatus(false, error.message);
+                return false;
+            }
+        }
+        
+        async function savePortfolioContent() {
+            try {
                 const updates = [];
                 
                 // Home section
@@ -397,6 +750,11 @@
                     section: 'about',
                     field: 'about2',
                     content: 'My unique value: ' + document.getElementById('edit-about2').value
+                });
+                updates.push({
+                    section: 'about',
+                    field: 'about3',
+                    content: document.getElementById('edit-about3').value
                 });
                 updates.push({
                     section: 'about',
@@ -482,18 +840,49 @@
                 
                 if (error) throw error;
                 
-                // Update status
-                updateSaveStatus(true);
+            } catch (error) {
+                console.error('Error saving portfolio content:', error);
+                throw error;
+            }
+        }
+        
+        async function saveProjects() {
+            try {
+                const projectElements = projectsContainer.querySelectorAll('.project-editor-item');
+                const projects = [];
                 
-                // Refresh preview
-                document.getElementById('livePreview').contentWindow.location.reload();
+                projectElements.forEach((element, index) => {
+                    const project = {
+                        id: element.getAttribute('data-id') || undefined,
+                        title: element.querySelector('.project-title-input').value,
+                        role: element.querySelector('.project-role-input').value,
+                        icon: element.querySelector('.icon-select').value,
+                        description: element.querySelector('.project-description-input').value,
+                        outcomes: element.querySelector('.project-outcomes-input').value
+                            .split('\n')
+                            .filter(line => line.trim() !== ''),
+                        tags: element.querySelector('.project-tags-input').value
+                            .split(',')
+                            .map(tag => tag.trim())
+                            .filter(tag => tag !== ''),
+                        display_order: parseInt(element.querySelector('.display-order').value) || index
+                    };
+                    
+                    projects.push(project);
+                });
                 
-                return true;
+                // Save all projects to Supabase
+                const { error } = await supabase
+                    .from('projects')
+                    .upsert(projects, {
+                        onConflict: 'id'
+                    });
+                
+                if (error) throw error;
                 
             } catch (error) {
-                console.error('Error saving changes:', error);
-                updateSaveStatus(false, error.message);
-                return false;
+                console.error('Error saving projects:', error);
+                throw error;
             }
         }
         
@@ -503,7 +892,7 @@
             
             if (success) {
                 saveStatus.className = 'status-saved';
-                saveStatus.innerHTML = '<i class="fas fa-check-circle"></i> Saved to Supabase';
+                saveStatus.innerHTML = '<i class="fas fa-check-circle"></i> All changes saved to Supabase';
             } else {
                 saveStatus.className = 'status-error';
                 saveStatus.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message || 'Save Failed'}`;
@@ -540,9 +929,13 @@
             // Save button
             saveBtn.addEventListener('click', saveAllChanges);
             
-            // Preview button
+            // Preview buttons
             previewBtn.addEventListener('click', function() {
                 window.open('index.html', '_blank');
+            });
+            
+            refreshPreviewBtn.addEventListener('click', function() {
+                document.getElementById('livePreview').contentWindow.location.reload();
             });
             
             // Photo preview
@@ -562,6 +955,11 @@
             });
             document.getElementById('edit-color-secondary-text').addEventListener('input', function() {
                 document.getElementById('edit-color-secondary').value = this.value;
+            });
+            
+            // Add project button
+            addProjectBtn.addEventListener('click', function() {
+                addProjectToEditor();
             });
             
             // Navigation
@@ -605,4 +1003,4 @@
         }
     </script>
 </body>
-    </html>
+                                                   </html>
