@@ -9,6 +9,72 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
 </head>
+    <!-- Add this script to load saved data -->
+<script>
+// Load admin-saved data
+document.addEventListener('DOMContentLoaded', function() {
+    const savedData = localStorage.getItem('portfolioData');
+    if(savedData) {
+        const data = JSON.parse(savedData);
+        
+        // Update homepage content
+        if(data.heroTitle) document.querySelector('.hero-title').textContent = data.heroTitle;
+        if(data.heroSubtitle) document.querySelector('.hero-subtitle').textContent = data.heroSubtitle;
+        if(data.heroDescription) document.querySelector('.hero-description').textContent = data.heroDescription;
+        
+        // Update profile photo
+        if(data.profilePhoto) {
+            const heroImage = document.querySelector('.hero-image');
+            heroImage.innerHTML = `<img src="${data.profilePhoto}" alt="Profile Photo" style="border-radius: 10px; width: 100%;">`;
+        }
+        
+        // Update about section
+        if(data.aboutText1) document.querySelectorAll('.about-text p')[0].textContent = data.aboutText1;
+        if(data.aboutText2) document.querySelectorAll('.about-text p')[1].innerHTML = `<strong>My unique value:</strong> ${data.aboutText2.replace('My unique value:', '')}`;
+        
+        // Update stats
+        if(data.stats) {
+            const statCards = document.querySelectorAll('.stat-card h3');
+            if(statCards[0]) statCards[0].textContent = data.stats.years + '+';
+            if(statCards[1]) statCards[1].textContent = data.stats.students + '+';
+            if(statCards[2]) statCards[2].textContent = data.stats.community + '+';
+            if(statCards[3]) statCards[3].textContent = data.stats.satisfaction + '%';
+        }
+        
+        // Update contact info
+        if(data.email) document.querySelector('a[href^="mailto"]').textContent = data.email;
+        if(data.phone) document.querySelector('a[href^="tel"]').textContent = data.phone;
+        if(data.location) document.querySelector('.contact-item:last-child p').textContent = data.location;
+        
+        // Update social links
+        if(data.social) {
+            const socialLinks = document.querySelectorAll('.footer-social a');
+            if(data.social.linkedin) socialLinks[0].href = data.social.linkedin;
+            if(data.social.github) socialLinks[1].href = data.social.github;
+            if(data.social.twitter) socialLinks[2].href = data.social.twitter;
+        }
+        
+        // Update colors
+        if(data.colors) {
+            const root = document.documentElement;
+            root.style.setProperty('--primary', data.colors.primary);
+            root.style.setProperty('--secondary', data.colors.secondary);
+        }
+        
+        // Update font
+        if(data.fontFamily) {
+            document.body.style.fontFamily = `'${data.fontFamily}', sans-serif`;
+        }
+        
+        // Apply custom CSS
+        if(data.customCSS) {
+            const style = document.createElement('style');
+            style.textContent = data.customCSS;
+            document.head.appendChild(style);
+        }
+    }
+});
+</script>
 <body>
     <!-- Navigation -->
     <nav class="navbar">
