@@ -6,6 +6,7 @@
     <title>Admin Dashboard - Portfolio Editor</title>
     <link rel="stylesheet" href="admin-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <!-- Login Screen -->
@@ -221,6 +222,387 @@
         </footer>
     </div>
 
-    <script src="admin-script.js"></script>
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://uhqoihahmocwjgzpiivd.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
+        
+        // Initialize Supabase
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Simple password protection
+        const ADMIN_PASSWORD = 'admin123';
+        let isAuthenticated = localStorage.getItem('portfolio_admin_auth') === 'true';
+        
+        // DOM Elements
+        const loginScreen = document.getElementById('loginScreen');
+        const dashboard = document.getElementById('dashboard');
+        const adminPassword = document.getElementById('adminPassword');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const previewBtn = document.getElementById('previewBtn');
+        const saveStatus = document.getElementById('saveStatus');
+        const lastSavedTime = document.getElementById('lastSavedTime');
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            if (isAuthenticated) {
+                showDashboard();
+                loadCurrentData();
+            } else {
+                showLoginScreen();
+            }
+            
+            setupEventListeners();
+        });
+        
+        function showLoginScreen() {
+            loginScreen.style.display = 'flex';
+            dashboard.style.display = 'none';
+        }
+        
+        function showDashboard() {
+            loginScreen.style.display = 'none';
+            dashboard.style.display = 'block';
+        }
+        
+        async function loadCurrentData() {
+            try {
+                // Load current data from Supabase to populate the form
+                const { data, error } = await supabase
+                    .from('portfolio_content')
+                    .select('*');
+                    
+                if (error) throw error;
+                
+                if (data && data.length > 0) {
+                    // Organize data
+                    const content = {};
+                    data.forEach(item => {
+                        if (!content[item.section]) {
+                            content[item.section] = {};
+                        }
+                        content[item.section][item.field] = item.content;
+                    });
+                    
+                    // Populate form fields
+                    populateFormFields(content);
+                }
+                
+            } catch (error) {
+                console.error('Error loading current data:', error);
+                alert('Failed to load current data. Using default values.');
+            }
+        }
+        
+        function populateFormFields(content) {
+            // Home section
+            if (content.home) {
+                if (content.home.hero_title) document.getElementById('edit-hero-title').value = content.home.hero_title;
+                if (content.home.hero_subtitle) document.getElementById('edit-hero-subtitle').value = content.home.hero_subtitle;
+                if (content.home.hero_description) document.getElementById('edit-hero-description').value = content.home.hero_description;
+                if (content.home.profile_photo) {
+                    document.getElementById('edit-profile-photo').value = content.home.profile_photo;
+                    updatePhotoPreview(content.home.profile_photo);
+                }
+            }
+            
+            // About section
+            if (content.about) {
+                if (content.about.about1) document.getElementById('edit-about1').value = content.about.about1;
+                if (content.about.about2) {
+                    // Remove "My unique value:" prefix if present
+                    const about2 = content.about.about2.replace('My unique value:', '').trim();
+                    document.getElementById('edit-about2').value = about2;
+                }
+                if (content.about.stat_years) document.getElementById('edit-stat1').value = content.about.stat_years;
+                if (content.about.stat_students) document.getElementById('edit-stat2').value = content.about.stat_students;
+                if (content.about.stat_community) document.getElementById('edit-stat3').value = content.about.stat_community;
+                if (content.about.stat_satisfaction) document.getElementById('edit-stat4').value = content.about.stat_satisfaction;
+            }
+            
+            // Contact section
+            if (content.contact) {
+                if (content.contact.email) document.getElementById('edit-contact-email').value = content.contact.email;
+                if (content.contact.phone) document.getElementById('edit-contact-phone').value = content.contact.phone;
+                if (content.contact.location) document.getElementById('edit-contact-location').value = content.contact.location;
+                if (content.contact.linkedin) document.getElementById('edit-linkedin').value = content.contact.linkedin;
+                if (content.contact.github) document.getElementById('edit-github').value = content.contact.github;
+                if (content.contact.twitter) document.getElementById('edit-twitter').value = content.contact.twitter;
+            }
+            
+            // Settings section
+            if (content.settings) {
+                if (content.settings.primary_color) {
+                    document.getElementById('edit-color-primary').value = content.settings.primary_color;
+                    document.getElementById('edit-color-primary-text').value = content.settings.primary_color;
+                }
+                if (content.settings.secondary_color) {
+                    document.getElementById('edit-color-secondary').value = content.settings.secondary_color;
+                    document.getElementById('edit-color-secondary-text').value = content.settings.secondary_color;
+                }
+                if (content.settings.font_family) {
+                    document.getElementById('edit-font-family').value = content.settings.font_family;
+                }
+                if (content.settings.custom_css) {
+                    document.getElementById('edit-custom-css').value = content.settings.custom_css;
+                }
+            }
+        }
+        
+        function updatePhotoPreview(photoUrl) {
+            const preview = document.getElementById('photoPreview');
+            if (photoUrl && photoUrl.trim() !== '') {
+                preview.innerHTML = `<img src="${photoUrl}" alt="Preview" style="max-width: 100%; max-height: 150px;">`;
+            } else {
+                preview.innerHTML = '<p>No photo selected</p>';
+            }
+        }
+        
+        async function saveAllChanges() {
+            try {
+                // Collect all data
+                const updates = [];
+                
+                // Home section
+                updates.push({
+                    section: 'home',
+                    field: 'hero_title',
+                    content: document.getElementById('edit-hero-title').value
+                });
+                updates.push({
+                    section: 'home',
+                    field: 'hero_subtitle',
+                    content: document.getElementById('edit-hero-subtitle').value
+                });
+                updates.push({
+                    section: 'home',
+                    field: 'hero_description',
+                    content: document.getElementById('edit-hero-description').value
+                });
+                updates.push({
+                    section: 'home',
+                    field: 'profile_photo',
+                    content: document.getElementById('edit-profile-photo').value
+                });
+                
+                // About section
+                updates.push({
+                    section: 'about',
+                    field: 'about1',
+                    content: document.getElementById('edit-about1').value
+                });
+                updates.push({
+                    section: 'about',
+                    field: 'about2',
+                    content: 'My unique value: ' + document.getElementById('edit-about2').value
+                });
+                updates.push({
+                    section: 'about',
+                    field: 'stat_years',
+                    content: document.getElementById('edit-stat1').value
+                });
+                updates.push({
+                    section: 'about',
+                    field: 'stat_students',
+                    content: document.getElementById('edit-stat2').value
+                });
+                updates.push({
+                    section: 'about',
+                    field: 'stat_community',
+                    content: document.getElementById('edit-stat3').value
+                });
+                updates.push({
+                    section: 'about',
+                    field: 'stat_satisfaction',
+                    content: document.getElementById('edit-stat4').value
+                });
+                
+                // Contact section
+                updates.push({
+                    section: 'contact',
+                    field: 'email',
+                    content: document.getElementById('edit-contact-email').value
+                });
+                updates.push({
+                    section: 'contact',
+                    field: 'phone',
+                    content: document.getElementById('edit-contact-phone').value
+                });
+                updates.push({
+                    section: 'contact',
+                    field: 'location',
+                    content: document.getElementById('edit-contact-location').value
+                });
+                updates.push({
+                    section: 'contact',
+                    field: 'linkedin',
+                    content: document.getElementById('edit-linkedin').value
+                });
+                updates.push({
+                    section: 'contact',
+                    field: 'github',
+                    content: document.getElementById('edit-github').value
+                });
+                updates.push({
+                    section: 'contact',
+                    field: 'twitter',
+                    content: document.getElementById('edit-twitter').value
+                });
+                
+                // Settings section
+                updates.push({
+                    section: 'settings',
+                    field: 'primary_color',
+                    content: document.getElementById('edit-color-primary').value
+                });
+                updates.push({
+                    section: 'settings',
+                    field: 'secondary_color',
+                    content: document.getElementById('edit-color-secondary').value
+                });
+                updates.push({
+                    section: 'settings',
+                    field: 'font_family',
+                    content: document.getElementById('edit-font-family').value
+                });
+                updates.push({
+                    section: 'settings',
+                    field: 'custom_css',
+                    content: document.getElementById('edit-custom-css').value
+                });
+                
+                // Save to Supabase
+                const { error } = await supabase
+                    .from('portfolio_content')
+                    .upsert(updates, {
+                        onConflict: 'section,field'
+                    });
+                
+                if (error) throw error;
+                
+                // Update status
+                updateSaveStatus(true);
+                
+                // Refresh preview
+                document.getElementById('livePreview').contentWindow.location.reload();
+                
+                return true;
+                
+            } catch (error) {
+                console.error('Error saving changes:', error);
+                updateSaveStatus(false, error.message);
+                return false;
+            }
+        }
+        
+        function updateSaveStatus(success, message = '') {
+            const now = new Date();
+            lastSavedTime.textContent = now.toLocaleTimeString();
+            
+            if (success) {
+                saveStatus.className = 'status-saved';
+                saveStatus.innerHTML = '<i class="fas fa-check-circle"></i> Saved to Supabase';
+            } else {
+                saveStatus.className = 'status-error';
+                saveStatus.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message || 'Save Failed'}`;
+            }
+            
+            // Reset status after 5 seconds
+            setTimeout(() => {
+                saveStatus.className = 'status-saved';
+                saveStatus.innerHTML = '<i class="fas fa-check-circle"></i> All changes saved';
+            }, 5000);
+        }
+        
+        function setupEventListeners() {
+            // Login
+            loginBtn.addEventListener('click', function() {
+                const password = adminPassword.value.trim();
+                if (password === ADMIN_PASSWORD) {
+                    localStorage.setItem('portfolio_admin_auth', 'true');
+                    isAuthenticated = true;
+                    showDashboard();
+                    loadCurrentData();
+                } else {
+                    alert('Incorrect password. Try again.');
+                }
+            });
+            
+            // Logout
+            logoutBtn.addEventListener('click', function() {
+                localStorage.removeItem('portfolio_admin_auth');
+                isAuthenticated = false;
+                showLoginScreen();
+            });
+            
+            // Save button
+            saveBtn.addEventListener('click', saveAllChanges);
+            
+            // Preview button
+            previewBtn.addEventListener('click', function() {
+                window.open('index.html', '_blank');
+            });
+            
+            // Photo preview
+            document.getElementById('edit-profile-photo').addEventListener('input', function() {
+                updatePhotoPreview(this.value);
+            });
+            
+            // Color inputs sync
+            document.getElementById('edit-color-primary').addEventListener('input', function() {
+                document.getElementById('edit-color-primary-text').value = this.value;
+            });
+            document.getElementById('edit-color-primary-text').addEventListener('input', function() {
+                document.getElementById('edit-color-primary').value = this.value;
+            });
+            document.getElementById('edit-color-secondary').addEventListener('input', function() {
+                document.getElementById('edit-color-secondary-text').value = this.value;
+            });
+            document.getElementById('edit-color-secondary-text').addEventListener('input', function() {
+                document.getElementById('edit-color-secondary').value = this.value;
+            });
+            
+            // Navigation
+            const navItems = document.querySelectorAll('.nav-item');
+            const sections = document.querySelectorAll('.editor-section');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Update active nav
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show section
+                    const targetId = this.getAttribute('href');
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === targetId.substring(1)) {
+                            section.classList.add('active');
+                        }
+                    });
+                });
+            });
+            
+            // Auto-save indicator on changes
+            const inputs = document.querySelectorAll('textarea, input, select');
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    saveStatus.className = 'status-unsaved';
+                    saveStatus.innerHTML = '<i class="fas fa-pencil-alt"></i> Unsaved changes';
+                });
+            });
+            
+            // Enter key to login
+            adminPassword.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    loginBtn.click();
+                }
+            });
+        }
+    </script>
 </body>
-</html>
+    </html>
