@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en" class="connectsphere-portal">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="generator" content="ConnectSphere WiFi Management Platform">
+    <meta name="description" content="Secure WiFi access with ConnectSphere">
+    
+    <!-- ConnectSphere Branding -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0066FF">
+    
+    <title>ConnectSphere: WiFi Portal</title>
+    
+    <!-- ConnectSphere Design System -->
+    <style>
+        :root {
+            /* ConnectSphere Brand Colors */
+            --cs-primary: #0066FF;
+            --cs-primary-dark: #0052CC;
+            --cs-secondary: #00D4AA;
+            --cs-success: #10B981;
+            --cs-warning: #F59E0B;
+            --cs-danger: #EF4444;
+            --cs-dark: #1E293B;
+            --cs-light: #F8FAFC;
+            --cs-gray: #64748B;
+            
+            /* Shadows & Effects */
+            --cs-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --cs-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --cs-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --cs-glow: 0 0 20px rgba(0, 102, 255, 0.2);
+            
+            /* Spacing */
+            --cs-radius: 12px;
+            --cs-radius-lg: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body.connectsphere-portal {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--cs-dark);
+        }
+        
+        /* Main Container */
+        .connectsphere-container {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            border-radius: var(--cs-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--cs-shadow-lg);
+            animation: cs-fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes cs-fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Header Section */
+        .cs-header {
+            background: linear-gradient(135deg, var(--cs-primary) 0%, var(--cs-secondary) 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cs-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.1;
+            animation: cs-float 20s linear infinite;
+        }
+        
+        @keyframes cs-float {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .cs-logo {
+            margin-bottom: 20px;
+        }
+        
+        .cs-logo-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .cs-logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .cs-tagline {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        
+        /* Form Container */
+        .cs-form-container {
+            padding: 40px 30px;
+        }
+        
+        .cs-form-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--cs-dark);
+            text-align: center;
+        }
+        
+        .cs-form-group {
+            margin-bottom: 24px;
+        }
+        
+        .cs-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--cs-dark);
+        }
+        
+        .cs-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #E2E8F0;
+            border-radius: var(--cs-radius);
+            font-size: 16px;
+            transition: all 0.2s;
+            background: white;
+        }
+        
+        .cs-input:focus {
+            outline: none;
+            border-color: var(--cs-primary);
+            box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+        }
+        
+        .cs-input.error {
+            border-color: var(--cs-danger);
+        }
+        
+        /* Buttons */
+        .cs-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--cs-primary);
+            color: white;
+            border: none;
+            border-radius: var(--cs-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .cs-btn:hover {
+            background: var(--cs-primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--cs-glow);
+        }
+        
+        .cs-btn:active {
+            transform: translateY(0);
+        }
+        
+        .cs-btn-secondary {
+            background: var(--cs-light);
+            color: var(--cs-dark);
+            border: 2px solid #E2E8F0;
+        }
+        
+        .cs-btn-secondary:hover {
+            background: #F1F5F9;
+            border-color: var(--cs-primary);
+        }
+        
+        /* Social Login */
+        .cs-social-login {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .cs-social-btn {
+            padding: 12px;
+            border: 2px solid #E2E8F0;
+            border-radius: var(--cs-radius);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .cs-social-btn:hover {
+            border-color: var(--cs-primary);
+            transform: translateY(-1px);
+        }
+        
+        /* Terms & Footer */
+        .cs-terms {
+            font-size: 12px;
+            color: var(--cs-gray);
+            text-align: center;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+        
+        .cs-terms a {
+            color: var(--cs-primary);
+            text-decoration: none;
+        }
+        
+        .cs-footer {
+            padding: 20px 30px;
+            background: var(--cs-light);
+            text-align: center;
+            font-size: 13px;
+            color: var(--cs-gray);
+            border-top: 1px solid #E2E8F0;
+        }
+        
+        .cs-footer a {
+            color: var(--cs-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        /* Status Indicators */
+        .cs-status {
+            padding: 12px 16px;
+            border-radius: var(--cs-radius);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .cs-status-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--cs-success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .cs-status-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--cs-danger);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        
+        /* Connection Animation */
+        .cs-connection-animation {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .cs-wave {
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background: var(--cs-primary);
+            margin: 0 2px;
+            animation: cs-wave 1.2s infinite ease-in-out;
+        }
+        
+        .cs-wave:nth-child(2) { animation-delay: -1.1s; }
+        .cs-wave:nth-child(3) { animation-delay: -1.0s; }
+        .cs-wave:nth-child(4) { animation-delay: -0.9s; }
+        .cs-wave:nth-child(5) { animation-delay: -0.8s; }
+        
+        @keyframes cs-wave {
+            0%, 40%, 100% { transform: scaleY(0.4); }
+            20% { transform: scaleY(1); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .connectsphere-container {
+                border-radius: 0;
+                max-width: 100%;
+            }
+            
+            .cs-header {
+                padding: 30px 20px;
+            }
+            
+            .cs-form-container {
+                padding: 30px 20px;
+            }
+        }
+        
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            .connectsphere-container {
+                background: #1E293B;
+                color: #E2E8F0;
+            }
+            
+            .cs-input {
+                background: #334155;
+                border-color: #475569;
+                color: #E2E8F0;
+            }
+            
+            .cs-btn-secondary {
+                background: #334155;
+                color: #E2E8F0;
+            }
+            
+            .cs-footer {
+                background: #0F172A;
+            }
+        }
+    </style>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Main Portal Container -->
+    <div class="connectsphere-container" id="csPortal">
+        <!-- Header Section -->
+        <div class="cs-header">
+            <div class="cs-logo">
+                <div class="cs-logo-icon">
+                    <i class="fas fa-wifi"></i>
+                </div>
+                <div class="cs-logo-text">ConnectSphere</div>
+                <div class="cs-tagline">Secure WiFi Access</div>
+            </div>
+        </div>
+        
+        <!-- Form Section -->
+        <div class="cs-form-container">
+            <h2 class="cs-form-title">Connect to WiFi</h2>
+            
+            <div id="csStatus" class="cs-status" style="display: none;"></div>
+            
+            <form id="csConnectForm">
+                <!-- User Info -->
+                <div class="cs-form-group">
+                    <label class="cs-label">Full Name</label>
+                    <input type="text" 
+                           class="cs-input" 
+                           id="csName" 
+                           placeholder="Enter your name" 
+                           required
+                           autocomplete="name">
+                </div>
+                
+                <div class="cs-form-group">
+                    <label class="cs-label">Email Address</label>
+                    <input type="email" 
+                           class="cs-input" 
+                           id="csEmail" 
+                           placeholder="your@email.com" 
+                           required
+                           autocomplete="email">
+                </div>
+                
+                <div class="cs-form-group">
+                    <label class="cs-label">Phone Number</label>
+                    <input type="tel" 
+                           class="cs-input" 
+                           id="csPhone" 
+                           placeholder="+254 700 000 000"
+                           autocomplete="tel">
+                </div>
+                
+                <!-- Duration Selection -->
+                <div class="cs-form-group">
+                    <label class="cs-label">Access Duration</label>
+                    <select class="cs-input" id="csDuration">
+                        <option value="1">1 Hour - Free</option>
+                        <option value="4" selected>4 Hours - Standard</option>
+                        <option value="8">8 Hours - Extended</option>
+                        <option value="24">24 Hours - Premium</option>
+                    </select>
+                </div>
+                
+                <!-- Terms Agreement -->
+                <div class="cs-form-group">
+                    <label class="cs-label" style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="csTerms" required>
+                        <span>I agree to the <a href="#" onclick="showTerms()">Terms & Conditions</a></span>
+                    </label>
+                </div>
+                
+                <!-- Connect Button -->
+                <button type="submit" class="cs-btn" id="csConnectBtn">
+                    <i class="fas fa-plug"></i>
+                    Connect to Network
+                </button>
+                
+                <!-- Alternative Options -->
+                <div style="text-align: center; margin: 20px 0; color: var(--cs-gray);">
+                    ─── or connect with ───
+                </div>
+                
+                <!-- Social Login -->
+                <div class="cs-social-login">
+                    <button type="button" class="cs-social-btn" onclick="socialLogin('google')">
+                        <i class="fab fa-google" style="color: #DB4437;"></i>
+                    </button>
+                    <button type="button" class="cs-social-btn" onclick="socialLogin('facebook')">
+                        <i class="fab fa-facebook-f" style="color: #4267B2;"></i>
+                    </button>
+                    <button type="button" class="cs-social-btn" onclick="socialLogin('phone')">
+                        <i class="fas fa-sms" style="color: var(--cs-primary);"></i>
+                    </button>
+                </div>
+                
+                <!-- Voucher Option -->
+                <button type="button" class="cs-btn cs-btn-secondary" onclick="showVoucherForm()" style="margin-top: 20px;">
+                    <i class="fas fa-ticket-alt"></i>
+                    I have a voucher code
+                </button>
+                
+                <!-- Terms -->
+                <div class="cs-terms">
+                    By connecting, you agree to our <a href="#" onclick="showTerms()">Terms of Service</a> 
+                    and <a href="#" onclick="showPrivacy()">Privacy Policy</a>. Your connection may be 
+                    monitored for security purposes.
+                </div>
+            </form>
+            
+            <!-- Connection Animation -->
+            <div class="cs-connection-animation" id="csConnecting">
+                <div style="margin-bottom: 30px;">
+                    <div class="cs-wave"></div>
+                    <div class="cs-wave"></div>
+                    <div class="cs-wave"></div>
+                    <div class="cs-wave"></div>
+                    <div class="cs-wave"></div>
+                </div>
+                <h3 style="margin-bottom: 10px; color: var(--cs-primary);">Connecting...</h3>
+                <p style="color: var(--cs-gray); font-size: 14px;">Please wait while we establish your secure connection</p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="cs-footer">
+            <p>Powered by <a href="#" onclick="showAbout()">ConnectSphere WiFi Platform</a></p>
+            <p style="font-size: 11px; margin-top: 5px; opacity: 0.7;">
+                © 2024 ConnectSphere. All rights reserved.
+            </p>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // ConnectSphere Portal Configuration
+        const ConnectSphere = {
+            config: {
+                apiEndpoint: 'https://api.connectsphere.io/v1',
+                portalId: 'WIFI_PORTAL_001',
+                sessionTimeout: 3600, // 1 hour in seconds
+                allowSocialLogin: true,
+                enableAnalytics: true
+            },
+            
+            // Initialize portal
+            init: function() {
+                this.bindEvents();
+                this.detectDevice();
+                this.checkExistingSession();
+                
+                if (this.config.enableAnalytics) {
+                    this.trackPageView();
+                }
+            },
+            
+            // Bind form events
+            bindEvents: function() {
+                const form = document.getElementById('csConnectForm');
+                const connectBtn = document.getElementById('csConnectBtn');
+                
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.connectUser();
+                });
+                
+                // Input validation
+                ['csName', 'csEmail', 'csPhone'].forEach(id => {
+                    document.getElementById(id).addEventListener('blur', (e) => {
+                        this.validateInput(e.target);
+                    });
+                });
+            },
+            
+            // Connect user to WiFi
+            connectUser: async function() {
+                const userData = {
+                    name: document.getElementById('csName').value.trim(),
+                    email: document.getElementById('csEmail').value.trim(),
+                    phone: document.getElementById('csPhone').value.trim(),
+                    duration: document.getElementById('csDuration').value,
+                    deviceInfo: this.getDeviceInfo(),
+                    timestamp: new Date().toISOString(),
+                    macAddress: await this.getMacAddress()
+                };
+                
+                // Validate
+                if (!this.validateForm(userData)) return;
+                
+                // Show connecting animation
+                this.showConnecting();
+                
+                try {
+                    // In production, this would call your API
+                    const response = await this.callAPI('/connect', userData);
+                    
+                    if (response.success) {
+                        this.showSuccess('Connected successfully! Redirecting...');
+                        this.grantAccess(response.sessionId);
+                        
+                        // Redirect after delay
+                        setTimeout(() => {
+                            window.location.href = response.redirectUrl || 'https://connectsphere.io/welcome';
+                        }, 2000);
+                    } else {
+                        this.showError(response.message || 'Connection failed');
+                    }
+                } catch (error) {
+                    console.error('Connection error:', error);
+                    this.showError('Network error. Please try again.');
+                }
+            },
+            
+            // Show connecting animation
+            showConnecting: function() {
+                document.getElementById('csConnectForm').style.display = 'none';
+                document.getElementById('csConnecting').style.display = 'block';
+                document.getElementById('csConnectBtn').disabled = true;
+            },
+            
+            // Show success message
+            showSuccess: function(message) {
+                const statusDiv = document.getElementById('csStatus');
+                statusDiv.className = 'cs-status cs-status-success';
+                statusDiv.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <span>${message}</span>
+                `;
+                statusDiv.style.display = 'flex';
+            },
+            
+            // Show error message
+            showError: function(message) {
+                const statusDiv = document.getElementById('csStatus');
+                statusDiv.className = 'cs-status cs-status-error';
+                statusDiv.innerHTML = `
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>${message}</span>
+                `;
+                statusDiv.style.display = 'flex';
+                
+                // Reset form
+                document.getElementById('csConnectForm').style.display = 'block';
+                document.getElementById('csConnecting').style.display = 'none';
+                document.getElementById('csConnectBtn').disabled = false;
+            },
+            
+            // Validate form data
+            validateForm: function(data) {
+                if (!data.name || data.name.length < 2) {
+                    this.showError('Please enter a valid name');
+                    return false;
+                }
+                
+                if (!this.validateEmail(data.email)) {
+                    this.showError('Please enter a valid email address');
+                    return false;
+                }
+                
+                if (data.phone && !this.validatePhone(data.phone)) {
+                    this.showError('Please enter a valid phone number');
+                    return false;
+                }
+                
+                if (!document.getElementById('csTerms').checked) {
+                    this.showError('You must agree to the terms & conditions');
+                    return false;
+                }
+                
+                return true;
+            },
+            
+            // Validate email
+            validateEmail: function(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            },
+            
+            // Validate phone
+            validatePhone: function(phone) {
+                const re = /^[\+]?[1-9][\d]{0,15}$/;
+                return re.test(phone.replace(/[\s\-\(\)]/g, ''));
+            },
+            
+            // Validate input on blur
+            validateInput: function(input) {
+                if (!input.value.trim()) return;
+                
+                if (input.type === 'email' && !this.validateEmail(input.value)) {
+                    input.classList.add('error');
+                } else if (input.id === 'csPhone' && !this.validatePhone(input.value)) {
+                    input.classList.add('error');
+                } else {
+                    input.classList.remove('error');
+                }
+            },
+            
+            // Get device information
+            getDeviceInfo: function() {
+                return {
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                    language: navigator.language,
+                    screen: {
+                        width: screen.width,
+                        height: screen.height
+                    },
+                    vendor: navigator.vendor
+                };
+            },
+            
+            // Get MAC address (simulated)
+            getMacAddress: async function() {
+                // Note: Real MAC address requires special permissions
+                // This is a simulated version for demo
+                return new Promise(resolve => {
+                    const prefix = ['00', '1A', '2B', '3C', '4D', '5E'];
+                    const mac = prefix.map(() => 
+                        Math.floor(Math.random() * 256).toString(16).padStart(2, '0')
+                    ).join(':').toUpperCase();
+                    resolve(mac);
+                });
+            },
+            
+            // API call simulation
+            callAPI: async function(endpoint, data) {
+                // Simulate API call
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        resolve({
+                            success: true,
+                            sessionId: 'SESSION_' + Date.now(),
+                            redirectUrl: 'https://connectsphere.io/welcome',
+                            message: 'Access granted for ' + data.duration + ' hours'
+                        });
+                    }, 1500);
+                });
+            },
+            
+            // Grant network access
+            grantAccess: function(sessionId) {
+                console.log('Granting network access for session:', sessionId);
+                // In production, this would integrate with your router/firewall
+                // Example: Make API call to Mikrotik/Ubiquiti/OpenWRT
+            },
+            
+            // Detect device type
+            detectDevice: function() {
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                if (isMobile) {
+                    document.body.classList.add('mobile-device');
+                }
+            },
+            
+            // Check for existing session
+            checkExistingSession: function() {
+                const session = localStorage.getItem('cs_session');
+                if (session) {
+                    const sessionData = JSON.parse(session);
+                    if (Date.now() < sessionData.expires) {
+                        // Auto-redirect if session is valid
+                        window.location.href = 'https://connectsphere.io/dashboard';
+                    }
+                }
+            },
+            
+            // Track page view
+            trackPageView: function() {
+                console.log('ConnectSphere Analytics: Page viewed');
+                // Integrate with Google Analytics or your analytics here
+            }
+        };
+        
+        // Social login functions
+        function socialLogin(provider) {
+            ConnectSphere.showConnecting();
+            
+            setTimeout(() => {
+                switch(provider) {
+                    case 'google':
+                        // Integrate Google OAuth here
+                        ConnectSphere.showSuccess('Google login successful');
+                        break;
+                    case 'facebook':
+                        // Integrate Facebook Login here
+                        ConnectSphere.showSuccess('Facebook login successful');
+                        break;
+                    case 'phone':
+                        showPhoneVerification();
+                        break;
+                }
+            }, 1000);
+        }
+        
+        // Show voucher form
+        function showVoucherForm() {
+            const form = document.getElementById('csConnectForm');
+            form.innerHTML = `
+                <h2 class="cs-form-title">Enter Voucher Code</h2>
+                <div class="cs-form-group">
+                    <label class="cs-label">Voucher Code</label>
+                    <input type="text" class="cs-input" id="csVoucher" placeholder="Enter your voucher code">
+                </div>
+                <button type="button" class="cs-btn" onclick="redeemVoucher()">
+                    <i class="fas fa-gift"></i>
+                    Redeem Voucher
+                </button>
+                <button type="button" class="cs-btn cs-btn-secondary" onclick="location.reload()" style="margin-top: 10px;">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Login
+                </button>
+            `;
+        }
+        
+        // Redeem voucher
+        function redeemVoucher() {
+            const voucher = document.getElementById('csVoucher').value.trim();
+            if (voucher) {
+                ConnectSphere.showConnecting();
+                // Simulate voucher validation
+                setTimeout(() => {
+                    ConnectSphere.showSuccess('Voucher accepted! 24 hours access granted.');
+                    // Auto-connect after voucher validation
+                    setTimeout(() => {
+                        window.location.href = 'https://connectsphere.io/welcome';
+                    }, 1500);
+                }, 1500);
+            }
+        }
+        
+        // Show phone verification
+        function showPhoneVerification() {
+            const form = document.getElementById('csConnectForm');
+            form.innerHTML = `
+                <h2 class="cs-form-title">Phone Verification</h2>
+                <div class="cs-form-group">
+                    <label class="cs-label">Phone Number</label>
+                    <input type="tel" class="cs-input" id="csVerifyPhone" placeholder="+254 700 000 000">
+                </div>
+                <button type="button" class="cs-btn" onclick="sendVerificationCode()">
+                    <i class="fas fa-sms"></i>
+                    Send Verification Code
+                </button>
+                <button type="button" class="cs-btn cs-btn-secondary" onclick="location.reload()" style="margin-top: 10px;">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Login
+                </button>
+            `;
+        }
+        
+        function sendVerificationCode() {
+            const phone = document.getElementById('csVerifyPhone').value.trim();
+            if (phone && ConnectSphere.validatePhone(phone)) {
+                ConnectSphere.showSuccess(`Verification code sent to ${phone}`);
+                // In production, integrate with SMS gateway like Twilio
+            }
+        }
+        
+        // Modal functions
+        function showTerms() {
+            alert('Terms & Conditions\n\n1. Acceptable Use Policy\n2. Privacy Commitment\n3. Fair Usage Policy\n\nFull terms at: https://connectsphere.io/terms');
+        }
+        
+        function showPrivacy() {
+            alert('Privacy Policy\n\nWe respect your privacy and protect your data.');
+        }
+        
+        function showAbout() {
+            alert('ConnectSphere WiFi Platform\n\nEnterprise-grade WiFi management with captive portal, analytics, and customer self-service.');
+        }
+        
+        // Initialize portal when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            ConnectSphere.init();
+            
+            // Add some visual effects
+            const logo = document.querySelector('.cs-logo-icon i');
+            logo.style.animation = 'pulse 2s infinite';
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes pulse {
+                    0% { transform: scale(1); }
+                    50% { transform: scale(1.1); }
+                    100% { transform: scale(1); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
