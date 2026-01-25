@@ -107,12 +107,26 @@ document.querySelectorAll('.skill-category, .project-card').forEach(el => {
     observer.observe(el);
 });
 
-// =============== SUPABASE FUNCTIONS ===============
+// =============== SUPABASE FUNCTIONS - FIXED VERSION ===============
 
 // Main function to load all data
 async function loadPortfolioData() {
     try {
         console.log('Loading portfolio data from Supabase...');
+        
+        // Test connection first
+        const { data: testData, error: testError } = await supabase
+            .from('portfolio_content')
+            .select('*')
+            .limit(1);
+            
+        if (testError) {
+            console.error('❌ Supabase connection error:', testError);
+            showErrorMessage('Database connection failed: ' + testError.message);
+            return;
+        }
+        
+        console.log('✅ Connected to Supabase');
         
         // 1. Load portfolio content (text fields)
         await loadPortfolioContent();
@@ -133,7 +147,7 @@ async function loadPortfolioData() {
         
     } catch (error) {
         console.error('❌ Error loading portfolio data:', error);
-        showErrorMessage();
+        showErrorMessage('An unexpected error occurred: ' + error.message);
     }
 }
 
@@ -143,7 +157,12 @@ async function loadPortfolioContent() {
             .from('portfolio_content')
             .select('*');
             
-        if (error) throw error;
+        if (error) {
+            console.error('Error loading portfolio content:', error);
+            return;
+        }
+        
+        console.log('Portfolio content loaded:', data?.length || 0, 'items');
         
         if (data && data.length > 0) {
             // Convert array to object for easy access
@@ -155,6 +174,8 @@ async function loadPortfolioContent() {
                 content[item.section][item.field] = item.content;
             });
             
+            console.log('Available sections:', Object.keys(content));
+            
             // Update Home Section
             updateHomeSection(content.home || {});
             
@@ -163,6 +184,8 @@ async function loadPortfolioContent() {
             
             // Update Contact Section
             updateContactSection(content.contact || {});
+        } else {
+            console.warn('No portfolio content data found');
         }
         
     } catch (error) {
@@ -171,63 +194,63 @@ async function loadPortfolioContent() {
 }
 
 function updateHomeSection(homeData) {
+    console.log('Updating home section with:', Object.keys(homeData));
+    
     // Hero Title
-    if (homeData.hero_title) {
-        const heroTitle = document.querySelector('.hero-title');
-        if (heroTitle) heroTitle.textContent = homeData.hero_title;
+    const heroTitle = document.querySelector('.hero-title');
+    if (heroTitle && homeData.hero_title) {
+        heroTitle.textContent = homeData.hero_title;
     }
     
     // Hero Subtitle
-    if (homeData.hero_subtitle) {
-        const heroSubtitle = document.querySelector('.hero-subtitle');
-        if (heroSubtitle) heroSubtitle.textContent = homeData.hero_subtitle;
+    const heroSubtitle = document.querySelector('.hero-subtitle');
+    if (heroSubtitle && homeData.hero_subtitle) {
+        heroSubtitle.textContent = homeData.hero_subtitle;
     }
     
     // Hero Description
-    if (homeData.hero_description) {
-        const heroDescription = document.querySelector('.hero-description');
-        if (heroDescription) heroDescription.textContent = homeData.hero_description;
+    const heroDescription = document.querySelector('.hero-description');
+    if (heroDescription && homeData.hero_description) {
+        heroDescription.textContent = homeData.hero_description;
     }
     
     // Profile Photo
-    if (homeData.profile_photo && homeData.profile_photo.trim() !== '') {
-        const heroImage = document.querySelector('.hero-image');
-        if (heroImage) {
-            heroImage.innerHTML = `
-                <div class="profile-photo-container">
-                    <img src="${homeData.profile_photo}" 
-                         alt="Profile Photo of Kevin Matoka" 
-                         class="profile-photo"
-                         onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 400\"><rect width=\"400\" height=\"400\" fill=\"%232a6e7a\"/><text x=\"50%\" y=\"50%\" font-family=\"Arial\" font-size=\"80\" fill=\"white\" text-anchor=\"middle\" dy=\".3em\">KM</text></svg>'">
-                </div>
-            `;
-        }
+    const heroImage = document.querySelector('.hero-image');
+    if (heroImage && homeData.profile_photo && homeData.profile_photo.trim() !== '') {
+        heroImage.innerHTML = `
+            <div class="profile-photo-container">
+                <img src="${homeData.profile_photo}" 
+                     alt="Profile Photo of Kevin Matoka" 
+                     class="profile-photo"
+                     onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 400\"><rect width=\"400\" height=\"400\" fill=\"%232a6e7a\"/><text x=\"50%\" y=\"50%\" font-family=\"Arial\" font-size=\"80\" fill=\"white\" text-anchor=\"middle\" dy=\".3em\">KM</text></svg>'">
+            </div>
+        `;
     }
 }
 
 function updateAboutSection(aboutData) {
+    console.log('Updating about section with:', Object.keys(aboutData));
+    
     // About Text 1
-    if (aboutData.about1) {
-        const about1 = document.getElementById('about-text-1');
-        if (about1) about1.textContent = aboutData.about1;
+    const about1 = document.getElementById('about-text-1');
+    if (about1 && aboutData.about1) {
+        about1.textContent = aboutData.about1;
     }
     
     // About Text 2
-    if (aboutData.about2) {
-        const about2Element = document.getElementById('about-text-2');
-        if (about2Element) {
-            if (aboutData.about2.includes('My unique value:')) {
-                about2Element.innerHTML = `<strong>My unique value:</strong> ${aboutData.about2.replace('My unique value:', '').trim()}`;
-            } else {
-                about2Element.innerHTML = `<strong>My unique value:</strong> ${aboutData.about2}`;
-            }
-        }
+    const about2Element = document.getElementById('about-text-2');
+    if (about2Element && aboutData.about2) {
+        // Check if "My unique value:" is already in the text
+        const aboutText = aboutData.about2.includes('My unique value:') 
+            ? aboutData.about2 
+            : `My unique value: ${aboutData.about2}`;
+        about2Element.innerHTML = aboutText.replace('My unique value:', '<strong>My unique value:</strong>');
     }
     
     // About Text 3
-    if (aboutData.about3) {
-        const about3 = document.getElementById('about-text-3');
-        if (about3) about3.textContent = aboutData.about3;
+    const about3 = document.getElementById('about-text-3');
+    if (about3 && aboutData.about3) {
+        about3.textContent = aboutData.about3;
     }
     
     // Stats
@@ -250,28 +273,26 @@ function updateAboutSection(aboutData) {
 }
 
 function updateContactSection(contactData) {
+    console.log('Updating contact section with:', Object.keys(contactData));
+    
     // Email
-    if (contactData.email) {
-        const emailElement = document.getElementById('contact-email');
-        if (emailElement) {
-            emailElement.textContent = contactData.email;
-            emailElement.href = `mailto:${contactData.email}`;
-        }
+    const emailElement = document.getElementById('contact-email');
+    if (emailElement && contactData.email) {
+        emailElement.textContent = contactData.email;
+        emailElement.href = `mailto:${contactData.email}`;
     }
     
     // Phone
-    if (contactData.phone) {
-        const phoneElement = document.getElementById('contact-phone');
-        if (phoneElement) {
-            phoneElement.textContent = contactData.phone;
-            phoneElement.href = `tel:${contactData.phone.replace(/\s/g, '')}`;
-        }
+    const phoneElement = document.getElementById('contact-phone');
+    if (phoneElement && contactData.phone) {
+        phoneElement.textContent = contactData.phone;
+        phoneElement.href = `tel:${contactData.phone.replace(/\s/g, '')}`;
     }
     
     // Location
-    if (contactData.location) {
-        const locationElement = document.getElementById('contact-location');
-        if (locationElement) locationElement.textContent = contactData.location;
+    const locationElement = document.getElementById('contact-location');
+    if (locationElement && contactData.location) {
+        locationElement.textContent = contactData.location;
     }
     
     // Social Links
@@ -308,6 +329,9 @@ async function loadSkills() {
         if (error) throw error;
         
         const skillsGrid = document.getElementById('skills-grid');
+        if (!skillsGrid) return;
+        
+        console.log('Skills loaded:', data?.length || 0, 'items');
         
         if (data && data.length > 0) {
             // Group skills by category
@@ -329,14 +353,15 @@ async function loadSkills() {
                 
                 // Determine icon based on category
                 let iconClass = 'fas fa-star';
-                if (category.includes('Clinical')) iconClass = 'fas fa-heartbeat';
-                else if (category.includes('Technology')) iconClass = 'fas fa-laptop-code';
-                else if (category.includes('Education')) iconClass = 'fas fa-chalkboard-teacher';
-                else if (category.includes('Public Health')) iconClass = 'fas fa-users';
+                if (category.toLowerCase().includes('clinical')) iconClass = 'fas fa-heartbeat';
+                else if (category.toLowerCase().includes('tech')) iconClass = 'fas fa-laptop-code';
+                else if (category.toLowerCase().includes('education')) iconClass = 'fas fa-chalkboard-teacher';
+                else if (category.toLowerCase().includes('health')) iconClass = 'fas fa-users';
                 
                 let skillsHTML = '';
                 skills.forEach(skill => {
-                    skillsHTML += `<li>${skill.skill_name} <span class="skill-level">(${skill.skill_level})</span></li>`;
+                    const levelText = skill.skill_level ? ` <span class="skill-level">(${skill.skill_level})</span>` : '';
+                    skillsHTML += `<li>${skill.skill_name}${levelText}</li>`;
                 });
                 
                 categoryDiv.innerHTML = `
@@ -369,6 +394,9 @@ async function loadProjects() {
         if (error) throw error;
         
         const projectsGrid = document.getElementById('projects-grid');
+        if (!projectsGrid) return;
+        
+        console.log('Projects loaded:', data?.length || 0, 'items');
         
         if (data && data.length > 0) {
             // Clear loading message
@@ -379,34 +407,67 @@ async function loadProjects() {
                 const projectCard = document.createElement('div');
                 projectCard.className = 'project-card';
                 
-                // Parse tags (if stored as array)
+                // Parse tags
                 let tagsHTML = '';
-                if (project.tags && Array.isArray(project.tags) && project.tags.length > 0) {
-                    tagsHTML = project.tags.map(tag => 
-                        `<span class="tag">${tag}</span>`
-                    ).join('');
-                } else if (typeof project.tags === 'string' && project.tags.trim() !== '') {
-                    tagsHTML = `<span class="tag">${project.tags}</span>`;
+                if (project.tags) {
+                    if (Array.isArray(project.tags)) {
+                        tagsHTML = project.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+                    } else if (typeof project.tags === 'string') {
+                        // Try to parse string as array or use as single tag
+                        try {
+                            const parsedTags = JSON.parse(project.tags);
+                            if (Array.isArray(parsedTags)) {
+                                tagsHTML = parsedTags.map(tag => `<span class="tag">${tag}</span>`).join('');
+                            } else {
+                                tagsHTML = `<span class="tag">${project.tags}</span>`;
+                            }
+                        } catch {
+                            tagsHTML = `<span class="tag">${project.tags}</span>`;
+                        }
+                    }
                 }
                 
                 // Parse outcomes
                 let outcomesHTML = '';
-                if (project.outcomes && Array.isArray(project.outcomes) && project.outcomes.length > 0) {
-                    outcomesHTML = `
-                        <div class="project-outcome">
-                            <h4>Key Outcomes:</h4>
-                            <ul>
-                                ${project.outcomes.map(outcome => `<li>${outcome}</li>`).join('')}
-                            </ul>
-                        </div>
-                    `;
-                } else if (typeof project.outcomes === 'string' && project.outcomes.trim() !== '') {
-                    outcomesHTML = `
-                        <div class="project-outcome">
-                            <h4>Key Outcomes:</h4>
-                            <p>${project.outcomes}</p>
-                        </div>
-                    `;
+                if (project.outcomes) {
+                    if (Array.isArray(project.outcomes)) {
+                        outcomesHTML = `
+                            <div class="project-outcome">
+                                <h4>Key Outcomes:</h4>
+                                <ul>
+                                    ${project.outcomes.map(outcome => `<li>${outcome}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    } else if (typeof project.outcomes === 'string') {
+                        try {
+                            const parsedOutcomes = JSON.parse(project.outcomes);
+                            if (Array.isArray(parsedOutcomes)) {
+                                outcomesHTML = `
+                                    <div class="project-outcome">
+                                        <h4>Key Outcomes:</h4>
+                                        <ul>
+                                            ${parsedOutcomes.map(outcome => `<li>${outcome}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                `;
+                            } else {
+                                outcomesHTML = `
+                                    <div class="project-outcome">
+                                        <h4>Key Outcomes:</h4>
+                                        <p>${project.outcomes}</p>
+                                    </div>
+                                `;
+                            }
+                        } catch {
+                            outcomesHTML = `
+                                <div class="project-outcome">
+                                    <h4>Key Outcomes:</h4>
+                                    <p>${project.outcomes}</p>
+                                </div>
+                            `;
+                        }
+                    }
                 }
                 
                 projectCard.innerHTML = `
@@ -443,6 +504,9 @@ async function loadCareer() {
         if (error) throw error;
         
         const careerTimeline = document.getElementById('career-timeline');
+        if (!careerTimeline) return;
+        
+        console.log('Career items loaded:', data?.length || 0, 'items');
         
         if (data && data.length > 0) {
             // Clear loading message
@@ -453,13 +517,18 @@ async function loadCareer() {
                 const timelineItem = document.createElement('div');
                 timelineItem.className = 'timeline-item';
                 
+                // FIXED: Use your date format (e.g., "Oct 2025 - Present")
                 let dateText = '';
-                if (item.start_date && item.end_date) {
-                    dateText = `${item.start_date} - ${item.end_date}`;
-                } else if (item.start_date) {
-                    dateText = `${item.start_date}${item.current ? ' - Present' : ''}`;
+                if (item.start_date) {
+                    if (item.end_date && !item.current) {
+                        dateText = `${item.start_date} - ${item.end_date}`;
+                    } else if (item.current) {
+                        dateText = `${item.start_date} - Present`;
+                    } else {
+                        dateText = item.start_date;
+                    }
                 } else if (item.end_date) {
-                    dateText = `${item.end_date}`;
+                    dateText = item.end_date;
                 }
                 
                 timelineItem.innerHTML = `
@@ -530,27 +599,53 @@ async function applyCustomStyles() {
     }
 }
 
-function showErrorMessage() {
+function showErrorMessage(message = 'Unable to load portfolio data.') {
+    console.error('Showing error message:', message);
+    
     const errorDiv = document.createElement('div');
     errorDiv.className = 'data-error';
     errorDiv.style.cssText = `
         background: #f8d7da;
         color: #721c24;
-        padding: 10px;
+        padding: 15px;
         border: 1px solid #f5c6cb;
-        border-radius: 4px;
-        margin: 10px;
+        border-radius: 8px;
+        margin: 20px;
         text-align: center;
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        max-width: 500px;
+        width: 90%;
     `;
     errorDiv.innerHTML = `
-        <p><i class="fas fa-exclamation-triangle"></i> Unable to load portfolio data.</p>
+        <p><i class="fas fa-exclamation-triangle"></i> ${message}</p>
         <small>Showing default content. Please check your internet connection.</small>
     `;
-    document.body.insertBefore(errorDiv, document.body.firstChild);
+    document.body.appendChild(errorDiv);
+    
+    // Remove after 10 seconds
+    setTimeout(() => {
+        if (errorDiv.parentNode) {
+            errorDiv.parentNode.removeChild(errorDiv);
+        }
+    }, 10000);
 }
 
 // Initialize Supabase data loading when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, starting data fetch...');
+    
+    // Set current year
+    if (currentYearSpan) {
+        currentYearSpan.textContent = new Date().getFullYear();
+    }
+    
     // Load data from Supabase
     loadPortfolioData();
 });
+
+// Add this to help debug
+console.log('✅ Script loaded successfully!');
