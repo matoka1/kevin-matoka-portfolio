@@ -230,16 +230,23 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- IMPORTANT: Remove the script.js reference if it contains duplicate supabase code -->
+    <!-- <script src="script.js"></script> -->
     
-    <!-- Supabase Integration Script -->
+    <!-- Supabase Integration Script - FIXED VERSION -->
     <script>
         // Supabase Configuration with YOUR credentials
         const SUPABASE_URL = 'https://uhqoihahmocwjgzpiivd.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
         
-        // Initialize Supabase client
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // FIX: Initialize Supabase client safely
+        // Check if supabase already exists before creating it
+        if (!window.supabaseClient) {
+            window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+        
+        // Use the client
+        const supabase = window.supabaseClient;
         
         // Main function to load all data
         async function loadPortfolioData() {
@@ -664,4 +671,4 @@
         });
     </script>
 </body>
-    </html>
+</html>
