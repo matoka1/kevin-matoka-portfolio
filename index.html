@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
-    <!-- Add Supabase CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- IMPORTANT: Supabase CDN is loaded in script.js, NOT here -->
 </head>
 <body>
     <!-- Navigation -->
@@ -26,7 +25,6 @@
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#career">Career</a></li>
                 <li><a href="#contact">Contact</a></li>
-                <!-- Admin link REMOVED from public site -->
             </ul>
         </div>
     </nav>
@@ -48,7 +46,6 @@
             </div>
             <div class="hero-image">
                 <div class="image-placeholder">
-                    <!-- Profile photo will be loaded dynamically -->
                     <i class="fas fa-user-md" id="profilePlaceholder"></i>
                     <p>Professional Photo</p>
                 </div>
@@ -119,7 +116,6 @@
         <div class="container">
             <h2 class="section-title">Areas of Expertise</h2>
             <div class="skills-grid" id="skills-grid">
-                <!-- Skills will be loaded dynamically from Supabase -->
                 <div class="loading-skills">
                     <i class="fas fa-spinner fa-spin"></i> Loading skills...
                 </div>
@@ -132,7 +128,6 @@
         <div class="container">
             <h2 class="section-title">Projects & Impact</h2>
             <div class="projects-grid" id="projects-grid">
-                <!-- Projects will be loaded dynamically from Supabase -->
                 <div class="loading-projects">
                     <i class="fas fa-spinner fa-spin"></i> Loading projects...
                 </div>
@@ -145,7 +140,6 @@
         <div class="container">
             <h2 class="section-title">Career Journey</h2>
             <div class="timeline" id="career-timeline">
-                <!-- Career items will be loaded dynamically from Supabase -->
                 <div class="loading-career">
                     <i class="fas fa-spinner fa-spin"></i> Loading career timeline...
                 </div>
@@ -230,7 +224,7 @@
         </div>
     </footer>
 
-   
-<script src="script.js"></script>
+    <!-- ONLY ONE JavaScript file - Make sure script.js loads Supabase CDN -->
+    <script src="script.js"></script>
 </body>
 </html>
