@@ -8,6 +8,11 @@ supabaseScript.onload = function() {
     console.log('✅ Supabase CDN loaded');
     initializeApp();
 };
+supabaseScript.onerror = function() {
+    console.error('❌ Failed to load Supabase CDN');
+    showErrorMessage('Failed to load database. Showing default content.');
+    initializeApp(); // Still try to initialize with fallback
+};
 document.head.appendChild(supabaseScript);
 
 // ============ MAIN APP INITIALIZATION ============
@@ -18,9 +23,14 @@ function initializeApp() {
     const SUPABASE_URL = 'https://uhqoihahmocwjgzpiivd.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
     
-    // Create Supabase client
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    console.log('✅ Supabase client created');
+    // Create Supabase client if available
+    let supabase = null;
+    if (window.supabase) {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log('✅ Supabase client created');
+    } else {
+        console.warn('⚠️ Supabase not available, using fallback content');
+    }
     
     // Set current year
     const currentYearSpan = document.getElementById('currentYear');
@@ -29,35 +39,91 @@ function initializeApp() {
         console.log('✅ Current year set:', currentYearSpan.textContent);
     }
     
-    // Mobile menu toggle
+    // Mobile menu toggle - FIXED for better UX
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.getElementById('navMenu');
+    
     if (menuToggle && navMenu) {
-        menuToggle.addEventListener('click', () => {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
             navMenu.classList.toggle('active');
-            console.log('📱 Mobile menu toggled');
+            
+            // Toggle between hamburger and X icon
+            const icon = menuToggle.querySelector('i');
+            if (navMenu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+                console.log('📱 Mobile menu opened');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+                console.log('📱 Mobile menu closed');
+            }
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                navMenu.classList.remove('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+        
+        // Close menu when clicking a link
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
         });
     }
     
     // Form submission
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
+        contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            alert('Thank you for your message! I will get back to you soon.');
-            contactForm.reset();
-            console.log('📝 Form submitted');
+            
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.disabled = true;
+            
+            // Simulate sending (replace with actual form submission)
+            setTimeout(() => {
+                alert('Thank you for your message! I will get back to you soon.');
+                contactForm.reset();
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                console.log('📝 Form submitted');
+            }, 1500);
         });
     }
     
-    // Smooth scrolling
+    // Smooth scrolling with offset for fixed navbar
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
+            
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
+                // Close mobile menu if open
+                if (navMenu && navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    const icon = menuToggle?.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                }
+                
+                // Smooth scroll
                 window.scrollTo({
                     top: targetElement.offsetTop - 80,
                     behavior: 'smooth'
@@ -66,9 +132,26 @@ function initializeApp() {
         });
     });
     
-    // Start loading data
-    console.log('📡 Starting to load data from Supabase...');
-    loadPortfolioData(supabase);
+    // Navbar scroll effect
+    const navbar = document.querySelector('.navbar');
+    if (navbar) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    }
+    
+    // Start loading data if Supabase is available
+    if (supabase) {
+        console.log('📡 Starting to load data from Supabase...');
+        loadPortfolioData(supabase);
+    } else {
+        console.log('📡 Using fallback content...');
+        loadFallbackContent();
+    }
 }
 
 // ============ LOAD PORTFOLIO DATA ============
@@ -76,23 +159,90 @@ async function loadPortfolioData(supabase) {
     console.log('🔄 loadPortfolioData function called');
     
     try {
-        // 1. Load portfolio content
-        await loadPortfolioContent(supabase);
-        
-        // 2. Load skills
-        await loadSkills(supabase);
-        
-        // 3. Load projects
-        await loadProjects(supabase);
-        
-        // 4. Load career
-        await loadCareer(supabase);
+        // Load all data in parallel for better performance
+        await Promise.all([
+            loadPortfolioContent(supabase),
+            loadSkills(supabase),
+            loadProjects(supabase),
+            loadCareer(supabase)
+        ]);
         
         console.log('✅ All data loaded successfully!');
         
     } catch (error) {
         console.error('❌ Error loading portfolio data:', error);
         showErrorMessage('Failed to load data: ' + error.message);
+        loadFallbackContent();
+    }
+}
+
+// ============ FALLBACK CONTENT ============
+function loadFallbackContent() {
+    console.log('📝 Loading fallback content...');
+    
+    // Set fallback skills if grid is empty
+    const skillsGrid = document.getElementById('skills-grid');
+    if (skillsGrid && skillsGrid.children.length === 0) {
+        skillsGrid.innerHTML = `
+            <div class="skill-category">
+                <h3><i class="fas fa-heartbeat"></i> Clinical Nursing</h3>
+                <ul class="skill-list">
+                    <li>Patient Assessment <span class="skill-level">(Expert)</span></li>
+                    <li>Emergency Care <span class="skill-level">(Expert)</span></li>
+                    <li>Critical Care <span class="skill-level">(Advanced)</span></li>
+                </ul>
+            </div>
+            <div class="skill-category">
+                <h3><i class="fas fa-laptop-code"></i> Health Tech</h3>
+                <ul class="skill-list">
+                    <li>EHR Systems <span class="skill-level">(Expert)</span></li>
+                    <li>Health Informatics <span class="skill-level">(Advanced)</span></li>
+                    <li>Telemedicine <span class="skill-level">(Intermediate)</span></li>
+                </ul>
+            </div>
+        `;
+    }
+    
+    // Set fallback projects
+    const projectsGrid = document.getElementById('projects-grid');
+    if (projectsGrid && projectsGrid.children.length === 0) {
+        projectsGrid.innerHTML = `
+            <div class="project-card">
+                <div class="project-icon"><i class="fas fa-hospital"></i></div>
+                <h3>Clinical Leadership</h3>
+                <p class="project-role">Head of Department</p>
+                <p class="project-desc">Leading nursing education and curriculum development at Nakuru College of Health Sciences.</p>
+            </div>
+            <div class="project-card">
+                <div class="project-icon"><i class="fas fa-mobile-alt"></i></div>
+                <h3>Health App Development</h3>
+                <p class="project-role">Technical Lead</p>
+                <p class="project-desc">Developing mobile health solutions for remote patient monitoring.</p>
+            </div>
+        `;
+    }
+    
+    // Set fallback career
+    const careerTimeline = document.getElementById('career-timeline');
+    if (careerTimeline && careerTimeline.children.length === 0) {
+        careerTimeline.innerHTML = `
+            <div class="timeline-item">
+                <div class="timeline-date">2023 - Present</div>
+                <div class="timeline-content">
+                    <h3>Head of Department</h3>
+                    <p class="timeline-org">Nakuru College of Health Sciences</p>
+                    <p>Leading nursing education and curriculum development</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2021 - 2023</div>
+                <div class="timeline-content">
+                    <h3>Nursing Officer</h3>
+                    <p class="timeline-org">Nakuru County Hospital</p>
+                    <p>Clinical care and patient management</p>
+                </div>
+            </div>
+        `;
     }
 }
 
@@ -236,7 +386,7 @@ async function loadSkills(supabase) {
                 // Create skills list
                 let skillsHTML = '';
                 skills.forEach(skill => {
-                    skillsHTML += `<li>${skill.skill_name} <span class="skill-level">(${skill.skill_level})</span></li>`;
+                    skillsHTML += `<li class="skill-item">${skill.skill_name} <span class="skill-level">${skill.skill_level}</span></li>`;
                 });
                 
                 categoryDiv.innerHTML = `
@@ -250,16 +400,10 @@ async function loadSkills(supabase) {
             });
             
             console.log('✅ Skills displayed on page');
-        } else {
-            skillsGrid.innerHTML = '<p class="no-data">No skills data available.</p>';
         }
         
     } catch (error) {
         console.error('❌ Error loading skills:', error);
-        const skillsGrid = document.getElementById('skills-grid');
-        if (skillsGrid) {
-            skillsGrid.innerHTML = '<p class="error">Failed to load skills.</p>';
-        }
     }
 }
 
@@ -298,7 +442,12 @@ async function loadProjects(supabase) {
                     if (Array.isArray(project.tags)) {
                         tagsHTML = project.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
                     } else if (typeof project.tags === 'string') {
-                        tagsHTML = `<span class="tag">${project.tags}</span>`;
+                        try {
+                            const tags = JSON.parse(project.tags);
+                            tagsHTML = tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+                        } catch {
+                            tagsHTML = `<span class="tag">${project.tags}</span>`;
+                        }
                     }
                 }
                 
@@ -315,12 +464,24 @@ async function loadProjects(supabase) {
                             </div>
                         `;
                     } else if (typeof project.outcomes === 'string') {
-                        outcomesHTML = `
-                            <div class="project-outcome">
-                                <h4>Key Outcomes:</h4>
-                                <p>${project.outcomes}</p>
-                            </div>
-                        `;
+                        try {
+                            const outcomes = JSON.parse(project.outcomes);
+                            outcomesHTML = `
+                                <div class="project-outcome">
+                                    <h4>Key Outcomes:</h4>
+                                    <ul>
+                                        ${outcomes.map(outcome => `<li>${outcome}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            `;
+                        } catch {
+                            outcomesHTML = `
+                                <div class="project-outcome">
+                                    <h4>Key Outcomes:</h4>
+                                    <p>${project.outcomes}</p>
+                                </div>
+                            `;
+                        }
                     }
                 }
                 
@@ -339,16 +500,10 @@ async function loadProjects(supabase) {
             });
             
             console.log('✅ Projects displayed on page');
-        } else {
-            projectsGrid.innerHTML = '<p class="no-data">No projects data available.</p>';
         }
         
     } catch (error) {
         console.error('❌ Error loading projects:', error);
-        const projectsGrid = document.getElementById('projects-grid');
-        if (projectsGrid) {
-            projectsGrid.innerHTML = '<p class="error">Failed to load projects.</p>';
-        }
     }
 }
 
@@ -406,16 +561,10 @@ async function loadCareer(supabase) {
             });
             
             console.log('✅ Career displayed on page');
-        } else {
-            careerTimeline.innerHTML = '<p class="no-data">No career data available.</p>';
         }
         
     } catch (error) {
         console.error('❌ Error loading career:', error);
-        const careerTimeline = document.getElementById('career-timeline');
-        if (careerTimeline) {
-            careerTimeline.innerHTML = '<p class="error">Failed to load career.</p>';
-        }
     }
 }
 
@@ -439,6 +588,7 @@ function showErrorMessage(message) {
         width: 90%;
         text-align: center;
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        animation: slideDown 0.3s ease;
     `;
     
     errorDiv.innerHTML = `
@@ -448,12 +598,12 @@ function showErrorMessage(message) {
     
     document.body.appendChild(errorDiv);
     
-    // Remove after 10 seconds
+    // Remove after 8 seconds
     setTimeout(() => {
         if (errorDiv.parentNode) {
             errorDiv.parentNode.removeChild(errorDiv);
         }
-    }, 10000);
+    }, 8000);
 }
 
 // ============ START THE APP ============
