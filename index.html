@@ -1,113 +1,1151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kevin Matoka | Clinical Leader & Healthcare Technologist</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico">
-    <!-- IMPORTANT: Supabase CDN is loaded in script.js, NOT here -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kevin Matoka Tiong'i | Clinical Leader & Healthcare Technologist</title>
+    <meta name="description" content="Kevin Matoka Tiong'i — Nursing Officer, Healthcare Technologist, and Educator based in Nakuru, Kenya. Bridging clinical excellence with technical innovation." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #F5F0E8;
+            color: #0D1B2A;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #0D1B2A;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 72px;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            font-style: italic;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #C9A84C;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #C9A84C;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #C9A84C;
+        }
+
+        .hire-btn {
+            background: #C9A84C;
+            color: #0D1B2A;
+            padding: 8px 20px;
+            border-radius: 2px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .hire-btn:hover {
+            background: #d4b660;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: #0D1B2A;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 60px;
+            position: relative;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-subtitle {
+            color: #C9A84C;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .hero-title span {
+            color: #C9A84C;
+            font-style: italic;
+        }
+
+        .hero-description {
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            max-width: 500px;
+            margin-bottom: 32px;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .btn-primary {
+            background: #C9A84C;
+            color: #0D1B2A;
+            padding: 12px 32px;
+            border: none;
+            border-radius: 2px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #d4b660;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 12px 32px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 2px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .btn-secondary:hover {
+            border-color: #C9A84C;
+            color: #C9A84C;
+        }
+
+        .contact-info-row {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 20px;
+            color: white;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-info-row i {
+            color: #C9A84C;
+            margin-right: 8px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 48px;
+        }
+
+        .stat-item h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #C9A84C;
+            margin-bottom: 4px;
+        }
+
+        .stat-item p {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .profile-container {
+            position: relative;
+        }
+
+        .profile-ring {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+        }
+
+        .profile-ring::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            border: 2px solid rgba(201, 168, 76, 0.2);
+            border-radius: 50%;
+        }
+
+        .profile-ring::after {
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: -40px;
+            right: -40px;
+            bottom: -40px;
+            border: 2px solid rgba(201, 168, 76, 0.1);
+            border-radius: 50%;
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #C9A84C;
+        }
+
+        .floating-badge {
+            position: absolute;
+            background: #0D1B2A;
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            padding: 12px 16px;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .badge-1 {
+            bottom: 40px;
+            left: -40px;
+        }
+
+        .badge-2 {
+            top: 40px;
+            right: -40px;
+        }
+
+        .badge-label {
+            color: #C9A84C;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+
+        .badge-value {
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-tag {
+            color: #C9A84C;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0D1B2A;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .section-title.gold-rule::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: #C9A84C;
+        }
+
+        .section-title.gold-rule-center::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: #C9A84C;
+        }
+
+        /* Profile Section - REMOVED - was duplicate */
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 60px;
+        }
+
+        .about-text p {
+            color: #0D1B2A;
+            opacity: 0.8;
+            margin-bottom: 24px;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .about-text strong {
+            color: #0D1B2A;
+            opacity: 1;
+        }
+
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 32px 0;
+        }
+
+        .highlight-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 12px 16px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .highlight-item i {
+            color: #C9A84C;
+            font-size: 0.9rem;
+            width: 20px;
+        }
+
+        .highlight-item span {
+            font-size: 0.9rem;
+        }
+
+        .cert-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .cert-item {
+            background: #0D1B2A;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 2px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .cert-item i {
+            color: #C9A84C;
+            font-size: 0.8rem;
+        }
+
+        .cert-item:hover {
+            background: #C9A84C;
+            color: #0D1B2A;
+        }
+
+        .cert-item:hover i {
+            color: #0D1B2A;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .stat-card {
+            padding: 24px;
+            border-radius: 4px;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .stat-card.dark {
+            background: #0D1B2A;
+            color: white;
+        }
+
+        .stat-card.gold {
+            background: #C9A84C;
+            color: #0D1B2A;
+        }
+
+        .stat-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .stat-card.dark h3 {
+            color: #C9A84C;
+        }
+
+        .stat-card.gold h3 {
+            color: #0D1B2A;
+        }
+
+        .stat-card p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* Skills Section */
+        .skills-section {
+            background: #0D1B2A;
+            color: white;
+            position: relative;
+        }
+
+        .skills-section .section-title {
+            color: white;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .skill-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 32px;
+        }
+
+        .skill-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .skill-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+
+        .skill-icon i {
+            font-size: 1.2rem;
+        }
+
+        .skill-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+        }
+
+        .skill-tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag-item {
+            background: rgba(255,255,255,0.1);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Employment Section */
+        .employment-section {
+            background: #F5F0E8;
+        }
+
+        .employment-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .employment-card {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .employment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .employment-title h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+
+        .employment-org {
+            color: #C9A84C;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .employment-date {
+            background: #0D1B2A;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .employment-location {
+            color: rgba(13,27,42,0.5);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+
+        .employment-points {
+            list-style: none;
+        }
+
+        .employment-points li {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: rgba(13,27,42,0.8);
+        }
+
+        .employment-points li i {
+            color: #C9A84C;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            min-width: 16px;
+        }
+
+        /* Education Section */
+        .education-section {
+            background: white;
+        }
+
+        .education-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .education-card {
+            background: #F5F0E8;
+            border-radius: 8px;
+            padding: 32px;
+        }
+
+        .education-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+        }
+
+        .education-school {
+            color: #C9A84C;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .education-period {
+            color: rgba(13,27,42,0.5);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+
+        /* Courses Section */
+        .courses-section {
+            background: #F5F0E8;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .course-item {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .course-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .course-item i {
+            font-size: 2rem;
+            color: #C9A84C;
+            margin-bottom: 16px;
+        }
+
+        .course-item h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .course-item p {
+            color: rgba(13,27,42,0.6);
+            font-size: 0.9rem;
+        }
+
+        .course-year {
+            display: inline-block;
+            background: #0D1B2A;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 12px;
+        }
+
+        /* Achievements Section */
+        .achievements-section {
+            background: #0D1B2A;
+            color: white;
+        }
+
+        .achievements-section .section-title {
+            color: white;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .achievement-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .achievement-card i {
+            font-size: 2.5rem;
+            color: #C9A84C;
+            margin-bottom: 20px;
+        }
+
+        .achievement-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .achievement-card p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.95rem;
+        }
+
+        /* Leadership Section */
+        .leadership-section {
+            background: white;
+        }
+
+        .leadership-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .leadership-card {
+            background: #F5F0E8;
+            padding: 32px;
+            border-radius: 8px;
+        }
+
+        .leadership-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .leadership-org {
+            color: #C9A84C;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .leadership-period {
+            color: rgba(13,27,42,0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: #F5F0E8;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+        }
+
+        .contact-info {
+            background: #0D1B2A;
+            border-radius: 8px;
+            padding: 40px;
+            color: white;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(201,168,76,0.15);
+            border: 1px solid rgba(201,168,76,0.3);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #C9A84C;
+        }
+
+        .contact-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .contact-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: white;
+            text-decoration: none;
+        }
+
+        .contact-form {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #0D1B2A;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #F5F0E8;
+            border: 1px solid rgba(13,27,42,0.1);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #C9A84C;
+        }
+
+        textarea.form-input {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 14px;
+            background: #C9A84C;
+            color: #0D1B2A;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .form-submit:hover {
+            background: #d4b660;
+        }
+
+        /* Footer */
+        .footer {
+            background: #0D1B2A;
+            padding: 60px 0 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-style: italic;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .footer-logo span {
+            color: #C9A84C;
+        }
+
+        .footer-tagline {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.5);
+            transition: all 0.2s;
+        }
+
+        .footer-social a:hover {
+            border-color: #C9A84C;
+            color: #C9A84C;
+        }
+
+        .footer-bottom {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.3);
+            font-size: 0.8rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 72px;
+                left: -100%;
+                width: 100%;
+                background: #0D1B2A;
+                flex-direction: column;
+                align-items: center;
+                padding: 40px 20px;
+                transition: left 0.3s;
+                gap: 24px;
+                border-top: 1px solid rgba(255,255,255,0.1);
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .hero-grid,
+            .about-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-grid,
+            .education-grid,
+            .courses-grid,
+            .achievements-grid,
+            .leadership-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-ring {
+                width: 300px;
+                height: 300px;
+            }
+
+            .floating-badge {
+                position: static;
+                margin: 10px 0;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .employment-header {
+                flex-direction: column;
+            }
+            
+            .contact-info-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar" id="navbar">
+    <nav class="navbar">
         <div class="container nav-container">
-            <a href="#home" class="logo">Kevin<span>Matoka</span></a>
+            <a href="#home" class="logo">Kevin <span>Matoka</span></a>
             <button class="menu-toggle" id="menuToggle">
                 <i class="fas fa-bars"></i>
             </button>
             <ul class="nav-menu" id="navMenu">
                 <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#skills" class="nav-link">Expertise</a></li>
-                <li><a href="#projects" class="nav-link">Projects</a></li>
-                <li><a href="#career" class="nav-link">Career</a></li>
+                <li><a href="#expertise" class="nav-link">Expertise</a></li>
+                <li><a href="#experience" class="nav-link">Experience</a></li>
+                <li><a href="#education" class="nav-link">Education</a></li>
+                <li><a href="#leadership" class="nav-link">Leadership</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><button class="hire-btn" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">Hire Me</button></li>
             </ul>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <div class="container hero-container">
-            <div class="hero-content">
-                <h3 class="hero-subtitle">Nursing Officer | Healthcare Technologist | Educator</h3>
-                <h1 class="hero-title">Kevin Matoka Tiong'i</h1>
-                <p class="hero-description">
-                    Bridging clinical excellence with technical innovation to build safer, more efficient, 
-                    and data-driven healthcare systems in Kenya and beyond.
-                </p>
+        <div class="container hero-grid">
+            <div>
+                <div class="hero-subtitle">Nursing Officer · Healthcare Technologist · Educator</div>
+                <h1 class="hero-title">Kevin Matoka <span>Tiong'i</span></h1>
+                <p class="hero-description">Calm, detail-oriented, and results-driven Nursing Officer with over 2 years of progressive clinical and leadership experience across diverse healthcare settings. Currently serving as Head of Department, School of Nursing at Nakuru College of Health Science and Management.</p>
+                
+                <div class="contact-info-row">
+                    <span><i class="fas fa-envelope"></i> matokakevin98@gmail.com</span>
+                    <span><i class="fas fa-phone"></i> +254 790 969 743</span>
+                    <span><i class="fas fa-map-marker-alt"></i> Nakuru, Kenya</span>
+                </div>
+
                 <div class="hero-buttons">
-                    <a href="#projects" class="btn btn-primary">View My Work</a>
-                    <a href="#contact" class="btn btn-secondary">Contact Me</a>
+                    <button class="btn-primary" onclick="document.getElementById('experience').scrollIntoView({behavior: 'smooth'})">View My Experience</button>
+                    <button class="btn-secondary" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">Contact Me</button>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <h3>2+</h3>
+                        <p>Years Clinical</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>500+</h3>
+                        <p>Students Mentored</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>98%</h3>
+                        <p>Patient Satisfaction</p>
+                    </div>
                 </div>
             </div>
-            <div class="hero-image">
-                <div class="profile-container">
-                    <div class="profile-frame">
-                        <div class="image-placeholder">
-                            <i class="fas fa-user-md" id="profilePlaceholder"></i>
-                            <p>Professional Photo</p>
-                        </div>
-                    </div>
+            <div class="profile-container">
+                <div class="profile-ring">
+                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop" alt="Kevin Matoka" class="profile-image">
+                </div>
+                <div class="floating-badge badge-1">
+                    <div class="badge-label">BSc. Nursing</div>
+                    <div class="badge-value">Kenya Methodist University</div>
+                </div>
+                <div class="floating-badge badge-2">
+                    <div class="badge-label">Location</div>
+                    <div class="badge-value">Nakuru, Kenya</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="section about">
+    <section id="about" class="section">
         <div class="container">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-content">
+            <div class="section-tag">Who I Am</div>
+            <h2 class="section-title gold-rule">About Me</h2>
+            <div class="about-grid">
                 <div class="about-text">
-                    <p id="about-text-1">
-                        I am a detail-oriented and results-driven Nursing Officer with over 2 years of progressive 
-                        clinical and leadership experience across diverse healthcare settings. Currently serving as 
-                        Head of Department, School of Nursing at Nakuru College of Health Science and Management.
-                    </p>
-                    <p id="about-text-2">
-                        <strong>My unique value:</strong> I combine hands-on clinical expertise with technical skills 
-                        in software engineering, database management, and cybersecurity. This dual competency allows me 
-                        to translate clinical workflows into technical requirements, design secure health applications, 
-                        and implement systems that improve patient care and healthcare delivery.
-                    </p>
-                    <p id="about-text-3">
-                        Certified in Basic Life Support (BLS), Advanced Trauma Life Support (ATLS), Advanced 
-                        Cardiovascular Life Support (ACLS), and Cybersecurity Essentials.
-                    </p>
-                    <div class="about-highlights">
+                    <p>I am a detail-oriented and results-driven Nursing Officer with over <strong>2 years of progressive clinical and leadership experience</strong> across diverse healthcare settings. Currently serving as <strong>Head of Department, School of Nursing</strong> at Nakuru College of Health Science and Management.</p>
+                    
+                    <div style="border-left: 2px solid #C9A84C; padding-left: 20px; margin: 24px 0;">
+                        <p><strong>My unique value:</strong> I combine hands-on clinical expertise with technical skills in software engineering, database management, and cybersecurity. This dual competency allows me to translate clinical workflows into technical requirements, design secure health applications, and implement systems that improve patient care.</p>
+                    </div>
+
+                    <p>Certified in Basic Life Support (BLS), Advanced Trauma Life Support (ATLS), Advanced Cardiovascular Life Support (ACLS), and Cybersecurity Essentials.</p>
+
+                    <div class="highlight-grid">
                         <div class="highlight-item">
                             <i class="fas fa-graduation-cap"></i>
-                            <span>BSc. Nursing, Kenya Methodist University</span>
+                            <span>BSc. Nursing, KEMU (2017-2022)</span>
                         </div>
                         <div class="highlight-item">
-                            <i class="fas fa-map-marker-alt"></i>
+                            <i class="fas fa-location-dot"></i>
                             <span>Based in Nakuru, Kenya</span>
                         </div>
                         <div class="highlight-item">
                             <i class="fas fa-language"></i>
                             <span>Fluent: English & Swahili</span>
                         </div>
+                        <div class="highlight-item">
+                            <i class="fas fa-code"></i>
+                            <span>Software Engineering</span>
+                        </div>
+                    </div>
+
+                    <div class="cert-grid">
+                        <div class="cert-item"><i class="fas fa-heart-pulse"></i> BLS</div>
+                        <div class="cert-item"><i class="fas fa-kit-medical"></i> ATLS</div>
+                        <div class="cert-item"><i class="fas fa-heart-circle-check"></i> ACLS</div>
+                        <div class="cert-item"><i class="fas fa-shield-halved"></i> Cybersec</div>
+                        <div class="cert-item"><i class="fas fa-bone"></i> AO Alliance</div>
+                        <div class="cert-item"><i class="fas fa-child"></i> OSS</div>
+                        <div class="cert-item"><i class="fas fa-brain"></i> Mental Health</div>
                     </div>
                 </div>
-                <div class="about-stats">
-                    <div class="stat-card">
-                        <h3 id="stat-years">2+</h3>
+                <div class="stats-grid">
+                    <div class="stat-card dark">
+                        <h3>2+</h3>
                         <p>Years Clinical Experience</p>
                     </div>
-                    <div class="stat-card">
-                        <h3 id="stat-students">500+</h3>
+                    <div class="stat-card gold">
+                        <h3>500+</h3>
                         <p>Students Mentored</p>
                     </div>
-                    <div class="stat-card">
-                        <h3 id="stat-community">1000+</h3>
-                        <p>Community Members Served</p>
+                    <div class="stat-card gold">
+                        <h3>1000+</h3>
+                        <p>Community Served</p>
                     </div>
-                    <div class="stat-card">
-                        <h3 id="stat-satisfaction">98%</h3>
+                    <div class="stat-card dark">
+                        <h3>98%</h3>
                         <p>Patient Satisfaction</p>
                     </div>
                 </div>
@@ -115,108 +1153,504 @@
         </div>
     </section>
 
-    <!-- Skills & Expertise Section -->
-    <section id="skills" class="section skills">
+    <!-- Skills Section -->
+    <section id="expertise" class="section skills-section">
         <div class="container">
-            <h2 class="section-title">Areas of Expertise</h2>
-            <div class="skills-grid" id="skills-grid">
-                <!-- Skills will be loaded dynamically -->
-                <div class="skill-category">
-                    <h3><i class="fas fa-heartbeat"></i> Clinical Nursing</h3>
-                    <ul class="skill-list">
-                        <li class="skill-item">Patient Assessment <span class="skill-level">Expert</span></li>
-                        <li class="skill-item">Emergency Care <span class="skill-level">Expert</span></li>
-                        <li class="skill-item">Critical Care <span class="skill-level">Advanced</span></li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3><i class="fas fa-laptop-code"></i> Health Tech</h3>
-                    <ul class="skill-list">
-                        <li class="skill-item">EHR Systems <span class="skill-level">Expert</span></li>
-                        <li class="skill-item">Health Informatics <span class="skill-level">Advanced</span></li>
-                        <li class="skill-item">Telemedicine <span class="skill-level">Intermediate</span></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="section projects">
-        <div class="container">
-            <h2 class="section-title">Projects & Impact</h2>
-            <div class="projects-grid" id="projects-grid">
-                <!-- Projects will be loaded dynamically -->
-                <div class="project-card">
-                    <div class="project-icon"><i class="fas fa-hospital"></i></div>
-                    <h3>Clinical Leadership</h3>
-                    <p class="project-role">Head of Department</p>
-                    <p class="project-desc">Leading nursing education and curriculum development at Nakuru College of Health Sciences.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Career Timeline -->
-    <section id="career" class="section career">
-        <div class="container">
-            <h2 class="section-title">Career Journey</h2>
-            <div class="timeline" id="career-timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">2023 - Present</div>
-                    <div class="timeline-content">
-                        <h3>Head of Department</h3>
-                        <p class="timeline-org">Nakuru College of Health Sciences</p>
-                        <p>Leading nursing education and curriculum development</p>
+            <div class="section-tag">What I Do</div>
+            <h2 class="section-title gold-rule">Core Competencies</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <div class="skill-icon" style="background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3);">
+                            <i class="fas fa-heartbeat" style="color: #C9A84C;"></i>
+                        </div>
+                        <h3>Clinical Skills</h3>
                     </div>
+                    <div class="skill-tag-list">
+                        <span class="skill-tag-item">Patient Assessment</span>
+                        <span class="skill-tag-item">Emergency Care</span>
+                        <span class="skill-tag-item">Critical Care</span>
+                        <span class="skill-tag-item">Wound Management</span>
+                        <span class="skill-tag-item">Medication Administration</span>
+                        <span class="skill-tag-item">Patient-Centered Care</span>
+                        <span class="skill-tag-item">Emergency Response</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <div class="skill-icon" style="background: rgba(74,144,217,0.1); border: 1px solid rgba(74,144,217,0.3);">
+                            <i class="fas fa-laptop-medical" style="color: #4A90D9;"></i>
+                        </div>
+                        <h3>Health Technology</h3>
+                    </div>
+                    <div class="skill-tag-list">
+                        <span class="skill-tag-item">EHR Systems</span>
+                        <span class="skill-tag-item">Health Informatics</span>
+                        <span class="skill-tag-item">Telemedicine</span>
+                        <span class="skill-tag-item">Computer Applications</span>
+                        <span class="skill-tag-item">Data Analysis</span>
+                        <span class="skill-tag-item">Cybersecurity Essentials</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <div class="skill-icon" style="background: rgba(92,184,92,0.1); border: 1px solid rgba(92,184,92,0.3);">
+                            <i class="fas fa-users" style="color: #5CB85C;"></i>
+                        </div>
+                        <h3>Leadership & Management</h3>
+                    </div>
+                    <div class="skill-tag-list">
+                        <span class="skill-tag-item">Curriculum Development</span>
+                        <span class="skill-tag-item">Clinical Supervision</span>
+                        <span class="skill-tag-item">Team Leadership</span>
+                        <span class="skill-tag-item">Policy Implementation</span>
+                        <span class="skill-tag-item">Quality Improvement</span>
+                        <span class="skill-tag-item">Mentorship</span>
+                        <span class="skill-tag-item">Advocacy</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-header">
+                        <div class="skill-icon" style="background: rgba(230,126,34,0.1); border: 1px solid rgba(230,126,34,0.3);">
+                            <i class="fas fa-hand-holding-heart" style="color: #E67E22;"></i>
+                        </div>
+                        <h3>Soft Skills</h3>
+                    </div>
+                    <div class="skill-tag-list">
+                        <span class="skill-tag-item">Calm under pressure</span>
+                        <span class="skill-tag-item">Detail-oriented</span>
+                        <span class="skill-tag-item">Results-driven</span>
+                        <span class="skill-tag-item">Communication</span>
+                        <span class="skill-tag-item">Resilience</span>
+                        <span class="skill-tag-item">Adaptability</span>
+                        <span class="skill-tag-item">Compassionate Care</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Employment Section -->
+    <section id="experience" class="section employment-section">
+        <div class="container">
+            <div class="section-tag">Professional Journey</div>
+            <h2 class="section-title gold-rule">Employment History</h2>
+            <div class="employment-grid">
+                <!-- Head of Department -->
+                <div class="employment-card">
+                    <div class="employment-header">
+                        <div class="employment-title">
+                            <h3>Head of Department – School of Nursing</h3>
+                            <div class="employment-org">Nakuru College of Health Science & Management</div>
+                        </div>
+                        <div class="employment-date">Oct 2025 – Present</div>
+                    </div>
+                    <div class="employment-location">Nakuru, Kenya</div>
+                    <ul class="employment-points">
+                        <li><i class="fas fa-circle"></i> Provide strategic leadership and overall management of the School of Nursing</li>
+                        <li><i class="fas fa-circle"></i> Coordinate teaching, learning, and evaluation of nursing programs in line with curriculum requirements</li>
+                        <li><i class="fas fa-circle"></i> Supervise, mentor, and appraise academic and support staff</li>
+                        <li><i class="fas fa-circle"></i> Ensure compliance with Nursing Council of Kenya (NCK) standards and accreditation requirements</li>
+                        <li><i class="fas fa-circle"></i> Oversee student admissions, academic progression, examinations, and discipline</li>
+                        <li><i class="fas fa-circle"></i> Plan and coordinate clinical placements and partnerships with healthcare facilities</li>
+                        <li><i class="fas fa-circle"></i> Lead curriculum review, development, and implementation</li>
+                    </ul>
+                </div>
+
+                <!-- Nurse Mentor & Program Implementer -->
+                <div class="employment-card">
+                    <div class="employment-header">
+                        <div class="employment-title">
+                            <h3>Nurse Mentor & Program Implementer</h3>
+                            <div class="employment-org">Obstetric Safe Surgery (OSS) Program</div>
+                        </div>
+                        <div class="employment-date">Jun 2025 – Present</div>
+                    </div>
+                    <div class="employment-location">Nakuru, Kenya</div>
+                    <ul class="employment-points">
+                        <li><i class="fas fa-circle"></i> Provide mentorship and on-site coaching to nurses and maternity teams on obstetric safe surgery practices</li>
+                        <li><i class="fas fa-circle"></i> Support implementation of OSS standards to improve maternal and neonatal outcomes</li>
+                        <li><i class="fas fa-circle"></i> Strengthen adherence to surgical safety protocols, infection prevention, and quality improvement</li>
+                        <li><i class="fas fa-circle"></i> Support capacity building and continuous professional development of healthcare workers</li>
+                    </ul>
+                </div>
+
+                <!-- Nurse Tutor -->
+                <div class="employment-card">
+                    <div class="employment-header">
+                        <div class="employment-title">
+                            <h3>Nurse Tutor</h3>
+                            <div class="employment-org">PCEA-Nakuru West Medical College</div>
+                        </div>
+                        <div class="employment-date">Apr 2025 – Present</div>
+                    </div>
+                    <div class="employment-location">Nakuru, Kenya</div>
+                    <ul class="employment-points">
+                        <li><i class="fas fa-circle"></i> Develop and deliver comprehensive nursing curricula for diploma and degree nursing students</li>
+                        <li><i class="fas fa-circle"></i> Supervise and mentor nursing students during clinical placements in various hospital departments</li>
+                        <li><i class="fas fa-circle"></i> Conduct regular assessments to evaluate student progress and competency</li>
+                        <li><i class="fas fa-circle"></i> Coordinate simulation-based training sessions to enhance clinical decision-making skills</li>
+                    </ul>
+                </div>
+
+                <!-- Nurse Intern - Jacaranda Health -->
+                <div class="employment-card">
+                    <div class="employment-header">
+                        <div class="employment-title">
+                            <h3>Nurse Intern - Program Implementation</h3>
+                            <div class="employment-org">Jacaranda Health / Nakuru County Partnership</div>
+                        </div>
+                        <div class="employment-date">Apr 2025 – Aug 2025</div>
+                    </div>
+                    <div class="employment-location">Nakuru, Kenya</div>
+                    <ul class="employment-points">
+                        <li><i class="fas fa-circle"></i> Supported implementation of Jacaranda Health–Nakuru County partnership program</li>
+                        <li><i class="fas fa-circle"></i> Assisted in roll-out and management of SMS prompt interventions for maternal health</li>
+                        <li><i class="fas fa-circle"></i> Participated in mentorship and supportive supervision programs for healthcare workers</li>
+                        <li><i class="fas fa-circle"></i> Supported facility-level supervision and monitoring for quality improvement</li>
+                    </ul>
+                </div>
+
+                <!-- County TOT - Measles Campaign -->
+                <div class="employment-card">
+                    <div class="employment-header">
+                        <div class="employment-title">
+                            <h3>County TOT - Measles & Typhoid Campaign</h3>
+                            <div class="employment-org">Nakuru County Health Services</div>
+                        </div>
+                        <div class="employment-date">Jun 2025 – Jul 2025</div>
+                    </div>
+                    <div class="employment-location">Nakuru, Kenya</div>
+                    <ul class="employment-points">
+                        <li><i class="fas fa-circle"></i> Led comprehensive Measles-Rubella (MR) and Tetanus Containing Vaccine (TCV) campaign</li>
+                        <li><i class="fas fa-circle"></i> Directed strategic planning and systematic data collection across all county facilities</li>
+                        <li><i class="fas fa-circle"></i> Coordinated training sessions on vaccine cold chain management and immunization best practices</li>
+                        <li><i class="fas fa-circle"></i> Monitored and evaluated vaccination campaign processes to identify gaps and implement corrective actions</li>
+                    </ul>
+                </div>
+
+                <!-- Clinical Instructor & Mentor -->
+                <div class="employment-card">
+                    <div class="employment-header">
+                        <div class="employment-title">
+                            <h3>Clinical Instructor & Mentor</h3>
+                            <div class="employment-org">Nakuru County Teaching and Referral Hospital</div>
+                        </div>
+                        <div class="employment-date">Aug 2024 – Aug 2025</div>
+                    </div>
+                    <div class="employment-location">Nakuru, Kenya</div>
+                    <ul class="employment-points">
+                        <li><i class="fas fa-circle"></i> Supervised students in advanced medical procedures and emergency response protocols</li>
+                        <li><i class="fas fa-circle"></i> Guided students in evidence-based practice implementation</li>
+                        <li><i class="fas fa-circle"></i> Worked collaboratively with medical residents and consultants in an educational capacity</li>
+                    </ul>
+                </div>
+
+                <!-- Nurse Officer Intern -->
+                <div class="employment-card">
+                    <div class="employment-header">
+                        <div class="employment-title">
+                            <h3>Nurse Officer Intern</h3>
+                            <div class="employment-org">Nakuru County Teaching and Referral Hospital</div>
+                        </div>
+                        <div class="employment-date">Aug 2024 – Aug 2025</div>
+                    </div>
+                    <div class="employment-location">Nakuru, Kenya</div>
+                    <ul class="employment-points">
+                        <li><i class="fas fa-circle"></i> Rotated across medical, surgical, emergency, pediatric, psychiatric, and obstetric units</li>
+                        <li><i class="fas fa-circle"></i> Actively involved in critical care, advanced procedures, and emergency response protocols</li>
+                        <li><i class="fas fa-circle"></i> Participated in multidisciplinary ward rounds and case management</li>
+                        <li><i class="fas fa-circle"></i> Mentored junior nursing students and contributed to research and evidence-based practice</li>
+                    </ul>
+                </div>
+
+                <!-- Nurse Practitioner - Equity Afya -->
+                <div class="employment-card">
+                    <div class="employment-header">
+                        <div class="employment-title">
+                            <h3>Nurse Practitioner</h3>
+                            <div class="employment-org">Equity Afya Meru Hospital</div>
+                        </div>
+                        <div class="employment-date">Nov 2023 – Jul 2024</div>
+                    </div>
+                    <div class="employment-location">Meru, Kenya</div>
+                    <ul class="employment-points">
+                        <li><i class="fas fa-circle"></i> Managed a daily caseload of 15–20 patients, achieving 98% satisfaction scores</li>
+                        <li><i class="fas fa-circle"></i> Spearheaded multidisciplinary care coordination, reducing readmission rates by 25%</li>
+                        <li><i class="fas fa-circle"></i> Implemented health education programs reaching over 200 community members monthly</li>
+                        <li><i class="fas fa-circle"></i> Mentored junior staff and supported hospital accreditation</li>
+                    </ul>
+                </div>
+
+                <!-- Earlier Positions -->
+                <div class="employment-card">
+                    <div class="employment-header">
+                        <div class="employment-title">
+                            <h3>Nurse Practitioner</h3>
+                            <div class="employment-org">Meru Doctor's Plaza / Jekim Hospital</div>
+                        </div>
+                        <div class="employment-date">2022 – 2023</div>
+                    </div>
+                    <div class="employment-location">Meru, Kenya</div>
+                    <ul class="employment-points">
+                        <li><i class="fas fa-circle"></i> Delivered comprehensive patient care with focus on safety, advocacy, and communication</li>
+                        <li><i class="fas fa-circle"></i> Supported decision-making in high-pressure clinical settings</li>
+                        <li><i class="fas fa-circle"></i> Advocated for patient rights and safety protocols</li>
+                        <li><i class="fas fa-circle"></i> Provided health education and counseling to patients and families</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="section education-section">
+        <div class="container">
+            <div class="section-tag">Academic Background</div>
+            <h2 class="section-title gold-rule">Education</h2>
+            <div class="education-grid">
+                <div class="education-card">
+                    <h3>Bachelor of Science in Nursing (BScN)</h3>
+                    <div class="education-school">Kenya Methodist University</div>
+                    <div class="education-period">2017 – 2022</div>
+                </div>
+                <div class="education-card">
+                    <h3>Kenya Certificate of Secondary Education</h3>
+                    <div class="education-school">Onjiko High School</div>
+                    <div class="education-period">2013 – 2016</div>
+                </div>
+                <div class="education-card">
+                    <h3>Kenya Certificate of Primary Education</h3>
+                    <div class="education-school">Nyahututu Primary School</div>
+                    <div class="education-period">2005 – 2012</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses & Certifications -->
+    <section class="section courses-section">
+        <div class="container">
+            <div class="section-tag">Professional Development</div>
+            <h2 class="section-title gold-rule">Certifications & Courses</h2>
+            <div class="courses-grid">
+                <div class="course-item">
+                    <i class="fas fa-heart-pulse"></i>
+                    <h4>Basic Life Support (BLS)</h4>
+                    <p>American Heart Association</p>
+                    <span class="course-year">2025</span>
+                </div>
+                <div class="course-item">
+                    <i class="fas fa-heart-circle-check"></i>
+                    <h4>Advanced Cardiac Life Support (ACLS)</h4>
+                    <p>American Heart Association</p>
+                    <span class="course-year">2025</span>
+                </div>
+                <div class="course-item">
+                    <i class="fas fa-kit-medical"></i>
+                    <h4>Advanced Trauma Life Support (ATLS)</h4>
+                    <p>American College of Surgeons</p>
+                    <span class="course-year">2025</span>
+                </div>
+                <div class="course-item">
+                    <i class="fas fa-shield-halved"></i>
+                    <h4>Cybersecurity Essentials</h4>
+                    <p>Cisco Networking Academy</p>
+                    <span class="course-year">2025</span>
+                </div>
+                <div class="course-item">
+                    <i class="fas fa-brain"></i>
+                    <h4>County Mental Health Trainer (TOT)</h4>
+                    <p>Building Resilient Health Workforce</p>
+                    <span class="course-year">2025</span>
+                </div>
+                <div class="course-item">
+                    <i class="fas fa-bone"></i>
+                    <h4>AO Alliance Fracture Management</h4>
+                    <p>Orthopedic & Fracture Management</p>
+                    <span class="course-year">2025</span>
+                </div>
+                <div class="course-item">
+                    <i class="fas fa-child"></i>
+                    <h4>Obstetric Safe Surgery (OSS)</h4>
+                    <p>Mentorship Qualification</p>
+                    <span class="course-year">2025</span>
+                </div>
+                <div class="course-item">
+                    <i class="fas fa-laptop"></i>
+                    <h4>Computer Applications</h4>
+                    <p>Distinction</p>
+                    <span class="course-year">2025</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section id="achievements" class="section achievements-section">
+        <div class="container">
+            <div class="section-tag">Career Highlights</div>
+            <h2 class="section-title gold-rule">Key Achievements</h2>
+            <div class="achievements-grid">
+                <div class="achievement-card">
+                    <i class="fas fa-building-columns"></i>
+                    <h3>County-level Leadership</h3>
+                    <p>Successfully supported county-level nursing policy and quality improvement programs under the Office of the Nakuru County Chief Nursing Officer.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>Mental Health TOT Trainer</h3>
+                    <p>Certified Mental Health Trainer through Building Resilient Health Workforce program.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-bone"></i>
+                    <h3>AO Alliance Specialist</h3>
+                    <p>Certified in advanced orthopedic and fracture management.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-child"></i>
+                    <h3>OSS Mentor & Trainer</h3>
+                    <p>Led county-wide obstetric safe surgery trainings for healthcare workers.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Novice Representative</h3>
+                    <p>KESSNUR - Advocated for over 500 student nurses nationally.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-tent"></i>
+                    <h3>Medical Camps Coordination</h3>
+                    <p>Coordinated 5+ medical camps reaching underserved populations of over 1,000 community members.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-star"></i>
+                    <h3>High Patient Satisfaction</h3>
+                    <p>Consistently achieved 98% satisfaction scores in private practice settings.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-syringe"></i>
+                    <h3>Vaccination Campaign Lead</h3>
+                    <p>Led successful county-wide MR & TCV vaccination campaign improving immunization coverage in Nakuru County.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-chalkboard-user"></i>
+                    <h3>Nursing Education Development</h3>
+                    <p>Developed and implemented comprehensive nursing curricula aligned with current clinical practices.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership Section (UPDATED) -->
+    <section id="leadership" class="section leadership-section">
+        <div class="container">
+            <div class="section-tag">Leadership & Mentorship</div>
+            <h2 class="section-title gold-rule">Professional Leadership</h2>
+            <div class="leadership-grid">
+                <div class="leadership-card">
+                    <h3>Novice Representative</h3>
+                    <div class="leadership-org">KESSNUR</div>
+                    <p style="margin-top: 12px;">Advocated for over 500 student nurses nationally</p>
+                    <div class="leadership-period">2025</div>
+                </div>
+                <div class="leadership-card">
+                    <h3>OSS Mentor</h3>
+                    <div class="leadership-org">Obstetric Safe Surgery Program</div>
+                    <p style="margin-top: 12px;">County-wide obstetric safe surgery mentorship and training</p>
+                    <div class="leadership-period">2025 – Present</div>
+                </div>
+                <div class="leadership-card">
+                    <h3>County Mental Health Mentor</h3>
+                    <div class="leadership-org">Building Resilient Health Workforce</div>
+                    <p style="margin-top: 12px;">Certified Mental Health Trainer (TOT)</p>
+                    <div class="leadership-period">2025</div>
+                </div>
+                <div class="leadership-card">
+                    <h3>Faculty Chairperson</h3>
+                    <div class="leadership-org">AO Alliance PGH Branch</div>
+                    <div class="leadership-period">2025</div>
+                </div>
+                <div class="leadership-card">
+                    <h3>Welfare Committee Chair</h3>
+                    <div class="leadership-org">Kenya Student & Novice Nurses</div>
+                    <p style="margin-top: 12px;">Advocated for over 500 student nurses</p>
+                    <div class="leadership-period">2023 – 2025</div>
+                </div>
+                <div class="leadership-card">
+                    <h3>President</h3>
+                    <div class="leadership-org">KeMUNSA</div>
+                    <div class="leadership-period">2021</div>
+                </div>
+                <div class="leadership-card">
+                    <h3>Organizing Secretary</h3>
+                    <div class="leadership-org">KeMUNSA</div>
+                    <div class="leadership-period">2019</div>
+                </div>
+                <div class="leadership-card">
+                    <h3>Head of Department</h3>
+                    <div class="leadership-org">Nakuru College of Health Sciences</div>
+                    <div class="leadership-period">2025</div>
+                </div>
+                <div class="leadership-card">
+                    <h3>Nominated Member</h3>
+                    <div class="leadership-org">Kenya Students & Novices Nurses</div>
+                    <div class="leadership-period">2025</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="section contact">
+    <section id="contact" class="section contact-section">
         <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-            <div class="contact-content">
+            <div class="section-tag">Let's Connect</div>
+            <h2 class="section-title gold-rule">Get In Touch</h2>
+            <div class="contact-grid">
                 <div class="contact-info">
                     <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
                         <div>
-                            <h3>Email</h3>
-                            <a href="mailto:matokakevin98@gmail.com" id="contact-email">matokakevin98@gmail.com</a>
+                            <div class="contact-label">Email</div>
+                            <a href="mailto:matokakevin98@gmail.com" class="contact-value">matokakevin98@gmail.com</a>
                         </div>
                     </div>
                     <div class="contact-item">
-                        <i class="fas fa-phone"></i>
+                        <div class="contact-icon"><i class="fas fa-phone"></i></div>
                         <div>
-                            <h3>Phone</h3>
-                            <a href="tel:+254790969743" id="contact-phone">+254 790 969 743</a>
+                            <div class="contact-label">Phone</div>
+                            <a href="tel:+254790969743" class="contact-value">+254 790 969 743</a>
                         </div>
                     </div>
                     <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
+                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
                         <div>
-                            <h3>Location</h3>
-                            <p id="contact-location">Nakuru, Kenya</p>
+                            <div class="contact-label">Location</div>
+                            <span class="contact-value">Nakuru, Kenya</span>
                         </div>
+                    </div>
+                    <div style="margin-top: 30px; padding: 16px; background: rgba(201,168,76,0.15); border-radius: 4px;">
+                        <p style="color: white;"><i class="fas fa-circle" style="color: #22c55e; font-size: 0.6rem; margin-right: 8px;"></i> Available for consulting, collaborations, and speaking engagements</p>
                     </div>
                 </div>
                 <div class="contact-form">
                     <form id="contactForm">
                         <div class="form-group">
-                            <input type="text" class="form-input" placeholder="Your Name" required>
+                            <label class="form-label">Your Name</label>
+                            <input type="text" class="form-input" placeholder="Dr. Jane Wanjiku" required>
                         </div>
                         <div class="form-group">
-                            <input type="email" class="form-input" placeholder="Your Email" required>
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-input" placeholder="your@email.com" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-input" placeholder="Subject" required>
+                            <label class="form-label">Subject</label>
+                            <input type="text" class="form-input" placeholder="Collaboration Opportunity" required>
                         </div>
                         <div class="form-group">
-                            <textarea class="form-input" placeholder="Your Message" rows="5" required></textarea>
+                            <label class="form-label">Message</label>
+                            <textarea class="form-input" placeholder="Tell Kevin about your project, question, or opportunity..." required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <button type="submit" class="form-submit">Send Message</button>
                     </form>
                 </div>
             </div>
@@ -227,69 +1661,75 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-logo">Kevin<span>Matoka</span></div>
-                <p class="footer-tagline">Clinical Leader & Healthcare Technologist</p>
+                <div class="footer-logo">Kevin Matoka <span>Tiong'i</span></div>
+                <div class="footer-tagline">Nursing Officer · Clinical Leader · Healthcare Technologist</div>
                 <div class="footer-social">
-                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
                 </div>
-                <p class="footer-copyright">
-                    &copy; <span id="currentYear"></span> Kevin Matoka Tiong'i. All rights reserved.
-                </p>
-                <p class="footer-note">
-                    Built by Kevin Matoka
-                </p>
+                <div class="footer-bottom">
+                    <span>© 2026 Kevin Matoka Tiong'i. All rights reserved.</span>
+                </div>
             </div>
         </div>
     </footer>
 
-    <!-- JavaScript -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const navbar = document.getElementById('navbar');
-            const menuToggle = document.getElementById('menuToggle');
-            const navMenu = document.getElementById('navMenu');
-            const navLinks = document.querySelectorAll('.nav-link');
-            
-            // Navbar scroll effect
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('scrolled');
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        if (menuToggle && navMenu) {
+            menuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                const icon = menuToggle.querySelector('i');
+                if (navMenu.classList.contains('active')) {
+                    icon.className = 'fas fa-times';
                 } else {
-                    navbar.classList.remove('scrolled');
+                    icon.className = 'fas fa-bars';
                 }
             });
-            
-            // Mobile menu toggle
-            menuToggle.addEventListener('click', function() {
-                navMenu.classList.toggle('active');
-            });
-            
-            // Close menu when clicking a link
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
+
+            navMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
                     navMenu.classList.remove('active');
-                    
-                    const targetId = this.getAttribute('href');
-                    const targetSection = document.querySelector(targetId);
-                    
-                    if (targetSection) {
-                        window.scrollTo({
-                            top: targetSection.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
-                    }
+                    menuToggle.querySelector('i').className = 'fas fa-bars';
                 });
             });
-            
-            // Set current year
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
-        });
-    </script>
+        }
 
-    <!-- Your script.js file -->
-    <script src="script.js"></script>
+        // Active link highlighting
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Form submission
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Thank you for your message! Kevin will get back to you soon.');
+                contactForm.reset();
+            });
+        }
+    </script>
 </body>
 </html>
