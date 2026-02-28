@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     <title>Kevin Matoka Tiong'i | Clinical Leader & Healthcare Technologist</title>
     <meta name="description" content="Kevin Matoka Tiong'i — Nursing Officer, Healthcare Technologist, and Educator based in Nakuru, Kenya. Bridging clinical excellence with technical innovation." />
     
@@ -25,12 +25,14 @@
             background: #F5F0E8;
             color: #0D1B2A;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
+            width: 100%;
             max-width: 1280px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 20px;
         }
 
         /* Navigation */
@@ -48,12 +50,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 72px;
+            height: 70px;
+            padding: 0 20px;
         }
 
         .logo {
             font-family: 'Playfair Display', serif;
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 700;
             font-style: italic;
             color: white;
@@ -65,19 +68,44 @@
         }
 
         .nav-menu {
-            display: flex;
+            position: fixed;
+            top: 70px;
+            left: -100%;
+            width: 100%;
+            height: calc(100vh - 70px);
+            background: #0D1B2A;
+            flex-direction: column;
             align-items: center;
-            gap: 32px;
+            justify-content: flex-start;
+            padding: 40px 20px;
+            transition: left 0.3s ease;
+            gap: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            z-index: 999;
+            overflow-y: auto;
+            display: flex;
             list-style: none;
+        }
+
+        .nav-menu.active {
+            left: 0;
         }
 
         .nav-link {
             color: rgba(255,255,255,0.8);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 1.1rem;
             font-weight: 500;
             transition: color 0.2s;
             position: relative;
+            padding: 12px 0;
+            width: 100%;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-link:last-child {
+            border-bottom: none;
         }
 
         .nav-link:hover,
@@ -85,26 +113,19 @@
             color: #C9A84C;
         }
 
-        .nav-link.active::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #C9A84C;
-        }
-
         .hire-btn {
             background: #C9A84C;
             color: #0D1B2A;
-            padding: 8px 20px;
-            border-radius: 2px;
+            padding: 12px 30px;
+            border-radius: 40px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 1rem;
             border: none;
             cursor: pointer;
             transition: background 0.2s;
+            width: 100%;
+            max-width: 200px;
+            margin-top: 10px;
         }
 
         .hire-btn:hover {
@@ -112,12 +133,13 @@
         }
 
         .menu-toggle {
-            display: none;
+            display: block;
             background: none;
             border: none;
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
+            z-index: 1001;
         }
 
         /* Hero Section */
@@ -126,33 +148,33 @@
             min-height: 100vh;
             display: flex;
             align-items: center;
-            padding: 120px 0 60px;
+            padding: 100px 0 50px;
             position: relative;
         }
 
         .hero-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
+            grid-template-columns: 1fr;
+            gap: 40px;
             align-items: center;
         }
 
         .hero-subtitle {
             color: #C9A84C;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .hero-title {
             font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
+            font-size: 2.5rem;
             font-weight: 700;
             color: white;
             line-height: 1.1;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .hero-title span {
@@ -162,28 +184,33 @@
 
         .hero-description {
             color: rgba(255,255,255,0.7);
-            font-size: 1rem;
-            max-width: 500px;
-            margin-bottom: 32px;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
             font-weight: 300;
         }
 
         .hero-buttons {
             display: flex;
-            gap: 16px;
-            margin-bottom: 48px;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .btn-primary, .btn-secondary {
+            width: 100%;
+            padding: 14px 20px;
+            text-align: center;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
         .btn-primary {
             background: #C9A84C;
             color: #0D1B2A;
-            padding: 12px 32px;
             border: none;
-            border-radius: 2px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background 0.2s;
         }
 
         .btn-primary:hover {
@@ -193,13 +220,7 @@
         .btn-secondary {
             background: transparent;
             color: white;
-            padding: 12px 32px;
             border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 2px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: border-color 0.2s, color 0.2s;
         }
 
         .btn-secondary:hover {
@@ -209,55 +230,65 @@
 
         .contact-info-row {
             display: flex;
-            gap: 24px;
-            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 25px;
             color: white;
             font-size: 0.9rem;
-            flex-wrap: wrap;
         }
 
         .contact-info-row i {
             color: #C9A84C;
+            width: 20px;
             margin-right: 8px;
         }
 
         .hero-stats {
             display: flex;
-            gap: 48px;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+            min-width: 80px;
         }
 
         .stat-item h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
+            font-size: 1.5rem;
             color: #C9A84C;
             margin-bottom: 4px;
         }
 
         .stat-item p {
             color: rgba(255,255,255,0.5);
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .profile-container {
             position: relative;
+            margin-top: 20px;
         }
 
         .profile-ring {
             position: relative;
-            width: 400px;
-            height: 400px;
+            width: 280px;
+            height: 280px;
             margin: 0 auto;
         }
 
         .profile-ring::before {
             content: '';
             position: absolute;
-            top: -20px;
-            left: -20px;
-            right: -20px;
-            bottom: -20px;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
             border: 2px solid rgba(201, 168, 76, 0.2);
             border-radius: 50%;
         }
@@ -265,10 +296,10 @@
         .profile-ring::after {
             content: '';
             position: absolute;
-            top: -40px;
-            left: -40px;
-            right: -40px;
-            bottom: -40px;
+            top: -30px;
+            left: -30px;
+            right: -30px;
+            bottom: -30px;
             border: 2px solid rgba(201, 168, 76, 0.1);
             border-radius: 50%;
         }
@@ -282,22 +313,20 @@
         }
 
         .floating-badge {
-            position: absolute;
+            position: static;
             background: #0D1B2A;
             border: 1px solid rgba(201, 168, 76, 0.3);
-            padding: 12px 16px;
-            border-radius: 4px;
+            padding: 10px 15px;
+            border-radius: 40px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin: 15px auto 0;
+            max-width: 250px;
+            text-align: center;
         }
 
-        .badge-1 {
-            bottom: 40px;
-            left: -40px;
-        }
-
-        .badge-2 {
-            top: 40px;
-            right: -40px;
+        .badge-1, .badge-2 {
+            position: static;
+            margin: 10px auto;
         }
 
         .badge-label {
@@ -316,24 +345,24 @@
 
         /* Sections */
         .section {
-            padding: 80px 0;
+            padding: 60px 0;
         }
 
         .section-tag {
             color: #C9A84C;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .section-title {
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
             color: #0D1B2A;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             position: relative;
         }
 
@@ -342,7 +371,7 @@
             position: absolute;
             bottom: -10px;
             left: 0;
-            width: 60px;
+            width: 50px;
             height: 3px;
             background: #C9A84C;
         }
@@ -353,38 +382,31 @@
             bottom: -10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 60px;
+            width: 50px;
             height: 3px;
             background: #C9A84C;
         }
 
-        /* Profile Section - REMOVED - was duplicate */
-
         /* About Section */
         .about-grid {
             display: grid;
-            grid-template-columns: 3fr 2fr;
-            gap: 60px;
+            grid-template-columns: 1fr;
+            gap: 40px;
         }
 
         .about-text p {
             color: #0D1B2A;
             opacity: 0.8;
-            margin-bottom: 24px;
-            font-size: 1rem;
-            line-height: 1.8;
-        }
-
-        .about-text strong {
-            color: #0D1B2A;
-            opacity: 1;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.7;
         }
 
         .highlight-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin: 32px 0;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin: 25px 0;
         }
 
         .highlight-item {
@@ -392,65 +414,44 @@
             align-items: center;
             gap: 12px;
             background: white;
-            padding: 12px 16px;
-            border-radius: 4px;
+            padding: 12px 15px;
+            border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .highlight-item i {
-            color: #C9A84C;
-            font-size: 0.9rem;
-            width: 20px;
-        }
-
-        .highlight-item span {
-            font-size: 0.9rem;
         }
 
         .cert-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 24px;
+            gap: 8px;
+            margin-top: 20px;
         }
 
         .cert-item {
             background: #0D1B2A;
             color: white;
-            padding: 8px 16px;
-            border-radius: 2px;
-            font-size: 0.85rem;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: background 0.2s;
+            gap: 6px;
         }
 
         .cert-item i {
             color: #C9A84C;
-            font-size: 0.8rem;
-        }
-
-        .cert-item:hover {
-            background: #C9A84C;
-            color: #0D1B2A;
-        }
-
-        .cert-item:hover i {
-            color: #0D1B2A;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
         }
 
         .stat-card {
-            padding: 24px;
-            border-radius: 4px;
-            min-height: 140px;
+            padding: 20px;
+            border-radius: 8px;
+            min-height: 120px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -468,7 +469,7 @@
 
         .stat-card h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
         }
 
@@ -481,15 +482,13 @@
         }
 
         .stat-card p {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             opacity: 0.8;
         }
 
         /* Skills Section */
         .skills-section {
             background: #0D1B2A;
-            color: white;
-            position: relative;
         }
 
         .skills-section .section-title {
@@ -498,22 +497,22 @@
 
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
 
         .skill-card {
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 8px;
-            padding: 32px;
+            padding: 25px;
         }
 
         .skill-header {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .skill-icon {
@@ -531,20 +530,22 @@
 
         .skill-card h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
+            color: white;
         }
 
         .skill-tag-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
         }
 
         .skill-tag-item {
             background: rgba(255,255,255,0.1);
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
+            color: white;
             border: 1px solid rgba(255,255,255,0.1);
         }
 
@@ -556,28 +557,32 @@
         .employment-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 30px;
+            gap: 20px;
         }
 
         .employment-card {
             background: white;
             border-radius: 8px;
-            padding: 32px;
+            padding: 25px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .employment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         .employment-header {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            flex-direction: column;
+            gap: 10px;
             margin-bottom: 16px;
-            flex-wrap: wrap;
-            gap: 16px;
         }
 
         .employment-title h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             margin-bottom: 4px;
         }
 
@@ -590,10 +595,12 @@
         .employment-date {
             background: #0D1B2A;
             color: white;
-            padding: 6px 16px;
+            padding: 5px 14px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 500;
+            display: inline-block;
+            align-self: flex-start;
         }
 
         .employment-location {
@@ -610,14 +617,14 @@
             display: flex;
             gap: 12px;
             margin-bottom: 10px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: rgba(13,27,42,0.8);
         }
 
         .employment-points li i {
             color: #C9A84C;
-            font-size: 0.8rem;
-            margin-top: 5px;
+            font-size: 0.6rem;
+            margin-top: 6px;
             min-width: 16px;
         }
 
@@ -628,20 +635,26 @@
 
         .education-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
 
         .education-card {
             background: #F5F0E8;
             border-radius: 8px;
-            padding: 32px;
+            padding: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .education-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         .education-card h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            margin-bottom: 4px;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
         }
 
         .education-school {
@@ -656,6 +669,15 @@
             margin-bottom: 16px;
         }
 
+        .education-badge {
+            display: inline-block;
+            background: #0D1B2A;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
         /* Courses Section */
         .courses-section {
             background: #F5F0E8;
@@ -663,37 +685,40 @@
 
         .courses-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
         }
 
         .course-item {
             background: white;
             border-radius: 8px;
-            padding: 24px;
+            padding: 20px 15px;
             text-align: center;
-            transition: transform 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .course-item:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
         .course-item i {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: #C9A84C;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .course-item h4 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
+            font-size: 1rem;
+            margin-bottom: 6px;
         }
 
         .course-item p {
-            color: rgba(13,27,42,0.6);
-            font-size: 0.9rem;
+            color: #4a5568;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
         }
 
         .course-year {
@@ -702,14 +727,78 @@
             color: white;
             padding: 4px 12px;
             border-radius: 20px;
-            font-size: 0.8rem;
-            margin-top: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Projects Section */
+        .projects-section {
+            background: #F5F0E8;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .project-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .project-org {
+            color: #C9A84C;
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+        }
+
+        .project-period {
+            color: #718096;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        .project-description {
+            color: #4a5568;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .project-tag {
+            background: #EDF2F7;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #2D3748;
         }
 
         /* Achievements Section */
         .achievements-section {
             background: #0D1B2A;
-            color: white;
         }
 
         .achievements-section .section-title {
@@ -718,33 +807,44 @@
 
         .achievements-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
 
         .achievement-card {
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            padding: 32px;
+            border-radius: 12px;
+            padding: 25px 20px;
             text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-5px);
+            border-color: #C9A84C;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
 
         .achievement-card i {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: #C9A84C;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .achievement-card h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            margin-bottom: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
         }
 
         .achievement-card p {
             color: rgba(255,255,255,0.7);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
 
         /* Leadership Section */
@@ -754,31 +854,108 @@
 
         .leadership-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
 
         .leadership-card {
             background: #F5F0E8;
-            padding: 32px;
-            border-radius: 8px;
+            border-radius: 12px;
+            padding: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid #C9A84C;
+        }
+
+        .leadership-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .leadership-card i {
+            color: #C9A84C;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
         }
 
         .leadership-card h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            margin-bottom: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
 
         .leadership-org {
             color: #C9A84C;
             font-weight: 600;
+            font-size: 0.9rem;
             margin-bottom: 8px;
         }
 
         .leadership-period {
             color: rgba(13,27,42,0.5);
+            font-size: 0.85rem;
+            margin-top: 10px;
+            display: inline-block;
+            background: #0D1B2A;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        /* By The Numbers Section */
+        .numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .number-card {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .number-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #C9A84C;
+            margin-bottom: 4px;
+        }
+
+        .number-label {
+            font-size: 0.8rem;
+            color: #4a5568;
+        }
+
+        /* Credentials Section */
+        .credentials-section {
+            margin-top: 40px;
+        }
+
+        .credentials-flex {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .credential-item {
+            background: #0D1B2A;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
             font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .credential-item i {
+            color: #C9A84C;
         }
 
         /* Contact Section */
@@ -788,21 +965,21 @@
 
         .contact-grid {
             display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 40px;
+            grid-template-columns: 1fr;
+            gap: 30px;
         }
 
         .contact-info {
             background: #0D1B2A;
-            border-radius: 8px;
-            padding: 40px;
+            border-radius: 12px;
+            padding: 30px 25px;
             color: white;
         }
 
         .contact-item {
             display: flex;
-            gap: 16px;
-            margin-bottom: 30px;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
         .contact-icon {
@@ -810,11 +987,12 @@
             height: 40px;
             background: rgba(201,168,76,0.15);
             border: 1px solid rgba(201,168,76,0.3);
-            border-radius: 4px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #C9A84C;
+            flex-shrink: 0;
         }
 
         .contact-label {
@@ -826,16 +1004,35 @@
         }
 
         .contact-value {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 500;
             color: white;
             text-decoration: none;
         }
 
+        .contact-value:hover {
+            color: #C9A84C;
+        }
+
+        .availability-badge {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(201,168,76,0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .availability-badge i {
+            color: #22c55e;
+            font-size: 0.6rem;
+        }
+
         .contact-form {
             background: white;
-            border-radius: 8px;
-            padding: 40px;
+            border-radius: 12px;
+            padding: 30px 25px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05);
         }
 
@@ -853,10 +1050,10 @@
 
         .form-input {
             width: 100%;
-            padding: 12px 16px;
+            padding: 12px 15px;
             background: #F5F0E8;
             border: 1px solid rgba(13,27,42,0.1);
-            border-radius: 4px;
+            border-radius: 8px;
             font-size: 0.95rem;
             transition: border-color 0.2s;
         }
@@ -867,7 +1064,7 @@
         }
 
         textarea.form-input {
-            min-height: 120px;
+            min-height: 100px;
             resize: vertical;
         }
 
@@ -877,7 +1074,7 @@
             background: #C9A84C;
             color: #0D1B2A;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             font-weight: 600;
             font-size: 1rem;
             cursor: pointer;
@@ -891,7 +1088,7 @@
         /* Footer */
         .footer {
             background: #0D1B2A;
-            padding: 60px 0 30px;
+            padding: 50px 0 25px;
             border-top: 1px solid rgba(255,255,255,0.1);
         }
 
@@ -901,10 +1098,10 @@
 
         .footer-logo {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-style: italic;
             color: white;
-            margin-bottom: 16px;
+            margin-bottom: 15px;
         }
 
         .footer-logo span {
@@ -913,15 +1110,15 @@
 
         .footer-tagline {
             color: rgba(255,255,255,0.5);
-            font-size: 0.9rem;
-            margin-bottom: 24px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
         }
 
         .footer-social {
             display: flex;
             justify-content: center;
-            gap: 16px;
-            margin-bottom: 32px;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
         .footer-social a {
@@ -942,80 +1139,180 @@
         }
 
         .footer-bottom {
-            margin-top: 32px;
-            padding-top: 24px;
+            margin-top: 25px;
+            padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.1);
             color: rgba(255,255,255,0.3);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
+            text-align: center;
         }
 
-        /* Responsive */
-        @media (max-width: 992px) {
-            .menu-toggle {
-                display: block;
+        /* Tablet Styles */
+        @media (min-width: 768px) {
+            .container {
+                padding: 0 30px;
             }
 
-            .nav-menu {
-                position: fixed;
-                top: 72px;
-                left: -100%;
-                width: 100%;
-                background: #0D1B2A;
-                flex-direction: column;
-                align-items: center;
-                padding: 40px 20px;
-                transition: left 0.3s;
-                gap: 24px;
-                border-top: 1px solid rgba(255,255,255,0.1);
+            .hero-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
             }
 
-            .nav-menu.active {
-                left: 0;
+            .hero-title {
+                font-size: 3rem;
             }
 
-            .hero-grid,
-            .about-grid,
-            .contact-grid {
-                grid-template-columns: 1fr;
+            .hero-buttons {
+                flex-direction: row;
             }
 
-            .skills-grid,
-            .education-grid,
-            .courses-grid,
-            .achievements-grid,
-            .leadership-grid {
-                grid-template-columns: 1fr;
+            .btn-primary, .btn-secondary {
+                width: auto;
+                padding: 12px 28px;
+            }
+
+            .contact-info-row {
+                flex-direction: row;
+                flex-wrap: wrap;
             }
 
             .profile-ring {
-                width: 300px;
-                height: 300px;
+                width: 320px;
+                height: 320px;
             }
 
             .floating-badge {
-                position: static;
-                margin: 10px 0;
+                position: absolute;
             }
 
-            .footer-bottom {
-                flex-direction: column;
-                gap: 8px;
-                text-align: center;
+            .badge-1 {
+                bottom: 30px;
+                left: -20px;
+            }
+
+            .badge-2 {
+                top: 30px;
+                right: -20px;
+            }
+
+            .highlight-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .education-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .courses-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .projects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .achievements-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .leadership-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .numbers-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .nav-menu {
+                position: static;
+                width: auto;
+                height: auto;
+                background: transparent;
+                flex-direction: row;
+                padding: 0;
+                gap: 25px;
+                border-top: none;
+                left: 0;
+                display: flex;
+            }
+
+            .nav-link {
+                width: auto;
+                padding: 0;
+                border-bottom: none;
+                font-size: 0.9rem;
+            }
+
+            .menu-toggle {
+                display: none;
+            }
+
+            .hire-btn {
+                width: auto;
+                padding: 8px 20px;
+                margin-top: 0;
             }
         }
 
-        @media (max-width: 768px) {
+        /* Desktop Styles */
+        @media (min-width: 1024px) {
             .hero-title {
-                font-size: 2.5rem;
+                font-size: 3.5rem;
             }
-            
-            .employment-header {
-                flex-direction: column;
+
+            .profile-ring {
+                width: 400px;
+                height: 400px;
             }
-            
-            .contact-info-row {
-                flex-direction: column;
-                gap: 12px;
+
+            .badge-1 {
+                bottom: 40px;
+                left: -40px;
+            }
+
+            .badge-2 {
+                top: 40px;
+                right: -40px;
+            }
+
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .education-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .courses-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .projects-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .achievements-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .leadership-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .numbers-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+
+            .employment-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr 2fr;
             }
         }
     </style>
@@ -1023,17 +1320,19 @@
 <body>
     <!-- Navigation -->
     <nav class="navbar">
-        <div class="container nav-container">
+        <div class="nav-container">
             <a href="#home" class="logo">Kevin <span>Matoka</span></a>
             <button class="menu-toggle" id="menuToggle">
                 <i class="fas fa-bars"></i>
             </button>
             <ul class="nav-menu" id="navMenu">
-                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#home" class="nav-link">Home</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
                 <li><a href="#expertise" class="nav-link">Expertise</a></li>
                 <li><a href="#experience" class="nav-link">Experience</a></li>
                 <li><a href="#education" class="nav-link">Education</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#achievements" class="nav-link">Achievements</a></li>
                 <li><a href="#leadership" class="nav-link">Leadership</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
                 <li><button class="hire-btn" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">Hire Me</button></li>
@@ -1075,19 +1374,20 @@
                     </div>
                 </div>
             </div>
-          <div class="profile-container">
-    <div class="profile-ring">
-        <img src="https://raw.githubusercontent.com/matoka1/kevin-matoka-portfolio/main/assets/images/WhatsApp%20Image%202026-02-26%20at%2022.23.05.jpeg" alt="Kevin Matoka" class="profile-image">
-    </div>
-    <div class="floating-badge badge-1">
-        <div class="badge-label">BSc. Nursing</div>
-        <div class="badge-value">Kenya Methodist University</div>
-    </div>
-    <div class="floating-badge badge-2">
-        <div class="badge-label">Location</div>
-        <div class="badge-value">Nakuru, Kenya</div>
-    </div>
-</div>
+            <div class="profile-container">
+                <div class="profile-ring">
+                    <img src="https://raw.githubusercontent.com/matoka1/kevin-matoka-portfolio/main/assets/images/WhatsApp%20Image%202026-02-26%20at%2022.23.05.jpeg" alt="Kevin Matoka" class="profile-image">
+                </div>
+                <div class="floating-badge badge-1">
+                    <div class="badge-label">BSc. Nursing</div>
+                    <div class="badge-value">Kenya Methodist University</div>
+                </div>
+                <div class="floating-badge badge-2">
+                    <div class="badge-label">Location</div>
+                    <div class="badge-value">Nakuru, Kenya</div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- About Section -->
@@ -1099,7 +1399,7 @@
                 <div class="about-text">
                     <p>I am a detail-oriented and results-driven Nursing Officer with over <strong>2 years of progressive clinical and leadership experience</strong> across diverse healthcare settings. Currently serving as <strong>Head of Department, School of Nursing</strong> at Nakuru College of Health Science and Management.</p>
                     
-                    <div style="border-left: 2px solid #C9A84C; padding-left: 20px; margin: 24px 0;">
+                    <div style="border-left: 2px solid #C9A84C; padding-left: 15px; margin: 20px 0;">
                         <p><strong>My unique value:</strong> I combine hands-on clinical expertise with technical skills in software engineering, database management, and cybersecurity. This dual competency allows me to translate clinical workflows into technical requirements, design secure health applications, and implement systems that improve patient care.</p>
                     </div>
 
@@ -1234,685 +1534,360 @@
     </section>
 
     <!-- Employment Section -->
-    <!-- Employment Section - 2-Column Grid -->
     <section id="experience" class="section employment-section">
         <div class="container">
             <div class="section-tag">Professional Journey</div>
             <h2 class="section-title gold-rule">Employment History</h2>
-            
-            <!-- 2-Column Grid -->
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
-                
+            <div class="employment-grid">
                 <!-- Head of Department -->
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); height: fit-content;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 4px;">Head of Department – School of Nursing</h3>
-                            <div style="color: #C9A84C; font-weight: 600; font-size: 1rem;">Nakuru College of Health Science & Management</div>
+                <div class="employment-card">
+                    <div class="employment-header">
+                        <div class="employment-title">
+                            <h3>Head of Department – School of Nursing</h3>
+                            <div class="employment-org">Nakuru College of Health Science & Management</div>
                         </div>
-                        <div style="background: #0D1B2A; color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; white-space: nowrap;">Oct 2025 – Present</div>
+                        <div class="employment-date">Oct 2025 – Present</div>
                     </div>
-                    <div style="color: rgba(13,27,42,0.5); font-size: 0.9rem; margin-bottom: 16px;">Nakuru, Kenya</div>
-                    <ul style="list-style: none;">
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Provide strategic leadership and overall management of the School of Nursing</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Coordinate teaching, learning, and evaluation of nursing programs</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Supervise, mentor, and appraise academic and support staff</li>
+                    <div class="employment-location">Nakuru, Kenya</div>
+                    <ul class="employment-points">
+                        <li><i class="fas fa-circle"></i> Provide strategic leadership and overall management</li>
+                        <li><i class="fas fa-circle"></i> Coordinate teaching, learning, and evaluation</li>
+                        <li><i class="fas fa-circle"></i> Supervise, mentor, and appraise staff</li>
                     </ul>
                 </div>
 
-                <!-- Nurse Mentor & Program Implementer -->
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); height: fit-content;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 4px;">Nurse Mentor & Program Implementer</h3>
-                            <div style="color: #C9A84C; font-weight: 600; font-size: 1rem;">Obstetric Safe Surgery (OSS) Program</div>
+                <!-- Nurse Mentor -->
+                <div class="employment-card">
+                    <div class="employment-header">
+                        <div class="employment-title">
+                            <h3>Nurse Mentor & Program Implementer</h3>
+                            <div class="employment-org">Obstetric Safe Surgery (OSS) Program</div>
                         </div>
-                        <div style="background: #0D1B2A; color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; white-space: nowrap;">Jun 2025 – Present</div>
+                        <div class="employment-date">Jun 2025 – Present</div>
                     </div>
-                    <div style="color: rgba(13,27,42,0.5); font-size: 0.9rem; margin-bottom: 16px;">Nakuru, Kenya</div>
-                    <ul style="list-style: none;">
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Provide mentorship on obstetric safe surgery practices</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Support implementation of OSS standards to improve maternal outcomes</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Strengthen adherence to surgical safety protocols</li>
+                    <div class="employment-location">Nakuru, Kenya</div>
+                    <ul class="employment-points">
+                        <li><i class="fas fa-circle"></i> Provide mentorship on obstetric safe surgery</li>
+                        <li><i class="fas fa-circle"></i> Support implementation of OSS standards</li>
+                        <li><i class="fas fa-circle"></i> Strengthen adherence to surgical protocols</li>
                     </ul>
                 </div>
 
                 <!-- Nurse Tutor -->
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); height: fit-content;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 4px;">Nurse Tutor</h3>
-                            <div style="color: #C9A84C; font-weight: 600; font-size: 1rem;">PCEA-Nakuru West Medical College</div>
+                <div class="employment-card">
+                    <div class="employment-header">
+                        <div class="employment-title">
+                            <h3>Nurse Tutor</h3>
+                            <div class="employment-org">PCEA-Nakuru West Medical College</div>
                         </div>
-                        <div style="background: #0D1B2A; color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; white-space: nowrap;">Apr 2025 – Present</div>
+                        <div class="employment-date">Apr 2025 – Present</div>
                     </div>
-                    <div style="color: rgba(13,27,42,0.5); font-size: 0.9rem; margin-bottom: 16px;">Nakuru, Kenya</div>
-                    <ul style="list-style: none;">
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Develop comprehensive nursing curricula for students</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Supervise students during clinical placements</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Coordinate simulation-based training sessions</li>
-                    </ul>
-                </div>
-
-                <!-- Nurse Intern - Jacaranda Health -->
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); height: fit-content;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 4px;">Nurse Intern - Program Implementation</h3>
-                            <div style="color: #C9A84C; font-weight: 600; font-size: 1rem;">Jacaranda Health / Nakuru County</div>
-                        </div>
-                        <div style="background: #0D1B2A; color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; white-space: nowrap;">Apr 2025 – Aug 2025</div>
-                    </div>
-                    <div style="color: rgba(13,27,42,0.5); font-size: 0.9rem; margin-bottom: 16px;">Nakuru, Kenya</div>
-                    <ul style="list-style: none;">
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Supported implementation of partnership program</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Assisted in SMS prompt interventions for maternal health</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Participated in mentorship programs</li>
-                    </ul>
-                </div>
-
-                <!-- County TOT - Measles Campaign -->
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); height: fit-content;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 4px;">County TOT - Measles & Typhoid Campaign</h3>
-                            <div style="color: #C9A84C; font-weight: 600; font-size: 1rem;">Nakuru County Health Services</div>
-                        </div>
-                        <div style="background: #0D1B2A; color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; white-space: nowrap;">Jun 2025 – Jul 2025</div>
-                    </div>
-                    <div style="color: rgba(13,27,42,0.5); font-size: 0.9rem; margin-bottom: 16px;">Nakuru, Kenya</div>
-                    <ul style="list-style: none;">
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Led Measles-Rubella and TCV campaign</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Directed strategic planning and data collection</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Coordinated training on vaccine cold chain management</li>
-                    </ul>
-                </div>
-
-                <!-- Clinical Instructor & Mentor -->
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); height: fit-content;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 4px;">Clinical Instructor & Mentor</h3>
-                            <div style="color: #C9A84C; font-weight: 600; font-size: 1rem;">Nakuru County Teaching and Referral Hospital</div>
-                        </div>
-                        <div style="background: #0D1B2A; color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; white-space: nowrap;">Aug 2024 – Aug 2025</div>
-                    </div>
-                    <div style="color: rgba(13,27,42,0.5); font-size: 0.9rem; margin-bottom: 16px;">Nakuru, Kenya</div>
-                    <ul style="list-style: none;">
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Supervised students in advanced medical procedures</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Guided students in evidence-based practice</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Collaborated with medical residents and consultants</li>
-                    </ul>
-                </div>
-
-                <!-- Nurse Officer Intern -->
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); height: fit-content;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 4px;">Nurse Officer Intern</h3>
-                            <div style="color: #C9A84C; font-weight: 600; font-size: 1rem;">Nakuru County Teaching and Referral Hospital</div>
-                        </div>
-                        <div style="background: #0D1B2A; color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; white-space: nowrap;">Aug 2024 – Aug 2025</div>
-                    </div>
-                    <div style="color: rgba(13,27,42,0.5); font-size: 0.9rem; margin-bottom: 16px;">Nakuru, Kenya</div>
-                    <ul style="list-style: none;">
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Rotated across medical, surgical, emergency units</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Involved in critical care and emergency response</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Participated in multidisciplinary ward rounds</li>
-                    </ul>
-                </div>
-
-                <!-- Nurse Practitioner - Equity Afya -->
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); height: fit-content;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 4px;">Nurse Practitioner</h3>
-                            <div style="color: #C9A84C; font-weight: 600; font-size: 1rem;">Equity Afya Meru Hospital</div>
-                        </div>
-                        <div style="background: #0D1B2A; color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; white-space: nowrap;">Nov 2023 – Jul 2024</div>
-                    </div>
-                    <div style="color: rgba(13,27,42,0.5); font-size: 0.9rem; margin-bottom: 16px;">Meru, Kenya</div>
-                    <ul style="list-style: none;">
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Managed 15–20 patients daily, 98% satisfaction</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Spearheaded multidisciplinary care coordination</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Implemented health education programs</li>
-                    </ul>
-                </div>
-
-                <!-- Earlier Positions -->
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); height: fit-content;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 4px;">Nurse Practitioner</h3>
-                            <div style="color: #C9A84C; font-weight: 600; font-size: 1rem;">Meru Doctor's Plaza / Jekim Hospital</div>
-                        </div>
-                        <div style="background: #0D1B2A; color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; white-space: nowrap;">2022 – 2023</div>
-                    </div>
-                    <div style="color: rgba(13,27,42,0.5); font-size: 0.9rem; margin-bottom: 16px;">Meru, Kenya</div>
-                    <ul style="list-style: none;">
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Delivered comprehensive patient care</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Supported decision-making in high-pressure settings</li>
-                        <li style="display: flex; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; color: rgba(13,27,42,0.8);"><i class="fas fa-circle" style="color: #C9A84C; font-size: 0.6rem; margin-top: 8px;"></i> Advocated for patient rights and safety protocols</li>
+                    <div class="employment-location">Nakuru, Kenya</div>
+                    <ul class="employment-points">
+                        <li><i class="fas fa-circle"></i> Develop comprehensive nursing curricula</li>
+                        <li><i class="fas fa-circle"></i> Supervise students during clinical placements</li>
+                        <li><i class="fas fa-circle"></i> Coordinate simulation-based training</li>
                     </ul>
                 </div>
             </div>
         </div>
     </section>
 
-       <!-- Education Section - Enhanced -->
+    <!-- Education Section -->
     <section id="education" class="section education-section">
         <div class="container">
             <div class="section-tag">Academic Background</div>
             <h2 class="section-title gold-rule">Education</h2>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
-                
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; hover:transform: translateY(-5px); hover:box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            <div class="education-grid">
+                <div class="education-card">
                     <div style="width: 50px; height: 50px; background: rgba(201,168,76,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
                         <i class="fas fa-graduation-cap" style="color: #C9A84C; font-size: 1.5rem;"></i>
                     </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 8px;">Bachelor of Science in Nursing (BScN)</h3>
-                    <div style="color: #C9A84C; font-weight: 600; margin-bottom: 8px;">Kenya Methodist University</div>
-                    <div style="color: rgba(13,27,42,0.5); font-size: 0.9rem; margin-bottom: 16px;">2017 – 2022</div>
-                    <div style="display: inline-block; background: #0D1B2A; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;">Degree</div>
+                    <h3>Bachelor of Science in Nursing (BScN)</h3>
+                    <div class="education-school">Kenya Methodist University</div>
+                    <div class="education-period">2017 – 2022</div>
+                    <span class="education-badge">Degree</span>
                 </div>
 
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; hover:transform: translateY(-5px); hover:box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                <div class="education-card">
                     <div style="width: 50px; height: 50px; background: rgba(201,168,76,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
                         <i class="fas fa-school" style="color: #C9A84C; font-size: 1.5rem;"></i>
                     </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 8px;">Kenya Certificate of Secondary Education</h3>
-                    <div style="color: #C9A84C; font-weight: 600; margin-bottom: 8px;">Onjiko High School</div>
-                    <div style="color: rgba(13,27,42,0.5); font-size: 0.9rem; margin-bottom: 16px;">2013 – 2016</div>
-                    <div style="display: inline-block; background: #0D1B2A; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;">KCSE</div>
+                    <h3>Kenya Certificate of Secondary Education</h3>
+                    <div class="education-school">Onjiko High School</div>
+                    <div class="education-period">2013 – 2016</div>
+                    <span class="education-badge">KCSE</span>
                 </div>
 
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; hover:transform: translateY(-5px); hover:box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                <div class="education-card">
                     <div style="width: 50px; height: 50px; background: rgba(201,168,76,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
                         <i class="fas fa-book-open" style="color: #C9A84C; font-size: 1.5rem;"></i>
                     </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 8px;">Kenya Certificate of Primary Education</h3>
-                    <div style="color: #C9A84C; font-weight: 600; margin-bottom: 8px;">Nyahututu Primary School</div>
-                    <div style="color: rgba(13,27,42,0.5); font-size: 0.9rem; margin-bottom: 16px;">2005 – 2012</div>
-                    <div style="display: inline-block; background: #0D1B2A; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;">KCPE</div>
+                    <h3>Kenya Certificate of Primary Education</h3>
+                    <div class="education-school">Nyahututu Primary School</div>
+                    <div class="education-period">2005 – 2012</div>
+                    <span class="education-badge">KCPE</span>
                 </div>
             </div>
         </div>
     </section>
 
-      <!-- Courses & Certifications - Enhanced -->
-    <section class="section courses-section">
+    <!-- Projects Section -->
+    <section id="projects" class="section projects-section">
         <div class="container">
-            <div class="section-tag">Professional Development</div>
-            <h2 class="section-title gold-rule">Certifications & Courses</h2>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
-                
-                <div style="background: white; border-radius: 8px; padding: 28px 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease; hover:transform: translateY(-5px); hover:box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-                    <div style="width: 60px; height: 60px; background: rgba(201,168,76,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                        <i class="fas fa-heart-pulse" style="font-size: 1.8rem; color: #C9A84C;"></i>
+            <div class="section-tag">My Work</div>
+            <h2 class="section-title gold-rule">Projects & Impact</h2>
+            <p style="color: #4a5568; margin-bottom: 30px;">A selection of clinical, educational, and technology initiatives that demonstrate the breadth of Kevin's impact across healthcare.</p>
+
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <div class="project-card">
+                    <h3>HEAD OF DEPARTMENT – SCHOOL OF NURSING</h3>
+                    <div class="project-org">Nakuru College of Health Sciences</div>
+                    <div class="project-period">2025 – Present</div>
+                    <p class="project-description">Leading nursing education and curriculum development, overseeing clinical placements, and mentoring over 500 nursing students.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Curriculum Design</span>
+                        <span class="project-tag">Supervision</span>
+                        <span class="project-tag">Leadership</span>
                     </div>
-                    <h4 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">Basic Life Support (BLS)</h4>
-                    <p style="color: #4a5568; font-size: 0.85rem; margin-bottom: 12px;">American Heart Association</p>
-                    <span style="display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 500;">2025</span>
                 </div>
 
-                <div style="background: white; border-radius: 8px; padding: 28px 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease; hover:transform: translateY(-5px); hover:box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-                    <div style="width: 60px; height: 60px; background: rgba(201,168,76,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                        <i class="fas fa-heart-circle-check" style="font-size: 1.8rem; color: #C9A84C;"></i>
+                <!-- Project 2 -->
+                <div class="project-card">
+                    <h3>HEALTH RESEARCHER</h3>
+                    <div class="project-org">Research & Publication</div>
+                    <div class="project-period">2022 – Present</div>
+                    <p class="project-description">Conducting research on healthcare delivery systems and community health interventions.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Research</span>
+                        <span class="project-tag">Publication</span>
                     </div>
-                    <h4 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">Advanced Cardiac Life Support (ACLS)</h4>
-                    <p style="color: #4a5568; font-size: 0.85rem; margin-bottom: 12px;">American Heart Association</p>
-                    <span style="display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 500;">2025</span>
                 </div>
 
-                <div style="background: white; border-radius: 8px; padding: 28px 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease; hover:transform: translateY(-5px); hover:box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-                    <div style="width: 60px; height: 60px; background: rgba(201,168,76,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                        <i class="fas fa-kit-medical" style="font-size: 1.8rem; color: #C9A84C;"></i>
+                <!-- Project 3 -->
+                <div class="project-card">
+                    <h3>COMMUNITY HEALTH OUTREACH</h3>
+                    <div class="project-org">Nakuru County Health Services</div>
+                    <div class="project-period">2022 – Present</div>
+                    <p class="project-description">Coordinated health campaigns reaching over 1,000 community members.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Public Health</span>
+                        <span class="project-tag">Outreach</span>
                     </div>
-                    <h4 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">Advanced Trauma Life Support (ATLS)</h4>
-                    <p style="color: #4a5568; font-size: 0.85rem; margin-bottom: 12px;">American College of Surgeons</p>
-                    <span style="display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 500;">2025</span>
-                </div>
-
-                <div style="background: white; border-radius: 8px; padding: 28px 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease; hover:transform: translateY(-5px); hover:box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-                    <div style="width: 60px; height: 60px; background: rgba(201,168,76,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                        <i class="fas fa-shield-halved" style="font-size: 1.8rem; color: #C9A84C;"></i>
-                    </div>
-                    <h4 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">Cybersecurity Essentials</h4>
-                    <p style="color: #4a5568; font-size: 0.85rem; margin-bottom: 12px;">Cisco Networking Academy</p>
-                    <span style="display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 500;">2025</span>
-                </div>
-
-                <div style="background: white; border-radius: 8px; padding: 28px 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease; hover:transform: translateY(-5px); hover:box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-                    <div style="width: 60px; height: 60px; background: rgba(201,168,76,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                        <i class="fas fa-brain" style="font-size: 1.8rem; color: #C9A84C;"></i>
-                    </div>
-                    <h4 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">County Mental Health Trainer (TOT)</h4>
-                    <p style="color: #4a5568; font-size: 0.85rem; margin-bottom: 12px;">Building Resilient Health Workforce</p>
-                    <span style="display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 500;">2025</span>
-                </div>
-
-                <div style="background: white; border-radius: 8px; padding: 28px 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease; hover:transform: translateY(-5px); hover:box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-                    <div style="width: 60px; height: 60px; background: rgba(201,168,76,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                        <i class="fas fa-bone" style="font-size: 1.8rem; color: #C9A84C;"></i>
-                    </div>
-                    <h4 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">AO Alliance Fracture Management</h4>
-                    <p style="color: #4a5568; font-size: 0.85rem; margin-bottom: 12px;">Orthopedic & Fracture Management</p>
-                    <span style="display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 500;">2025</span>
-                </div>
-
-                <div style="background: white; border-radius: 8px; padding: 28px 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease; hover:transform: translateY(-5px); hover:box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-                    <div style="width: 60px; height: 60px; background: rgba(201,168,76,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                        <i class="fas fa-child" style="font-size: 1.8rem; color: #C9A84C;"></i>
-                    </div>
-                    <h4 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">Obstetric Safe Surgery (OSS)</h4>
-                    <p style="color: #4a5568; font-size: 0.85rem; margin-bottom: 12px;">Mentorship Qualification</p>
-                    <span style="display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 500;">2025</span>
-                </div>
-
-                <div style="background: white; border-radius: 8px; padding: 28px 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease; hover:transform: translateY(-5px); hover:box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-                    <div style="width: 60px; height: 60px; background: rgba(201,168,76,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                        <i class="fas fa-laptop" style="font-size: 1.8rem; color: #C9A84C;"></i>
-                    </div>
-                    <h4 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">Computer Applications</h4>
-                    <p style="color: #4a5568; font-size: 0.85rem; margin-bottom: 12px;">Distinction</p>
-                    <span style="display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 500;">2025</span>
                 </div>
             </div>
         </div>
     </section>
 
-        <!-- Achievements Section - Enhanced -->
+    <!-- Achievements Section -->
     <section id="achievements" class="section achievements-section">
         <div class="container">
             <div class="section-tag">Career Highlights</div>
             <h2 class="section-title gold-rule">Key Achievements</h2>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
-                
-                <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 32px 24px; text-align: center; backdrop-filter: blur(10px); transition: all 0.3s ease; hover:transform: translateY(-8px); hover:border-color: #C9A84C; hover:box-shadow: 0 15px 30px rgba(0,0,0,0.3);">
-                    <div style="width: 70px; height: 70px; background: rgba(201,168,76,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 1px solid rgba(201,168,76,0.3);">
-                        <i class="fas fa-building-columns" style="font-size: 2.2rem; color: #C9A84C;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: white; margin-bottom: 12px;">County-level Leadership</h3>
-                    <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.6;">Successfully supported county-level nursing policy and quality improvement programs under the Office of the Nakuru County Chief Nursing Officer.</p>
+            <div class="achievements-grid">
+                <div class="achievement-card">
+                    <i class="fas fa-building-columns"></i>
+                    <h3>County-level Leadership</h3>
+                    <p>Supported county-level nursing policy and quality improvement programs.</p>
                 </div>
-
-                <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 32px 24px; text-align: center; backdrop-filter: blur(10px); transition: all 0.3s ease; hover:transform: translateY(-8px); hover:border-color: #C9A84C; hover:box-shadow: 0 15px 30px rgba(0,0,0,0.3);">
-                    <div style="width: 70px; height: 70px; background: rgba(201,168,76,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 1px solid rgba(201,168,76,0.3);">
-                        <i class="fas fa-brain" style="font-size: 2.2rem; color: #C9A84C;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: white; margin-bottom: 12px;">Mental Health TOT Trainer</h3>
-                    <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.6;">Certified Mental Health Trainer through Building Resilient Health Workforce program.</p>
+                <div class="achievement-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>Mental Health TOT Trainer</h3>
+                    <p>Certified Mental Health Trainer through BRHW program.</p>
                 </div>
-
-                <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 32px 24px; text-align: center; backdrop-filter: blur(10px); transition: all 0.3s ease; hover:transform: translateY(-8px); hover:border-color: #C9A84C; hover:box-shadow: 0 15px 30px rgba(0,0,0,0.3);">
-                    <div style="width: 70px; height: 70px; background: rgba(201,168,76,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 1px solid rgba(201,168,76,0.3);">
-                        <i class="fas fa-bone" style="font-size: 2.2rem; color: #C9A84C;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: white; margin-bottom: 12px;">AO Alliance Specialist</h3>
-                    <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.6;">Certified in advanced orthopedic and fracture management.</p>
+                <div class="achievement-card">
+                    <i class="fas fa-bone"></i>
+                    <h3>AO Alliance Specialist</h3>
+                    <p>Certified in advanced orthopedic and fracture management.</p>
                 </div>
-
-                <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 32px 24px; text-align: center; backdrop-filter: blur(10px); transition: all 0.3s ease; hover:transform: translateY(-8px); hover:border-color: #C9A84C; hover:box-shadow: 0 15px 30px rgba(0,0,0,0.3);">
-                    <div style="width: 70px; height: 70px; background: rgba(201,168,76,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 1px solid rgba(201,168,76,0.3);">
-                        <i class="fas fa-child" style="font-size: 2.2rem; color: #C9A84C;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: white; margin-bottom: 12px;">OSS Mentor & Trainer</h3>
-                    <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.6;">Led county-wide obstetric safe surgery trainings for healthcare workers.</p>
+                <div class="achievement-card">
+                    <i class="fas fa-child"></i>
+                    <h3>OSS Mentor & Trainer</h3>
+                    <p>Led county-wide obstetric safe surgery trainings.</p>
                 </div>
-
-                <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 32px 24px; text-align: center; backdrop-filter: blur(10px); transition: all 0.3s ease; hover:transform: translateY(-8px); hover:border-color: #C9A84C; hover:box-shadow: 0 15px 30px rgba(0,0,0,0.3);">
-                    <div style="width: 70px; height: 70px; background: rgba(201,168,76,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 1px solid rgba(201,168,76,0.3);">
-                        <i class="fas fa-users" style="font-size: 2.2rem; color: #C9A84C;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: white; margin-bottom: 12px;">Novice Representative</h3>
-                    <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.6;">KESSNUR - Advocated for over 500 student nurses nationally.</p>
+                <div class="achievement-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Novice Representative</h3>
+                    <p>KESSNUR - Advocated for 500+ student nurses.</p>
                 </div>
-
-                <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 32px 24px; text-align: center; backdrop-filter: blur(10px); transition: all 0.3s ease; hover:transform: translateY(-8px); hover:border-color: #C9A84C; hover:box-shadow: 0 15px 30px rgba(0,0,0,0.3);">
-                    <div style="width: 70px; height: 70px; background: rgba(201,168,76,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 1px solid rgba(201,168,76,0.3);">
-                        <i class="fas fa-tent" style="font-size: 2.2rem; color: #C9A84C;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: white; margin-bottom: 12px;">Medical Camps Coordination</h3>
-                    <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.6;">Coordinated 5+ medical camps reaching underserved populations of over 1,000 community members.</p>
-                </div>
-
-                <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 32px 24px; text-align: center; backdrop-filter: blur(10px); transition: all 0.3s ease; hover:transform: translateY(-8px); hover:border-color: #C9A84C; hover:box-shadow: 0 15px 30px rgba(0,0,0,0.3);">
-                    <div style="width: 70px; height: 70px; background: rgba(201,168,76,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 1px solid rgba(201,168,76,0.3);">
-                        <i class="fas fa-star" style="font-size: 2.2rem; color: #C9A84C;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: white; margin-bottom: 12px;">High Patient Satisfaction</h3>
-                    <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.6;">Consistently achieved 98% satisfaction scores in private practice settings.</p>
-                </div>
-
-                <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 32px 24px; text-align: center; backdrop-filter: blur(10px); transition: all 0.3s ease; hover:transform: translateY(-8px); hover:border-color: #C9A84C; hover:box-shadow: 0 15px 30px rgba(0,0,0,0.3);">
-                    <div style="width: 70px; height: 70px; background: rgba(201,168,76,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 1px solid rgba(201,168,76,0.3);">
-                        <i class="fas fa-syringe" style="font-size: 2.2rem; color: #C9A84C;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: white; margin-bottom: 12px;">Vaccination Campaign Lead</h3>
-                    <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.6;">Led successful county-wide MR & TCV vaccination campaign improving immunization coverage in Nakuru County.</p>
-                </div>
-
-                <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 32px 24px; text-align: center; backdrop-filter: blur(10px); transition: all 0.3s ease; hover:transform: translateY(-8px); hover:border-color: #C9A84C; hover:box-shadow: 0 15px 30px rgba(0,0,0,0.3);">
-                    <div style="width: 70px; height: 70px; background: rgba(201,168,76,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 1px solid rgba(201,168,76,0.3);">
-                        <i class="fas fa-chalkboard-user" style="font-size: 2.2rem; color: #C9A84C;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: white; margin-bottom: 12px;">Nursing Education Development</h3>
-                    <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.6;">Developed and implemented comprehensive nursing curricula aligned with current clinical practices.</p>
+                <div class="achievement-card">
+                    <i class="fas fa-tent"></i>
+                    <h3>Medical Camps Coordination</h3>
+                    <p>Coordinated 5+ camps serving 1,000+ community members.</p>
                 </div>
             </div>
         </div>
     </section>
 
-        <!-- Leadership Section - Enhanced -->
+    <!-- Leadership Section -->
     <section id="leadership" class="section leadership-section">
         <div class="container">
             <div class="section-tag">Leadership & Mentorship</div>
             <h2 class="section-title gold-rule">Professional Leadership</h2>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
-                
-                <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: all 0.3s ease; border-top: 4px solid #C9A84C; hover:transform: translateY(-8px); hover:box-shadow: 0 15px 30px rgba(0,0,0,0.1);">
-                    <div style="width: 50px; height: 50px; background: rgba(201,168,76,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                        <i class="fas fa-users" style="color: #C9A84C; font-size: 1.5rem;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">Novice Representative</h3>
-                    <div style="color: #C9A84C; font-weight: 600; font-size: 0.95rem; margin-bottom: 12px;">KESSNUR</div>
-                    <p style="color: #4a5568; font-size: 0.95rem; margin-bottom: 16px; line-height: 1.5;">Advocated for over 500 student nurses nationally</p>
-                    <div style="display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500;">2025</div>
+            <div class="leadership-grid">
+                <div class="leadership-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Novice Representative</h3>
+                    <div class="leadership-org">KESSNUR</div>
+                    <div class="leadership-period">2025</div>
                 </div>
-
-                <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: all 0.3s ease; border-top: 4px solid #C9A84C; hover:transform: translateY(-8px); hover:box-shadow: 0 15px 30px rgba(0,0,0,0.1);">
-                    <div style="width: 50px; height: 50px; background: rgba(201,168,76,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                        <i class="fas fa-child" style="color: #C9A84C; font-size: 1.5rem;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">OSS Mentor</h3>
-                    <div style="color: #C9A84C; font-weight: 600; font-size: 0.95rem; margin-bottom: 12px;">Obstetric Safe Surgery Program</div>
-                    <p style="color: #4a5568; font-size: 0.95rem; margin-bottom: 16px; line-height: 1.5;">County-wide obstetric safe surgery mentorship and training</p>
-                    <div style="display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500;">2025 – Present</div>
+                <div class="leadership-card">
+                    <i class="fas fa-child"></i>
+                    <h3>OSS Mentor</h3>
+                    <div class="leadership-org">Obstetric Safe Surgery Program</div>
+                    <div class="leadership-period">2025 – Present</div>
                 </div>
-
-                <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: all 0.3s ease; border-top: 4px solid #C9A84C; hover:transform: translateY(-8px); hover:box-shadow: 0 15px 30px rgba(0,0,0,0.1);">
-                    <div style="width: 50px; height: 50px; background: rgba(201,168,76,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                        <i class="fas fa-brain" style="color: #C9A84C; font-size: 1.5rem;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">County Mental Health Mentor</h3>
-                    <div style="color: #C9A84C; font-weight: 600; font-size: 0.95rem; margin-bottom: 12px;">Building Resilient Health Workforce</div>
-                    <p style="color: #4a5568; font-size: 0.95rem; margin-bottom: 16px; line-height: 1.5;">Certified Mental Health Trainer (TOT)</p>
-                    <div style="display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500;">2025</div>
+                <div class="leadership-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>County Mental Health Mentor</h3>
+                    <div class="leadership-org">BRHW Program</div>
+                    <div class="leadership-period">2025</div>
                 </div>
-
-                <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: all 0.3s ease; border-top: 4px solid #C9A84C; hover:transform: translateY(-8px); hover:box-shadow: 0 15px 30px rgba(0,0,0,0.1);">
-                    <div style="width: 50px; height: 50px; background: rgba(201,168,76,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                        <i class="fas fa-bone" style="color: #C9A84C; font-size: 1.5rem;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">Faculty Chairperson</h3>
-                    <div style="color: #C9A84C; font-weight: 600; font-size: 0.95rem; margin-bottom: 12px;">AO Alliance PGH Branch</div>
-                    <div style="margin-top: 20px; display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500;">2025</div>
+                <div class="leadership-card">
+                    <i class="fas fa-bone"></i>
+                    <h3>Faculty Chairperson</h3>
+                    <div class="leadership-org">AO Alliance PGH Branch</div>
+                    <div class="leadership-period">2025</div>
                 </div>
-
-                <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: all 0.3s ease; border-top: 4px solid #C9A84C; hover:transform: translateY(-8px); hover:box-shadow: 0 15px 30px rgba(0,0,0,0.1);">
-                    <div style="width: 50px; height: 50px; background: rgba(201,168,76,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                        <i class="fas fa-hand-holding-heart" style="color: #C9A84C; font-size: 1.5rem;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">Welfare Committee Chair</h3>
-                    <div style="color: #C9A84C; font-weight: 600; font-size: 0.95rem; margin-bottom: 12px;">Kenya Student & Novice Nurses</div>
-                    <p style="color: #4a5568; font-size: 0.95rem; margin-bottom: 16px; line-height: 1.5;">Advocated for over 500 student nurses</p>
-                    <div style="display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500;">2023 – 2024</div>
+                <div class="leadership-card">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <h3>Welfare Committee Chair</h3>
+                    <div class="leadership-org">Kenya Student & Novice Nurses</div>
+                    <div class="leadership-period">2023 – 2024</div>
                 </div>
-
-                <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: all 0.3s ease; border-top: 4px solid #C9A84C; hover:transform: translateY(-8px); hover:box-shadow: 0 15px 30px rgba(0,0,0,0.1);">
-                    <div style="width: 50px; height: 50px; background: rgba(201,168,76,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                        <i class="fas fa-gavel" style="color: #C9A84C; font-size: 1.5rem;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">President</h3>
-                    <div style="color: #C9A84C; font-weight: 600; font-size: 0.95rem; margin-bottom: 12px;">KeMUNSA</div>
-                    <div style="margin-top: 20px; display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500;">2021</div>
-                </div>
-
-                <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: all 0.3s ease; border-top: 4px solid #C9A84C; hover:transform: translateY(-8px); hover:box-shadow: 0 15px 30px rgba(0,0,0,0.1);">
-                    <div style="width: 50px; height: 50px; background: rgba(201,168,76,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                        <i class="fas fa-pen" style="color: #C9A84C; font-size: 1.5rem;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">Organizing Secretary</h3>
-                    <div style="color: #C9A84C; font-weight: 600; font-size: 0.95rem; margin-bottom: 12px;">KeMUNSA</div>
-                    <div style="margin-top: 20px; display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500;">2019</div>
-                </div>
-
-                <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: all 0.3s ease; border-top: 4px solid #C9A84C; hover:transform: translateY(-8px); hover:box-shadow: 0 15px 30px rgba(0,0,0,0.1);">
-                    <div style="width: 50px; height: 50px; background: rgba(201,168,76,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                        <i class="fas fa-building" style="color: #C9A84C; font-size: 1.5rem;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">Head of Department</h3>
-                    <div style="color: #C9A84C; font-weight: 600; font-size: 0.95rem; margin-bottom: 12px;">Nakuru College of Health Sciences</div>
-                    <div style="margin-top: 20px; display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500;">2025</div>
-                </div>
-
-                <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: all 0.3s ease; border-top: 4px solid #C9A84C; hover:transform: translateY(-8px); hover:box-shadow: 0 15px 30px rgba(0,0,0,0.1);">
-                    <div style="width: 50px; height: 50px; background: rgba(201,168,76,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                        <i class="fas fa-medal" style="color: #C9A84C; font-size: 1.5rem;"></i>
-                    </div>
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">Nominated Member</h3>
-                    <div style="color: #C9A84C; font-weight: 600; font-size: 0.95rem; margin-bottom: 12px;">Kenya Students & Novices Nurses</div>
-                    <div style="margin-top: 20px; display: inline-block; background: #0D1B2A; color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500;">2025</div>
+                <div class="leadership-card">
+                    <i class="fas fa-gavel"></i>
+                    <h3>President</h3>
+                    <div class="leadership-org">KeMUNSA</div>
+                    <div class="leadership-period">2021</div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Projects & Impact Section -->
-    <section id="projects" class="section" style="background: #F5F0E8;">
+
+    <!-- By The Numbers Section -->
+    <section class="section" style="background: white;">
         <div class="container">
-            <!-- Section Header -->
-            <div class="section-tag" style="color: #C9A84C; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;">My Work</div>
-            <h2 class="section-title gold-rule" style="font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: #0D1B2A; margin-bottom: 40px; position: relative;">Projects & Impact</h2>
-            <p style="color: #4a5568; max-width: 700px; margin-bottom: 48px; font-size: 1.1rem;">A selection of clinical, educational, and technology initiatives that demonstrate the breadth of Kevin's impact across healthcare.</p>
-
-            <!-- Projects Grid - 3 columns -->
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 60px;">
-                
-                <!-- Card 1: Head of Department -->
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">HEAD OF DEPARTMENT – SCHOOL OF NURSING</h3>
-                    <p style="color: #C9A84C; font-weight: 600; margin-bottom: 12px;">Nakuru College of Health Sciences & Management</p>
-                    <p style="color: #718096; font-size: 0.9rem; margin-bottom: 20px;">2025 – Present</p>
-                    <p style="color: #4a5568; margin-bottom: 20px; line-height: 1.6;">Leading nursing education and curriculum development, overseeing clinical placements, and mentoring over 500 nursing students. Implemented competency-based assessment frameworks aligned with Kenya Nursing Council standards.</p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Curriculum Design</span>
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Clinical Supervision</span>
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Leadership</span>
-                    </div>
+            <div class="section-tag" style="text-align: center;">By The Numbers</div>
+            <h2 class="section-title gold-rule-center">Impact & Reach</h2>
+            
+            <div class="numbers-grid">
+                <div class="number-card">
+                    <div class="number-value">500+</div>
+                    <div class="number-label">Nursing Students Mentored</div>
                 </div>
-
-                <!-- Card 2: Health Researcher -->
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">HEALTH RESEARCHER</h3>
-                    <p style="color: #C9A84C; font-weight: 600; margin-bottom: 12px;">Research & Publication</p>
-                    <p style="color: #718096; font-size: 0.9rem; margin-bottom: 20px;">2022 – Present</p>
-                    <p style="color: #4a5568; margin-bottom: 20px; line-height: 1.6;">Conducting research on healthcare delivery systems, patient outcomes, and community health interventions. Published findings in peer-reviewed journals and presented at national conferences.</p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Research</span>
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Publication</span>
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Community Outreach</span>
-                    </div>
+                <div class="number-card">
+                    <div class="number-value">1,000+</div>
+                    <div class="number-label">Community Members Served</div>
                 </div>
-
-                <!-- Card 3: Community Health Outreach -->
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">COMMUNITY HEALTH OUTREACH PROGRAM</h3>
-                    <p style="color: #C9A84C; font-weight: 600; margin-bottom: 12px;">Nakuru County Health Services</p>
-                    <p style="color: #718096; font-size: 0.9rem; margin-bottom: 20px;">2022 – Present</p>
-                    <p style="color: #4a5568; margin-bottom: 20px; line-height: 1.6;">Coordinated health education campaigns reaching over 1,000 community members. Focused on maternal health, disease prevention, and health literacy in underserved communities around Nakuru County.</p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Public Health</span>
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Outreach</span>
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Health Education</span>
-                    </div>
+                <div class="number-card">
+                    <div class="number-value">200+</div>
+                    <div class="number-label">Healthcare Workers Trained</div>
                 </div>
-
-                <!-- Card 4: Telemedicine Study -->
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">TELEMEDICINE INTEGRATION STUDY</h3>
-                    <p style="color: #C9A84C; font-weight: 600; margin-bottom: 12px;">Kenya Methodist University</p>
-                    <p style="color: #718096; font-size: 0.9rem; margin-bottom: 20px;">2022</p>
-                    <p style="color: #4a5568; margin-bottom: 20px; line-height: 1.6;">Conducted a feasibility study on telemedicine adoption in rural Kenyan healthcare facilities. Identified key barriers and proposed a phased implementation roadmap for low-bandwidth environments.</p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Telemedicine</span>
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Research</span>
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Rural Health</span>
-                    </div>
+                <div class="number-card">
+                    <div class="number-value">98%</div>
+                    <div class="number-label">Patient Satisfaction</div>
                 </div>
-
-                <!-- Card 5: Clinical Database System -->
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">CLINICAL DATABASE MANAGEMENT SYSTEM</h3>
-                    <p style="color: #C9A84C; font-weight: 600; margin-bottom: 12px;">Personal Development Project</p>
-                    <p style="color: #718096; font-size: 0.9rem; margin-bottom: 20px;">2023</p>
-                    <p style="color: #4a5568; margin-bottom: 20px; line-height: 1.6;">Designed and developed a lightweight patient records management system tailored for small clinics in Kenya. Built with offline-first architecture to function in areas with unreliable internet connectivity.</p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Database Design</span>
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Software Dev</span>
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Health Tech</span>
-                    </div>
+                <div class="number-card">
+                    <div class="number-value">4+</div>
+                    <div class="number-label">Years in Healthcare</div>
                 </div>
-
-                <!-- Card 6: BLS/ACLS Training -->
-                <div style="background: white; border-radius: 8px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px;">BLS & ACLS TRAINING FACILITATION</h3>
-                    <p style="color: #C9A84C; font-weight: 600; margin-bottom: 12px;">Nakuru College of Health Sciences</p>
-                    <p style="color: #718096; font-size: 0.9rem; margin-bottom: 20px;">2025 – Present</p>
-                    <p style="color: #4a5568; margin-bottom: 20px; line-height: 1.6;">Certified facilitator for Basic Life Support and Advanced Cardiovascular Life Support training. Trained over 200 healthcare workers and students in emergency response protocols.</p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">BLS</span>
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">ACLS</span>
-                        <span style="background: #EDF2F7; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; color: #2D3748;">Emergency Training</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- By The Numbers Section -->
-            <div style="margin-top: 80px;">
-                <div class="section-tag" style="color: #C9A84C; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; text-align: center;">By The Numbers</div>
-                <h2 class="section-title gold-rule-center" style="font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: #0D1B2A; margin-bottom: 40px; position: relative; text-align: center;">Impact & Reach</h2>
-                
-                <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 60px;">
-                    <div style="text-align: center;">
-                        <div style="font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: #C9A84C; margin-bottom: 4px;">500+</div>
-                        <div style="color: #4a5568; font-size: 0.8rem;">Nursing Students Mentored</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: #C9A84C; margin-bottom: 4px;">1,000+</div>
-                        <div style="color: #4a5568; font-size: 0.8rem;">Community Members Served</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: #C9A84C; margin-bottom: 4px;">200+</div>
-                        <div style="color: #4a5568; font-size: 0.8rem;">Healthcare Workers Trained</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: #C9A84C; margin-bottom: 4px;">98%</div>
-                        <div style="color: #4a5568; font-size: 0.8rem;">Patient Satisfaction Rate</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: #C9A84C; margin-bottom: 4px;">4+</div>
-                        <div style="color: #4a5568; font-size: 0.8rem;">Years in Healthcare</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: #C9A84C; margin-bottom: 4px;">2</div>
-                        <div style="color: #4a5568; font-size: 0.8rem;">Hospitals Served</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Credentials Section -->
-            <div style="margin-top: 60px;">
-                <div class="section-tag" style="color: #C9A84C; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; text-align: center;">Credentials</div>
-                <h2 class="section-title gold-rule-center" style="font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: #0D1B2A; margin-bottom: 40px; position: relative; text-align: center;">Certifications</h2>
-                
-                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;">
-                    <div style="background: #0D1B2A; color: white; padding: 12px 28px; border-radius: 40px; font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-heart-pulse" style="color: #C9A84C;"></i> BLS
-                    </div>
-                    <div style="background: #0D1B2A; color: white; padding: 12px 28px; border-radius: 40px; font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-kit-medical" style="color: #C9A84C;"></i> ATLS
-                    </div>
-                    <div style="background: #0D1B2A; color: white; padding: 12px 28px; border-radius: 40px; font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-heart-circle-check" style="color: #C9A84C;"></i> ACLS
-                    </div>
-                    <div style="background: #0D1B2A; color: white; padding: 12px 28px; border-radius: 40px; font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-shield-halved" style="color: #C9A84C;"></i> CyberSec
-                    </div>
-                    <div style="background: #0D1B2A; color: white; padding: 12px 28px; border-radius: 40px; font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-graduation-cap" style="color: #C9A84C;"></i> BSc
-                    </div>
+                <div class="number-card">
+                    <div class="number-value">2</div>
+                    <div class="number-label">Hospitals Served</div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Contact Section -->
-    <section id="contact" class="section contact-section">
+
+    <!-- Credentials Section -->
+    <section class="section credentials-section" style="background: #F5F0E8; padding-top: 0;">
         <div class="container">
-            <div class="section-tag">Let's Connect</div>
-            <h2 class="section-title gold-rule">Get In Touch</h2>
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
-                        <div>
-                            <div class="contact-label">Email</div>
-                            <a href="mailto:matokakevin98@gmail.com" class="contact-value">matokakevin98@gmail.com</a>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon"><i class="fas fa-phone"></i></div>
-                        <div>
-                            <div class="contact-label">Phone</div>
-                            <a href="tel:+254790969743" class="contact-value">+254 790 969 743</a>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
-                        <div>
-                            <div class="contact-label">Location</div>
-                            <span class="contact-value">Nakuru, Kenya</span>
-                        </div>
-                    </div>
-                    <div style="margin-top: 30px; padding: 16px; background: rgba(201,168,76,0.15); border-radius: 4px;">
-                        <p style="color: white;"><i class="fas fa-circle" style="color: #22c55e; font-size: 0.6rem; margin-right: 8px;"></i> Available for consulting, collaborations, and speaking engagements</p>
-                    </div>
-                </div>
-                <div class="contact-form">
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <label class="form-label">Your Name</label>
-                            <input type="text" class="form-input" placeholder="Dr. Jane Wanjiku" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Email Address</label>
-                            <input type="email" class="form-input" placeholder="your@email.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Subject</label>
-                            <input type="text" class="form-input" placeholder="Collaboration Opportunity" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Message</label>
-                            <textarea class="form-input" placeholder="Tell Kevin about your project, question, or opportunity..." required></textarea>
-                        </div>
-                        <button type="submit" class="form-submit">Send Message</button>
-                    </form>
-                </div>
+            <div class="section-tag" style="text-align: center;">Credentials</div>
+            <h2 class="section-title gold-rule-center">Certifications</h2>
+            
+            <div class="credentials-flex">
+                <div class="credential-item"><i class="fas fa-heart-pulse"></i> BLS</div>
+                <div class="credential-item"><i class="fas fa-kit-medical"></i> ATLS</div>
+                <div class="credential-item"><i class="fas fa-heart-circle-check"></i> ACLS</div>
+                <div class="credential-item"><i class="fas fa-shield-halved"></i> CyberSec</div>
+                <div class="credential-item"><i class="fas fa-graduation-cap"></i> BSc</div>
             </div>
         </div>
     </section>
+
+  <!-- Contact Section with Supabase -->
+<section id="contact" class="section contact-section">
+    <div class="container">
+        <div class="section-tag">Let's Connect</div>
+        <h2 class="section-title gold-rule">Get In Touch</h2>
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <div>
+                        <div class="contact-label">Email</div>
+                        <a href="mailto:matokakevin98@gmail.com" class="contact-value">matokakevin98@gmail.com</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                    <div>
+                        <div class="contact-label">Phone</div>
+                        <a href="tel:+254790969743" class="contact-value">+254 790 969 743</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div>
+                        <div class="contact-label">Location</div>
+                        <span class="contact-value">Nakuru, Kenya</span>
+                    </div>
+                </div>
+                <div class="availability-badge">
+                    <i class="fas fa-circle"></i>
+                    <span>Available for consulting, collaborations, and speaking engagements</span>
+                </div>
+            </div>
+            <div class="contact-form">
+                <form id="supabaseContactForm">
+                    <div id="formStatus" style="display: none; padding: 12px; border-radius: 8px; margin-bottom: 20px;"></div>
+                    
+                    <div class="form-group">
+                        <input type="text" id="name" class="form-input" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" class="form-input" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="subject" class="form-input" placeholder="Subject" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" class="form-input" placeholder="Your Message" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" id="submitBtn" class="form-submit">
+                        <span id="btnText">Send Message</span>
+                        <span id="btnSpinner" style="display: none;"><i class="fas fa-spinner fa-spin"></i> Sending...</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">Kevin Matoka <span>Tiong'i</span></div>
-                <div class="footer-tagline">Nursing Officer · Clinical Leader · Healthcare Technologist</div>
-                <div class="footer-social">
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-github"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                </div>
+                <p class="footer-tagline">Nursing Officer · Clinical Leader · Healthcare Technologist</p>
+    <div class="footer-social">
+    <a href="https://www.linkedin.com/in/kevin-t-16a7931a1/" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+    <a href="https://www.facebook.com/kevin.matoka.1" target="_blank" rel="noopener noreferrer" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://x.com/Tiongikevin" target="_blank" rel="noopener noreferrer" title="Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://wa.me/254790969743" target="_blank" rel="noopener noreferrer" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+</div>
                 <div class="footer-bottom">
                     <span>© 2026 Kevin Matoka Tiong'i. All rights reserved.</span>
                 </div>
@@ -1976,5 +1951,103 @@
             });
         }
     </script>
+    <!-- Supabase Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    // Initialize Supabase
+    const SUPABASE_URL = 'https://uhqoihahmocwjgzpiivd.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
+    
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Handle form submission
+    document.getElementById('supabaseContactForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Get form elements
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const subject = document.getElementById('subject').value.trim();
+        const message = document.getElementById('message').value.trim();
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+        const formStatus = document.getElementById('formStatus');
+        
+        // Validate
+        if (!name || !email || !subject || !message) {
+            showStatus('Please fill in all fields', 'error');
+            return;
+        }
+        
+        if (!isValidEmail(email)) {
+            showStatus('Please enter a valid email address', 'error');
+            return;
+        }
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        btnText.style.display = 'none';
+        btnSpinner.style.display = 'inline';
+        formStatus.style.display = 'none';
+        
+        try {
+            // Insert into Supabase
+            const { data, error } = await supabase
+                .from('contacts')
+                .insert([
+                    { 
+                        name, 
+                        email, 
+                        subject, 
+                        message,
+                        status: 'new'
+                    }
+                ]);
+            
+            if (error) throw error;
+            
+            // Success!
+            showStatus('Thank you! Your message has been sent successfully. Kevin will get back to you soon.', 'success');
+            document.getElementById('supabaseContactForm').reset();
+            
+        } catch (error) {
+            console.error('Error:', error);
+            showStatus('Failed to send message. Please try again or email directly.', 'error');
+        } finally {
+            // Reset button state
+            submitBtn.disabled = false;
+            btnText.style.display = 'inline';
+            btnSpinner.style.display = 'none';
+        }
+    });
+    
+    // Helper functions
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+    
+    function showStatus(message, type) {
+        const statusDiv = document.getElementById('formStatus');
+        statusDiv.style.display = 'block';
+        statusDiv.textContent = message;
+        
+        if (type === 'success') {
+            statusDiv.style.backgroundColor = '#d4edda';
+            statusDiv.style.color = '#155724';
+            statusDiv.style.border = '1px solid #c3e6cb';
+        } else {
+            statusDiv.style.backgroundColor = '#f8d7da';
+            statusDiv.style.color = '#721c24';
+            statusDiv.style.border = '1px solid #f5c6cb';
+        }
+        
+        // Auto hide after 5 seconds
+        setTimeout(() => {
+            statusDiv.style.display = 'none';
+        }, 5000);
+    }
+</script>
 </body>
 </html>
