@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>✨ Glawins · The Ultimate Birthday Journey ✨ | Love, Slides & Magic</title>
+    
+    <!-- Google Fonts Premium -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 30%, #ffc0cb, #ff9a9e, #fecfef);
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="27" viewBox="0 0 24 27"><path fill="%23ff4d6d" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') 12 10, auto;
+        }
+
+        /* falling petals & particles */
+        .petal {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 1.2rem;
+            animation: fallPetals linear forwards;
+        }
+
+        @keyframes fallPetals {
+            0% { transform: translateY(-20vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* progress bar */
+        .progress-bar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(255,220,210,0.5);
+            z-index: 10000;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff4d6d, #ff9f4a);
+            transition: width 0.4s ease;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* main container */
+        .slides-container {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem 5rem;
+        }
+
+        .slide {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 252, 245, 0.98);
+            backdrop-filter: blur(4px);
+            border-radius: 3rem;
+            box-shadow: 0 35px 65px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(255, 225, 215, 0.9);
+            padding: 2rem;
+            transition: all 0.3s;
+            margin: 0 auto;
+            opacity: 1;
+            animation: slideGlow 0.7s ease;
+        }
+
+        @keyframes slideGlow {
+            0% { opacity: 0; transform: scale(0.96) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        h1, .slide h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.6rem;
+            background: linear-gradient(135deg, #c44569, #ff7b89, #f9a26c);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .emoji-glow {
+            font-size: 3.5rem;
+            letter-spacing: 10px;
+            animation: gentleWobble 2s infinite;
+        }
+
+        @keyframes gentleWobble {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .sub {
+            background: rgba(255, 210, 200, 0.5);
+            display: inline-block;
+            padding: 0.3rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 500;
+            color: #b14564;
+            margin-bottom: 1.2rem;
+        }
+
+        .message-body {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.22rem;
+            line-height: 1.65;
+            color: #2c1a15;
+            text-align: left;
+            margin: 1rem 0;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .photo-card {
+            background: #fff5ef;
+            border-radius: 2rem;
+            padding: 0.8rem;
+            text-align: center;
+            transition: transform 0.2s;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+        }
+        .photo-card:hover { transform: scale(1.02); background: #ffe7df; }
+        .photo-placeholder {
+            background: linear-gradient(145deg, #ffe0d4, #ffcdc0);
+            border-radius: 1.5rem;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 8px;
+        }
+        .photo-card span { font-weight: 500; color: #b54662; font-size: 0.8rem; }
+
+        /* candle section */
+        .cake-area {
+            background: #fff2e9;
+            border-radius: 2rem;
+            padding: 1.2rem;
+            text-align: center;
+            margin: 1rem 0;
+        }
+        .candles {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem;
+        }
+        .candle {
+            font-size: 2.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            filter: drop-shadow(0 0 2px orange);
+        }
+        .candle.blown {
+            opacity: 0.3;
+            filter: grayscale(0.6);
+        }
+        .blow-btn {
+            background: #ffc2a1;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 60px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .signature-love {
+            text-align: right;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #e96479;
+            border-top: 2px dashed #ffbecf;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .nav-btn {
+            background: linear-gradient(145deg, #ff4d6d, #ff708d);
+            border: none;
+            padding: 0.8rem 2rem;
+            font-weight: bold;
+            color: white;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+        }
+
+        .progress-dots { display: flex; justify-content: center; gap: 10px; margin: 1.2rem 0; }
+        .dot { width: 10px; height: 10px; background: #f5b0aa; border-radius: 20px; transition: 0.2s; cursor: pointer; }
+        .dot.active-dot { background: #ff4d6d; width: 28px; }
+
+        /* music toggle + voice + share */
+        .floating-tools {
+            position: fixed;
+            bottom: 20px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 1001;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        .icon-btn {
+            background: rgba(255, 245, 240, 0.9);
+            backdrop-filter: blur(12px);
+            border: none;
+            border-radius: 40px;
+            padding: 8px 16px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 650px) {
+            .slide { padding: 1.4rem; }
+            h1 { font-size: 2rem; }
+            .message-body { font-size: 1rem; }
+        }
+        
+        /* wish input */
+        .wish-box {
+            background: #fff7f0;
+            border-radius: 2rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .wish-input {
+            width: 90%;
+            padding: 10px;
+            border-radius: 60px;
+            border: 1px solid #ffb7b0;
+            background: white;
+            font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar-container"><div class="progress-fill" id="progressFill"></div></div>
+<div class="floating-tools">
+    <button class="icon-btn" id="musicToggleBtn">🎵 Play Melody</button>
+    <button class="icon-btn" id="voiceMsgBtn">🎤 Voice Note</button>
+    <button class="icon-btn" id="shareBtn">📤 Share Magic</button>
+</div>
+
+<div class="slides-container" id="slidesContainer">
+    <!-- SLIDE 0 - intro -->
+    <div class="slide" data-index="0">
+        <div class="emoji-glow">🎂💖✨🎈</div>
+        <h1>Glawins, this is YOUR story</h1>
+        <div class="sub">a birthday experience made of love & slides</div>
+        <div class="message-body">
+            <p>🌸 Welcome, beautiful soul. Each slide holds a piece of my heart. Swipe, click, and feel the magic.</p>
+            <p>💫 You are about to laugh, melt, and maybe tear up. Let's begin →</p>
+        </div>
+        <div class="signature-love">✨ with every sparkle, me</div>
+    </div>
+
+    <!-- SLIDE 1 - photo gallery (you insert photos) -->
+    <div class="slide" data-index="1">
+        <div class="emoji-glow">📸💞</div>
+        <h2>our treasury of moments</h2>
+        <div class="sub">drag & replace images — or just admire the love</div>
+        <div class="photo-grid" id="photoGrid">
+            <div class="photo-card"><div class="photo-placeholder">🌅</div><span>memory 1: sunshine day</span></div>
+            <div class="photo-card"><div class="photo-placeholder">🍕✨</div><span>laugh attack</span></div>
+            <div class="photo-card"><div class="photo-placeholder">🎨💖</div><span>art & us</span></div>
+        </div>
+        <div class="message-body"><p><em>💬 “Every picture holds a whisper of us. Add your own by replacing the placeholders with actual images — right click the div or use developer tools — but the love is real.”</em></p></div>
+        <div class="signature-love">📷 forever developing memories</div>
+    </div>
+
+    <!-- SLIDE 2 - birthday wishes + blow candle -->
+    <div class="slide" data-index="2">
+        <div class="emoji-glow">🎂🕯️🎁</div>
+        <h2>make a wish</h2>
+        <div class="sub">blow the candles, Glawins!</div>
+        <div class="cake-area">
+            <div class="candles" id="candleContainer">
+                <div class="candle" data-blown="false">🕯️</div>
+                <div class="candle" data-blown="false">🕯️</div>
+                <div class="candle" data-blown="false">🕯️</div>
+                <div class="candle" data-blown="false">🕯️</div>
+                <div class="candle" data-blown="false">🕯️</div>
+            </div>
+            <button class="blow-btn" id="blowCandlesBtn">💨 Click to Blow / Tap 💨</button>
+            <p id="candleMsg" style="margin-top: 8px; font-style:italic;">🎈 make a wish...</p>
+        </div>
+        <div class="message-body"><p>🎂 Happy Birthday my love! I wish you endless smiles, spontaneous adventures, and all the cake your heart desires. You deserve galaxies of happiness.</p></div>
+        <div class="signature-love">💖 your biggest fan</div>
+    </div>
+
+    <!-- SLIDE 3 - secret love letter + typewriter effect -->
+    <div class="slide" data-index="3">
+        <div class="emoji-glow">💌📜✨</div>
+        <h2>a letter just for you</h2>
+        <div class="sub">from my heart to yours</div>
+        <div class="message-body" id="typewriterContainer">
+            <p id="typewriterText"></p>
+        </div>
+        <div class="wish-box">
+            <label>🤫 write your secret birthday wish (only you see it):</label>
+            <input type="text" id="secretWish" class="wish-input" placeholder="e.g., travel the world, more joy...">
+            <button id="saveWishBtn" style="margin-top: 8px; background:#ffb7b0; border:none; padding:4px 16px; border-radius:40px;">💾 Seal Wish</button>
+            <p id="wishFeedback" style="font-size:0.7rem;"></p>
+        </div>
+        <div class="signature-love">forever written in stars</div>
+    </div>
+
+    <!-- SLIDE 4 - final celebration & voice note -->
+    <div class="slide" data-index="4">
+        <div class="emoji-glow">🌈🎉💕🕊️</div>
+        <h2>happily ever after</h2>
+        <div class="sub">you are deeply, wildly loved</div>
+        <div class="message-body">
+            <p>🌟 Glawins, this is not goodbye — it's a beginning. Every day with you is a slide worth celebrating. Thank you for being you.</p>
+            <p>🎀 May this year bring you closer to your dreams. I love you more than confetti can express. ✨</p>
+            <div id="voiceNotePlayer" style="margin: 1rem 0; text-align:center; background:#fce4db; border-radius: 2rem; padding: 0.6rem;">
+                <span>🎙️ voice love note (click mic to record)</span>
+                <button id="recordVoiceBtn" style="background:#ff9f8f; border:none; border-radius:50%; padding:8px 14px;">🎤 Record</button>
+                <audio id="voiceAudio" controls style="width:100%; margin-top:6px; display:none;"></audio>
+            </div>
+        </div>
+        <div class="signature-love">eternally yours, forever & always ❤️</div>
+    </div>
+</div>
+
+<div class="nav-buttons">
+    <button class="nav-btn" id="prevBtn">◀ Previous</button>
+    <button class="nav-btn" id="nextBtn">Next ▶</button>
+</div>
+<div class="progress-dots" id="dotsContainer"></div>
+<footer style="text-align:center; color:#fff3e8; margin-top:1rem;">✨ tap, swipe, blow the candles — you are magic ✨</footer>
+
+<script>
+    (function(){
+        // ---------- SLIDES MANAGER ----------
+        const slides = document.querySelectorAll('.slide');
+        let currentIdx = 0;
+        const total = slides.length;
+        function updateSlides() {
+            slides.forEach((s, i) => {
+                s.style.display = i === currentIdx ? 'block' : 'none';
+            });
+            updateDots();
+            updateProgress();
+            triggerMiniConfetti();
+            if(currentIdx === 2) initCandles(); 
+            if(currentIdx === 3) startTypewriterEffect();
+        }
+        function updateProgress() { const percent = ((currentIdx+1)/total)*100; document.getElementById('progressFill').style.width = percent+'%'; }
+        function updateDots() {
+            const cont = document.getElementById('dotsContainer'); cont.innerHTML='';
+            for(let i=0;i<total;i++) {
+                let d = document.createElement('div'); d.classList.add('dot');
+                if(i===currentIdx) d.classList.add('active-dot');
+                d.addEventListener('click',()=>{ if(i!==currentIdx){ currentIdx=i; updateSlides(); celebrationBurst(); } });
+                cont.appendChild(d);
+            }
+        }
+        function triggerMiniConfetti() { for(let i=0;i<12;i++) createFloatingHeart(Math.random()*window.innerWidth, window.innerHeight-50); }
+        function celebrationBurst() { for(let i=0;i<40;i++) createFloatingHeart(Math.random()*window.innerWidth, window.innerHeight/2); }
+        function createFloatingHeart(x,y) {
+            let el=document.createElement('div'); el.className='petal'; el.innerText=['❤️','💖','🌸','✨','🎀','💕'][Math.floor(Math.random()*6)];
+            el.style.left=x+'px'; el.style.top=y+'px'; el.style.fontSize=(Math.random()*1.2+0.9)+'rem';
+            document.body.appendChild(el); setTimeout(()=>el.remove(),1500);
+        }
+        function fallingPetalsInterval() { setInterval(()=>{ if(Math.random()>0.85){ let p=document.createElement('div'); p.className='petal'; p.innerText=['🌸','🌼','🍂','💮'][Math.floor(Math.random()*4)]; p.style.left=Math.random()*window.innerWidth+'px'; p.style.fontSize=(Math.random()*0.9+0.8)+'rem'; document.body.appendChild(p); setTimeout(()=>p.remove(),5000); } }, 800); }
+        
+        // CANDLE BLOW FEATURE
+        let candlesBlown = 0;
+        function initCandles() {
+            const candles = document.querySelectorAll('.candle');
+            candlesBlown = 0;
+            candles.forEach(c => { c.classList.remove('blown'); c.setAttribute('data-blown','false'); c.style.opacity='1'; });
+            document.getElementById('candleMsg').innerHTML = '🎂 Make a wish and blow out the candles!';
+        }
+        function blowCandles() {
+            const candles = document.querySelectorAll('.candle');
+            candles.forEach(c => { if(c.getAttribute('data-blown')==='false') { c.classList.add('blown'); c.setAttribute('data-blown','true'); c.style.opacity='0.4'; candlesBlown++; } });
+            if(candlesBlown >= 5) {
+                document.getElementById('candleMsg').innerHTML = '✨✨ WISH GRANTED! Happy Birthday Glawins! ✨✨';
+                celebrationBurst(); grandBurst();
+            } else { document.getElementById('candleMsg').innerHTML = '💨 blow again! tap the button or click each candle!'; }
+        }
+        function grandBurst() { for(let i=0;i<70;i++) createFloatingHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight); }
+        document.getElementById('blowCandlesBtn')?.addEventListener('click', blowCandles);
+        document.querySelectorAll('.candle').forEach(c => { c.addEventListener('click',()=>{ if(c.getAttribute('data-blown')==='false'){ c.classList.add('blown'); c.setAttribute('data-blown','true'); c.style.opacity='0.4'; candlesBlown++; if(candlesBlown>=5){document.getElementById('candleMsg').innerHTML='✨ WISH ACTIVE! ✨'; grandBurst();}} }); });
+        
+        // TYPEWRITER EFFECT for slide 3
+        let typewriterStarted = false;
+        function startTypewriterEffect() {
+            if(typewriterStarted) return;
+            typewriterStarted=true;
+            const fullText = `My beloved Glawins, 💕\n\nEvery beat of my heart spells your name. You are the warmth in winter and the laughter in my ordinary days. I admire your strength, your silly side, and the way you make this world feel like home. On your birthday, I just want you to know: you are the best chapter of my life, and I'll keep writing endless pages with you. I love you, today and beyond. 🕊️`;
+            const container = document.getElementById('typewriterText');
+            container.innerHTML = '';
+            let i=0;
+            function typing() { if(i<fullText.length) { container.innerHTML += fullText.charAt(i); i++; setTimeout(typing, 45); } }
+            typing();
+        }
+        
+        // WISH localStorage + feedback
+        const savedWish = localStorage.getItem('GlawinsWish');
+        if(savedWish) document.getElementById('secretWish') && (document.getElementById('secretWish').value = savedWish);
+        document.getElementById('saveWishBtn')?.addEventListener('click',()=>{ const wish=document.getElementById('secretWish').value; localStorage.setItem('GlawinsWish',wish); document.getElementById('wishFeedback').innerText='✨ Your wish is sealed with stardust ✨'; setTimeout(()=>document.getElementById('wishFeedback').innerText='',2000); });
+        
+        // ---------- AUDIO + VOICE RECORDING (simplified, works with MediaRecorder) ----------
+        let mediaRecorder; let audioChunks=[];
+        const recordBtn = document.getElementById('recordVoiceBtn');
+        const audioPlayer = document.getElementById('voiceAudio');
+        if(recordBtn){
+            recordBtn.addEventListener('click', async()=>{
+                if(mediaRecorder && mediaRecorder.state === 'recording'){
+                    mediaRecorder.stop(); recordBtn.innerText='🎤 Record'; return;
+                }
+                try{
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks=[];
+                    mediaRecorder.ondataavailable = e=> audioChunks.push(e.data);
+                    mediaRecorder.onstop = ()=>{
+                        const blob = new Blob(audioChunks, {type:'audio/wav'});
+                        const url = URL.createObjectURL(blob);
+                        audioPlayer.src = url;
+                        audioPlayer.style.display='block';
+                        audioPlayer.controls=true;
+                        stream.getTracks().forEach(t=>t.stop());
+                    };
+                    mediaRecorder.start();
+                    recordBtn.innerText='⏹️ Stop';
+                }catch(e){ alert('Please allow mic for voice magic'); }
+            });
+        }
+        
+        // music (simple web audio bell)
+        let audioCtx=null; let musicActive=false;
+        function playChime(){
+            if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+            if(audioCtx.state==='suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.frequency.value=880; gain.gain.value=0.1; osc.type='sine';
+            osc.start(); gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime+0.3);
+            osc.stop(audioCtx.currentTime+0.3);
+        }
+        document.getElementById('musicToggleBtn')?.addEventListener('click',()=>{ playChime(); document.getElementById('musicToggleBtn').innerHTML='🎶 Lovely chime ✨'; setTimeout(()=>{document.getElementById('musicToggleBtn').innerHTML='🎵 Play Melody';},1500); });
+        
+        // share magic
+        document.getElementById('shareBtn')?.addEventListener('click',()=>{
+            if(navigator.share) navigator.share({title:'Birthday Magic for Glawins', text:'You are invited to a beautiful love card!', url:window.location.href});
+            else alert('💖 Copy this link & share the love!');
+        });
+        
+        // navigation
+        document.getElementById('nextBtn').addEventListener('click',()=>{ if(currentIdx<total-1){ currentIdx++; updateSlides(); celebrationBurst(); playChime(); } else { ultimateGrandFinale(); } });
+        document.getElementById('prevBtn').addEventListener('click',()=>{ if(currentIdx>0){ currentIdx--; updateSlides(); playChime(); } });
+        window.addEventListener('keydown',(e)=>{ if(e.key==='ArrowRight'){ if(currentIdx<total-1){currentIdx++; updateSlides(); celebrationBurst();}} if(e.key==='ArrowLeft' && currentIdx>0){currentIdx--; updateSlides();} });
+        let touchX=0; document.body.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX;});
+        document.body.addEventListener('touchend',e=>{ let diff=e.changedTouches[0].screenX-touchX; if(diff<-40 && currentIdx<total-1){currentIdx++; updateSlides(); celebrationBurst();} if(diff>40 && currentIdx>0){currentIdx--; updateSlides();}});
+        
+        function ultimateGrandFinale(){
+            for(let i=0;i<140;i++) createFloatingHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight);
+            alert('✨ HAPPY BIRTHDAY GLAWINS! You are the most loved person ✨');
+        }
+        fallingPetalsInterval();
+        updateSlides();
+    })();
+</script>
+</body>
+</html>
