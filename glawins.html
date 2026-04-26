@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>✨ Glawins · A Birthday Journey ✨ | Ultra Love Slides</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>✨ Glawins · The Ultimate Birthday Journey ✨ | Love, Slides & Magic</title>
+    
+    <!-- Google Fonts Premium -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         * {
             margin: 0;
@@ -12,15 +16,47 @@
         }
 
         body {
-            background: radial-gradient(circle at 30% 10%, #ffb6c1, #ff8da1, #ff6f91);
+            background: radial-gradient(circle at 20% 30%, #ffc0cb, #ff9a9e, #fecfef);
             min-height: 100vh;
-            font-family: 'Poppins', 'Segoe UI', 'Georgia', cursive;
+            font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
-            overflow-y: auto;
-            scroll-behavior: smooth;
+            position: relative;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="27" viewBox="0 0 24 27"><path fill="%23ff4d6d" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') 12 10, auto;
         }
 
-        /* carousel container */
+        /* falling petals & particles */
+        .petal {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 1.2rem;
+            animation: fallPetals linear forwards;
+        }
+
+        @keyframes fallPetals {
+            0% { transform: translateY(-20vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* progress bar */
+        .progress-bar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(255,220,210,0.5);
+            z-index: 10000;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff4d6d, #ff9f4a);
+            transition: width 0.4s ease;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* main container */
         .slides-container {
             width: 100%;
             min-height: 100vh;
@@ -28,104 +64,132 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem 1.5rem;
+            padding: 2rem 1.5rem 5rem;
         }
 
-        /* each slide as magical card */
         .slide {
-            max-width: 750px;
+            max-width: 800px;
             width: 100%;
-            background: rgba(255, 250, 245, 0.97);
-            backdrop-filter: blur(2px);
-            border-radius: 4rem;
-            box-shadow: 0 35px 65px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(255, 220, 200, 0.8);
-            padding: 2rem 2rem 2.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            margin: 1rem auto;
-            position: relative;
-            transform: scale(1);
-            animation: floatSlide 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            background: rgba(255, 252, 245, 0.98);
+            backdrop-filter: blur(4px);
+            border-radius: 3rem;
+            box-shadow: 0 35px 65px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(255, 225, 215, 0.9);
+            padding: 2rem;
+            transition: all 0.3s;
+            margin: 0 auto;
+            opacity: 1;
+            animation: slideGlow 0.7s ease;
         }
 
-        @keyframes floatSlide {
-            0% {
-                opacity: 0;
-                transform: translateY(40px) scale(0.96);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+        @keyframes slideGlow {
+            0% { opacity: 0; transform: scale(0.96) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        /* active slide animation on entrance */
-        .slide {
-            opacity: 0;
-            animation: fadeSlideUp 0.7s forwards;
-        }
-
-        @keyframes fadeSlideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* first slide visible */
-        .slide.active {
-            display: block;
-        }
-
-        /* title style */
         h1, .slide h2 {
-            font-size: 2.5rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.6rem;
             background: linear-gradient(135deg, #c44569, #ff7b89, #f9a26c);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            margin-bottom: 0.8rem;
-            font-weight: 800;
+            margin-bottom: 0.5rem;
         }
 
         .emoji-glow {
-            font-size: 3.8rem;
-            letter-spacing: 12px;
-            animation: bounceHeart 1.8s infinite ease;
+            font-size: 3.5rem;
+            letter-spacing: 10px;
+            animation: gentleWobble 2s infinite;
         }
 
-        @keyframes bounceHeart {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        @keyframes gentleWobble {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
         }
 
         .sub {
-            background: rgba(255, 220, 210, 0.6);
+            background: rgba(255, 210, 200, 0.5);
             display: inline-block;
-            padding: 0.3rem 1.6rem;
+            padding: 0.3rem 1.5rem;
             border-radius: 60px;
-            color: #b14564;
             font-weight: 500;
-            margin: 0.7rem 0;
+            color: #b14564;
+            margin-bottom: 1.2rem;
         }
 
         .message-body {
-            font-size: 1.2rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.22rem;
             line-height: 1.65;
-            color: #2f1e1a;
-            font-family: 'Georgia', serif;
-            margin: 1.2rem 0;
+            color: #2c1a15;
             text-align: left;
-            padding: 0 0.5rem;
+            margin: 1rem 0;
         }
 
-        .message-body p {
-            margin-bottom: 1rem;
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .photo-card {
+            background: #fff5ef;
+            border-radius: 2rem;
+            padding: 0.8rem;
+            text-align: center;
+            transition: transform 0.2s;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+        }
+        .photo-card:hover { transform: scale(1.02); background: #ffe7df; }
+        .photo-placeholder {
+            background: linear-gradient(145deg, #ffe0d4, #ffcdc0);
+            border-radius: 1.5rem;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 8px;
+        }
+        .photo-card span { font-weight: 500; color: #b54662; font-size: 0.8rem; }
+
+        /* candle section */
+        .cake-area {
+            background: #fff2e9;
+            border-radius: 2rem;
+            padding: 1.2rem;
+            text-align: center;
+            margin: 1rem 0;
+        }
+        .candles {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem;
+        }
+        .candle {
+            font-size: 2.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            filter: drop-shadow(0 0 2px orange);
+        }
+        .candle.blown {
+            opacity: 0.3;
+            filter: grayscale(0.6);
+        }
+        .blow-btn {
+            background: #ffc2a1;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 60px;
+            font-weight: bold;
+            margin-top: 8px;
         }
 
         .signature-love {
             text-align: right;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 1.2rem;
             color: #e96479;
             border-top: 2px dashed #ffbecf;
@@ -133,475 +197,306 @@
             margin-top: 1rem;
         }
 
-        /* navigation buttons ultra */
         .nav-buttons {
             display: flex;
             justify-content: center;
-            gap: 1.8rem;
+            gap: 1.5rem;
             margin-top: 2rem;
-            flex-wrap: wrap;
         }
-
         .nav-btn {
             background: linear-gradient(145deg, #ff4d6d, #ff708d);
             border: none;
-            padding: 0.9rem 2rem;
-            font-size: 1.2rem;
+            padding: 0.8rem 2rem;
             font-weight: bold;
             color: white;
             border-radius: 60px;
             cursor: pointer;
             transition: 0.2s;
-            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.2);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-family: inherit;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.2);
         }
 
-        .nav-btn:hover {
-            transform: scale(1.05);
-            background: linear-gradient(145deg, #e63946, #ff5f7e);
-            box-shadow: 0 14px 22px rgba(230, 57, 70, 0.4);
-        }
+        .progress-dots { display: flex; justify-content: center; gap: 10px; margin: 1.2rem 0; }
+        .dot { width: 10px; height: 10px; background: #f5b0aa; border-radius: 20px; transition: 0.2s; cursor: pointer; }
+        .dot.active-dot { background: #ff4d6d; width: 28px; }
 
-        .nav-btn:active {
-            transform: scale(0.96);
-        }
-
-        .progress-dots {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin: 1.5rem 0 0.5rem;
-        }
-
-        .dot {
-            width: 12px;
-            height: 12px;
-            background: #f7bcb9;
-            border-radius: 20px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .dot.active-dot {
-            background: #ff4d6d;
-            width: 28px;
-            box-shadow: 0 0 6px #ff8da1;
-        }
-
-        footer {
-            text-align: center;
-            font-size: 0.7rem;
-            color: #fff0e6;
-            margin-top: 2rem;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-
-        /* floating hearts confetti */
-        .floating-love {
+        /* music toggle + voice + share */
+        .floating-tools {
             position: fixed;
-            pointer-events: none;
-            z-index: 999;
-            font-size: 1.4rem;
-            animation: riseLove 1.2s forwards;
+            bottom: 20px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 1001;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
-
-        @keyframes riseLove {
-            0% { opacity: 1; transform: translateY(0) scale(0.6); }
-            100% { opacity: 0; transform: translateY(-90px) scale(1.2); }
-        }
-
-        @media (max-width: 600px) {
-            .slide {
-                padding: 1.5rem;
-            }
-            h1, .slide h2 { font-size: 1.9rem; }
-            .message-body { font-size: 1rem; }
-            .nav-btn { padding: 0.7rem 1.4rem; font-size: 1rem; }
-        }
-        
-        .special-img-placeholder {
-            font-size: 3rem;
-            background: #ffe8e0;
-            border-radius: 70px;
-            padding: 0.5rem;
-            display: inline-block;
-            margin: 0.5rem auto;
-        }
-        
-        button {
-            background: none;
+        .icon-btn {
+            background: rgba(255, 245, 240, 0.9);
+            backdrop-filter: blur(12px);
             border: none;
+            border-radius: 40px;
+            padding: 8px 16px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 650px) {
+            .slide { padding: 1.4rem; }
+            h1 { font-size: 2rem; }
+            .message-body { font-size: 1rem; }
+        }
+        
+        /* wish input */
+        .wish-box {
+            background: #fff7f0;
+            border-radius: 2rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .wish-input {
+            width: 90%;
+            padding: 10px;
+            border-radius: 60px;
+            border: 1px solid #ffb7b0;
+            background: white;
+            font-family: inherit;
         }
     </style>
 </head>
 <body>
 
-<div class="slides-container" id="slidesContainer">
-    <!-- SLIDE 1 - intro -->
-    <div class="slide" data-index="0">
-        <div class="emoji-glow">🎂💖🎈✨</div>
-        <h1>Hey, Glawins! 🌸</h1>
-        <div class="sub">a birthday story made of slides & love</div>
-        <div class="message-body">
-            <p>💫 Welcome to your very own birthday journey. Each slide is a heartbeat, a whisper of how much you mean to me.</p>
-            <p>Get ready to smile, feel loved, and relive all the magic that is YOU. ✨</p>
-            <div class="special-img-placeholder">🎁 ➡️ 💌</div>
-        </div>
-        <div class="signature-love">⭐ your forever fan</div>
-    </div>
-
-    <!-- SLIDE 2 - memory & warmth -->
-    <div class="slide" data-index="1">
-        <div class="emoji-glow">🌟✨🌙</div>
-        <h2>the little things</h2>
-        <div class="sub">that make my universe brighter</div>
-        <div class="message-body">
-            <p>🌸 Do you know what's magical? The way your laugh echoes in my thoughts, the way you see beauty where others overlook. You've turned ordinary days into treasure maps.</p>
-            <p>🎈 From deep talks to silly memes — every bit of you is my favorite constellation. You deserve the entire galaxy, Glawins.</p>
-            <div style="background:#ffefea; border-radius: 2rem; padding: 0.6rem; font-style:italic;">“You make the world feel like a gentle poem.” 💕</div>
-        </div>
-        <div class="signature-love">💭 always remembering your sparkle</div>
-    </div>
-
-    <!-- SLIDE 3 - birthday wishes -->
-    <div class="slide" data-index="2">
-        <div class="emoji-glow">🎁🎂🎉🥳</div>
-        <h2>birthday magic</h2>
-        <div class="sub">for the most radiant soul</div>
-        <div class="message-body">
-            <p>🎂 Happy Birthday, my love! Today isn't just a date — it's the celebration of your beautiful existence. May laughter follow you like sunshine, and may every dream you hold find its way to your doorstep.</p>
-            <p>💖 I wish you boundless joy, surprise adventures, and cakes that taste like nostalgia. This year, may you receive all the love you so generously give. You deserve the universe and more.</p>
-            <p>✨ <strong>21 hugs, 100 kisses, and infinite confetti</strong> ✨</p>
-        </div>
-        <div class="signature-love">🎀 with all my heart</div>
-    </div>
-
-    <!-- SLIDE 4 - love letter slide deeper -->
-    <div class="slide" data-index="3">
-        <div class="emoji-glow">💌💕❤️‍🔥</div>
-        <h2>a secret letter</h2>
-        <div class="sub">just between us</div>
-        <div class="message-body">
-            <p>📜 My Dearest Glawins,</p>
-            <p>Every moment with you feels like a treasure hunt — and I always find gold. You have a heart that paints rainbows even on cloudy days. I adore your passion, your kindness, and the way you care deeply.</p>
-            <p>On your birthday, I promise to always cheer for you, to be your biggest fan, and to remind you that you are never alone. You’re my favorite thought, my comfort place, my eternal soft spot.</p>
-            <p>Thank you for existing. Thank you for being brilliantly, uniquely <strong>Glawins</strong>.</p>
-            <div class="signature-love">Forever wrapped around you,<br>❤️ your person</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 5 - final happiness & future -->
-    <div class="slide" data-index="4">
-        <div class="emoji-glow">🌈🕊️💖✨</div>
-        <h2>our tomorrow</h2>
-        <div class="sub">more moments, more smiles</div>
-        <div class="message-body">
-            <p>🌻 Here's to the future — more inside jokes, more late night "remember when", and more of your contagious happiness. I can't wait to see all the amazing things you'll do.</p>
-            <p>🎀 No matter where life takes us, my heart will always have a room with your name on it, full of balloons and warmth.</p>
-            <p><strong>Happy Birthday, Glawins! 🎂🎈</strong> <br> You are deeply, wildly loved. 💕</p>
-            <div class="special-img-placeholder">🎂 + 💖 = ∞</div>
-        </div>
-        <div class="signature-love">✨ eternally yours ✨</div>
-    </div>
-
-    <!-- navigation controls -->
-    <div class="nav-buttons">
-        <button class="nav-btn" id="prevBtn">◀  Previous</button>
-        <button class="nav-btn" id="nextBtn">Next  ▶</button>
-    </div>
-    <div class="progress-dots" id="dotsContainer"></div>
-    <footer>✨ Slide through and feel the love — each step is a birthday surprise ✨</footer>
+<div class="progress-bar-container"><div class="progress-fill" id="progressFill"></div></div>
+<div class="floating-tools">
+    <button class="icon-btn" id="musicToggleBtn">🎵 Play Melody</button>
+    <button class="icon-btn" id="voiceMsgBtn">🎤 Voice Note</button>
+    <button class="icon-btn" id="shareBtn">📤 Share Magic</button>
 </div>
 
+<div class="slides-container" id="slidesContainer">
+    <!-- SLIDE 0 - intro -->
+    <div class="slide" data-index="0">
+        <div class="emoji-glow">🎂💖✨🎈</div>
+        <h1>Glawins, this is YOUR story</h1>
+        <div class="sub">a birthday experience made of love & slides</div>
+        <div class="message-body">
+            <p>🌸 Welcome, beautiful soul. Each slide holds a piece of my heart. Swipe, click, and feel the magic.</p>
+            <p>💫 You are about to laugh, melt, and maybe tear up. Let's begin →</p>
+        </div>
+        <div class="signature-love">✨ with every sparkle, me</div>
+    </div>
+
+    <!-- SLIDE 1 - photo gallery (you insert photos) -->
+    <div class="slide" data-index="1">
+        <div class="emoji-glow">📸💞</div>
+        <h2>our treasury of moments</h2>
+        <div class="sub">drag & replace images — or just admire the love</div>
+        <div class="photo-grid" id="photoGrid">
+            <div class="photo-card"><div class="photo-placeholder">🌅</div><span>memory 1: sunshine day</span></div>
+            <div class="photo-card"><div class="photo-placeholder">🍕✨</div><span>laugh attack</span></div>
+            <div class="photo-card"><div class="photo-placeholder">🎨💖</div><span>art & us</span></div>
+        </div>
+        <div class="message-body"><p><em>💬 “Every picture holds a whisper of us. Add your own by replacing the placeholders with actual images — right click the div or use developer tools — but the love is real.”</em></p></div>
+        <div class="signature-love">📷 forever developing memories</div>
+    </div>
+
+    <!-- SLIDE 2 - birthday wishes + blow candle -->
+    <div class="slide" data-index="2">
+        <div class="emoji-glow">🎂🕯️🎁</div>
+        <h2>make a wish</h2>
+        <div class="sub">blow the candles, Glawins!</div>
+        <div class="cake-area">
+            <div class="candles" id="candleContainer">
+                <div class="candle" data-blown="false">🕯️</div>
+                <div class="candle" data-blown="false">🕯️</div>
+                <div class="candle" data-blown="false">🕯️</div>
+                <div class="candle" data-blown="false">🕯️</div>
+                <div class="candle" data-blown="false">🕯️</div>
+            </div>
+            <button class="blow-btn" id="blowCandlesBtn">💨 Click to Blow / Tap 💨</button>
+            <p id="candleMsg" style="margin-top: 8px; font-style:italic;">🎈 make a wish...</p>
+        </div>
+        <div class="message-body"><p>🎂 Happy Birthday my love! I wish you endless smiles, spontaneous adventures, and all the cake your heart desires. You deserve galaxies of happiness.</p></div>
+        <div class="signature-love">💖 your biggest fan</div>
+    </div>
+
+    <!-- SLIDE 3 - secret love letter + typewriter effect -->
+    <div class="slide" data-index="3">
+        <div class="emoji-glow">💌📜✨</div>
+        <h2>a letter just for you</h2>
+        <div class="sub">from my heart to yours</div>
+        <div class="message-body" id="typewriterContainer">
+            <p id="typewriterText"></p>
+        </div>
+        <div class="wish-box">
+            <label>🤫 write your secret birthday wish (only you see it):</label>
+            <input type="text" id="secretWish" class="wish-input" placeholder="e.g., travel the world, more joy...">
+            <button id="saveWishBtn" style="margin-top: 8px; background:#ffb7b0; border:none; padding:4px 16px; border-radius:40px;">💾 Seal Wish</button>
+            <p id="wishFeedback" style="font-size:0.7rem;"></p>
+        </div>
+        <div class="signature-love">forever written in stars</div>
+    </div>
+
+    <!-- SLIDE 4 - final celebration & voice note -->
+    <div class="slide" data-index="4">
+        <div class="emoji-glow">🌈🎉💕🕊️</div>
+        <h2>happily ever after</h2>
+        <div class="sub">you are deeply, wildly loved</div>
+        <div class="message-body">
+            <p>🌟 Glawins, this is not goodbye — it's a beginning. Every day with you is a slide worth celebrating. Thank you for being you.</p>
+            <p>🎀 May this year bring you closer to your dreams. I love you more than confetti can express. ✨</p>
+            <div id="voiceNotePlayer" style="margin: 1rem 0; text-align:center; background:#fce4db; border-radius: 2rem; padding: 0.6rem;">
+                <span>🎙️ voice love note (click mic to record)</span>
+                <button id="recordVoiceBtn" style="background:#ff9f8f; border:none; border-radius:50%; padding:8px 14px;">🎤 Record</button>
+                <audio id="voiceAudio" controls style="width:100%; margin-top:6px; display:none;"></audio>
+            </div>
+        </div>
+        <div class="signature-love">eternally yours, forever & always ❤️</div>
+    </div>
+</div>
+
+<div class="nav-buttons">
+    <button class="nav-btn" id="prevBtn">◀ Previous</button>
+    <button class="nav-btn" id="nextBtn">Next ▶</button>
+</div>
+<div class="progress-dots" id="dotsContainer"></div>
+<footer style="text-align:center; color:#fff3e8; margin-top:1rem;">✨ tap, swipe, blow the candles — you are magic ✨</footer>
+
 <script>
-    (function() {
-        // gather slides
+    (function(){
+        // ---------- SLIDES MANAGER ----------
         const slides = document.querySelectorAll('.slide');
-        let currentIndex = 0;
-        const totalSlides = slides.length;
-        
-        // hide all slides initially, show first
+        let currentIdx = 0;
+        const total = slides.length;
         function updateSlides() {
-            slides.forEach((slide, idx) => {
-                if (idx === currentIndex) {
-                    slide.style.display = 'block';
-                    slide.style.animation = 'none';
-                    slide.offsetHeight; // reflow
-                    slide.style.animation = 'fadeSlideUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards';
-                } else {
-                    slide.style.display = 'none';
-                }
+            slides.forEach((s, i) => {
+                s.style.display = i === currentIdx ? 'block' : 'none';
             });
             updateDots();
-            triggerMicroConfetti(); // little joy each slide change
+            updateProgress();
+            triggerMiniConfetti();
+            if(currentIdx === 2) initCandles(); 
+            if(currentIdx === 3) startTypewriterEffect();
         }
-        
-        // pro confetti & floating hearts effect when slide changes
-        function triggerMicroConfetti() {
-            // produce 20 soft floating love particles
-            for (let i = 0; i < 22; i++) {
-                const loveElement = document.createElement('div');
-                loveElement.className = 'floating-love';
-                const icons = ['❤️', '💖', '🌸', '🎀', '✨', '💕', '🎈', '💗'];
-                loveElement.innerText = icons[Math.floor(Math.random() * icons.length)];
-                const randomX = Math.random() * window.innerWidth;
-                const startY = window.innerHeight - 100;
-                loveElement.style.left = randomX + 'px';
-                loveElement.style.top = (startY - 20 + Math.random() * 50) + 'px';
-                loveElement.style.fontSize = (Math.random() * 1.2 + 0.9) + 'rem';
-                document.body.appendChild(loveElement);
-                setTimeout(() => { if(loveElement && loveElement.remove) loveElement.remove(); }, 1200);
-            }
-            // extra burst of confetti from the center
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2;
-            for (let s = 0; s < 15; s++) {
-                const spark = document.createElement('div');
-                spark.className = 'floating-love';
-                spark.innerText = ['🎉', '🎂', '💖', '✨'][Math.floor(Math.random()*4)];
-                spark.style.left = (centerX - 40 + Math.random() * 80) + 'px';
-                spark.style.top = (centerY - 30 + Math.random() * 70) + 'px';
-                spark.style.fontSize = '1.3rem';
-                document.body.appendChild(spark);
-                setTimeout(() => spark.remove(), 1000);
-            }
-        }
-        
-        // bigger celebratory effect for birthday specific slide (slide index 2 or 4)
-        function grandCelebration(slideIdx) {
-            if (slideIdx === 2 || slideIdx === 4) {
-                // heavy confetti rain
-                for (let i = 0; i < 55; i++) {
-                    const conf = document.createElement('div');
-                    conf.className = 'floating-love';
-                    conf.innerText = ['🎂', '🎉', '💖', '✨', '🎁', '🥳'][Math.floor(Math.random()*6)];
-                    conf.style.left = Math.random() * window.innerWidth + 'px';
-                    conf.style.top = '-20px';
-                    conf.style.fontSize = (Math.random() * 1.4 + 0.8) + 'rem';
-                    conf.style.animation = 'riseLove 1.4s ease-out forwards';
-                    document.body.appendChild(conf);
-                    setTimeout(() => conf.remove(), 1400);
-                }
-            }
-        }
-        
-        // dots generation
+        function updateProgress() { const percent = ((currentIdx+1)/total)*100; document.getElementById('progressFill').style.width = percent+'%'; }
         function updateDots() {
-            const dotsContainer = document.getElementById('dotsContainer');
-            dotsContainer.innerHTML = '';
-            for (let i = 0; i < totalSlides; i++) {
-                const dot = document.createElement('div');
-                dot.classList.add('dot');
-                if (i === currentIndex) dot.classList.add('active-dot');
-                dot.addEventListener('click', () => {
-                    if (i !== currentIndex) {
-                        currentIndex = i;
-                        updateSlides();
-                        grandCelebration(currentIndex);
-                        addExtraHeartWave();
-                    }
-                });
-                dotsContainer.appendChild(dot);
+            const cont = document.getElementById('dotsContainer'); cont.innerHTML='';
+            for(let i=0;i<total;i++) {
+                let d = document.createElement('div'); d.classList.add('dot');
+                if(i===currentIdx) d.classList.add('active-dot');
+                d.addEventListener('click',()=>{ if(i!==currentIdx){ currentIdx=i; updateSlides(); celebrationBurst(); } });
+                cont.appendChild(d);
             }
         }
+        function triggerMiniConfetti() { for(let i=0;i<12;i++) createFloatingHeart(Math.random()*window.innerWidth, window.innerHeight-50); }
+        function celebrationBurst() { for(let i=0;i<40;i++) createFloatingHeart(Math.random()*window.innerWidth, window.innerHeight/2); }
+        function createFloatingHeart(x,y) {
+            let el=document.createElement('div'); el.className='petal'; el.innerText=['❤️','💖','🌸','✨','🎀','💕'][Math.floor(Math.random()*6)];
+            el.style.left=x+'px'; el.style.top=y+'px'; el.style.fontSize=(Math.random()*1.2+0.9)+'rem';
+            document.body.appendChild(el); setTimeout(()=>el.remove(),1500);
+        }
+        function fallingPetalsInterval() { setInterval(()=>{ if(Math.random()>0.85){ let p=document.createElement('div'); p.className='petal'; p.innerText=['🌸','🌼','🍂','💮'][Math.floor(Math.random()*4)]; p.style.left=Math.random()*window.innerWidth+'px'; p.style.fontSize=(Math.random()*0.9+0.8)+'rem'; document.body.appendChild(p); setTimeout(()=>p.remove(),5000); } }, 800); }
         
-        // add heart wave on navigation tap
-        function addExtraHeartWave() {
-            const btnRectPrev = document.getElementById('prevBtn').getBoundingClientRect();
-            const x = btnRectPrev.left + 50;
-            const y = btnRectPrev.top + 20;
-            for (let i=0;i<12;i++) {
-                const h = document.createElement('div');
-                h.className = 'floating-love';
-                h.innerText = '❤️';
-                h.style.left = (x + (Math.random() - 0.5)*70) + 'px';
-                h.style.top = (y + (Math.random() - 0.5)*50) + 'px';
-                document.body.appendChild(h);
-                setTimeout(()=>h.remove(), 900);
-            }
+        // CANDLE BLOW FEATURE
+        let candlesBlown = 0;
+        function initCandles() {
+            const candles = document.querySelectorAll('.candle');
+            candlesBlown = 0;
+            candles.forEach(c => { c.classList.remove('blown'); c.setAttribute('data-blown','false'); c.style.opacity='1'; });
+            document.getElementById('candleMsg').innerHTML = '🎂 Make a wish and blow out the candles!';
+        }
+        function blowCandles() {
+            const candles = document.querySelectorAll('.candle');
+            candles.forEach(c => { if(c.getAttribute('data-blown')==='false') { c.classList.add('blown'); c.setAttribute('data-blown','true'); c.style.opacity='0.4'; candlesBlown++; } });
+            if(candlesBlown >= 5) {
+                document.getElementById('candleMsg').innerHTML = '✨✨ WISH GRANTED! Happy Birthday Glawins! ✨✨';
+                celebrationBurst(); grandBurst();
+            } else { document.getElementById('candleMsg').innerHTML = '💨 blow again! tap the button or click each candle!'; }
+        }
+        function grandBurst() { for(let i=0;i<70;i++) createFloatingHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight); }
+        document.getElementById('blowCandlesBtn')?.addEventListener('click', blowCandles);
+        document.querySelectorAll('.candle').forEach(c => { c.addEventListener('click',()=>{ if(c.getAttribute('data-blown')==='false'){ c.classList.add('blown'); c.setAttribute('data-blown','true'); c.style.opacity='0.4'; candlesBlown++; if(candlesBlown>=5){document.getElementById('candleMsg').innerHTML='✨ WISH ACTIVE! ✨'; grandBurst();}} }); });
+        
+        // TYPEWRITER EFFECT for slide 3
+        let typewriterStarted = false;
+        function startTypewriterEffect() {
+            if(typewriterStarted) return;
+            typewriterStarted=true;
+            const fullText = `My beloved Glawins, 💕\n\nEvery beat of my heart spells your name. You are the warmth in winter and the laughter in my ordinary days. I admire your strength, your silly side, and the way you make this world feel like home. On your birthday, I just want you to know: you are the best chapter of my life, and I'll keep writing endless pages with you. I love you, today and beyond. 🕊️`;
+            const container = document.getElementById('typewriterText');
+            container.innerHTML = '';
+            let i=0;
+            function typing() { if(i<fullText.length) { container.innerHTML += fullText.charAt(i); i++; setTimeout(typing, 45); } }
+            typing();
         }
         
-        // Next Slide
-        function nextSlide() {
-            if (currentIndex < totalSlides - 1) {
-                currentIndex++;
-                updateSlides();
-                grandCelebration(currentIndex);
-                addExtraHeartWave();
-                // optional: play subtle birthday chime mental
-                playSoftTone();
-            } else {
-                // at end loop to beginning? but we keep but show a big extra love
-                if(currentIndex === totalSlides-1) {
-                    // burst final ecstasy
-                    ultimateFinale();
+        // WISH localStorage + feedback
+        const savedWish = localStorage.getItem('GlawinsWish');
+        if(savedWish) document.getElementById('secretWish') && (document.getElementById('secretWish').value = savedWish);
+        document.getElementById('saveWishBtn')?.addEventListener('click',()=>{ const wish=document.getElementById('secretWish').value; localStorage.setItem('GlawinsWish',wish); document.getElementById('wishFeedback').innerText='✨ Your wish is sealed with stardust ✨'; setTimeout(()=>document.getElementById('wishFeedback').innerText='',2000); });
+        
+        // ---------- AUDIO + VOICE RECORDING (simplified, works with MediaRecorder) ----------
+        let mediaRecorder; let audioChunks=[];
+        const recordBtn = document.getElementById('recordVoiceBtn');
+        const audioPlayer = document.getElementById('voiceAudio');
+        if(recordBtn){
+            recordBtn.addEventListener('click', async()=>{
+                if(mediaRecorder && mediaRecorder.state === 'recording'){
+                    mediaRecorder.stop(); recordBtn.innerText='🎤 Record'; return;
                 }
-            }
+                try{
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks=[];
+                    mediaRecorder.ondataavailable = e=> audioChunks.push(e.data);
+                    mediaRecorder.onstop = ()=>{
+                        const blob = new Blob(audioChunks, {type:'audio/wav'});
+                        const url = URL.createObjectURL(blob);
+                        audioPlayer.src = url;
+                        audioPlayer.style.display='block';
+                        audioPlayer.controls=true;
+                        stream.getTracks().forEach(t=>t.stop());
+                    };
+                    mediaRecorder.start();
+                    recordBtn.innerText='⏹️ Stop';
+                }catch(e){ alert('Please allow mic for voice magic'); }
+            });
         }
         
-        function prevSlide() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateSlides();
-                grandCelebration(currentIndex);
-                addExtraHeartWave();
-                playSoftTone();
-            } else {
-                rippleFirstLove();
-            }
+        // music (simple web audio bell)
+        let audioCtx=null; let musicActive=false;
+        function playChime(){
+            if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+            if(audioCtx.state==='suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.frequency.value=880; gain.gain.value=0.1; osc.type='sine';
+            osc.start(); gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime+0.3);
+            osc.stop(audioCtx.currentTime+0.3);
         }
+        document.getElementById('musicToggleBtn')?.addEventListener('click',()=>{ playChime(); document.getElementById('musicToggleBtn').innerHTML='🎶 Lovely chime ✨'; setTimeout(()=>{document.getElementById('musicToggleBtn').innerHTML='🎵 Play Melody';},1500); });
         
-        // small web audio tone for premium feel (polite beep)
-        let audioCtx = null;
-        function playSoftTone() {
-            try {
-                if (!audioCtx) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume().then(() => {
-                        beep();
-                    }).catch(()=>{});
-                } else {
-                    beep();
-                }
-            } catch(e) { console.log('audio not supported, still cute'); }
-        }
-        
-        function beep() {
-            if (!audioCtx) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.frequency.value = 880;
-            gain.gain.value = 0.1;
-            osc.type = 'sine';
-            osc.start();
-            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.25);
-            osc.stop(audioCtx.currentTime + 0.25);
-        }
-        
-        function ultimateFinale() {
-            for (let i=0;i<100;i++) {
-                const heartStorm = document.createElement('div');
-                heartStorm.className = 'floating-love';
-                const emojis = ['🎂', '💖', '🎉', '❤️', '✨', '🌸', '🥳'];
-                heartStorm.innerText = emojis[Math.floor(Math.random()*emojis.length)];
-                heartStorm.style.left = Math.random() * window.innerWidth + 'px';
-                heartStorm.style.top = Math.random() * window.innerHeight + 'px';
-                heartStorm.style.fontSize = (Math.random() * 1.8 + 1) + 'rem';
-                heartStorm.style.animation = 'riseLove 1.2s forwards';
-                document.body.appendChild(heartStorm);
-                setTimeout(() => heartStorm.remove(), 1300);
-            }
-            const finaleMsg = document.createElement('div');
-            finaleMsg.style.position = 'fixed';
-            finaleMsg.style.bottom = '30%';
-            finaleMsg.style.left = '50%';
-            finaleMsg.style.transform = 'translateX(-50%)';
-            finaleMsg.style.background = '#fff0e6';
-            finaleMsg.style.padding = '1rem 2rem';
-            finaleMsg.style.borderRadius = '80px';
-            finaleMsg.style.fontWeight = 'bold';
-            finaleMsg.style.fontSize = '1.4rem';
-            finaleMsg.style.color = '#e63946';
-            finaleMsg.style.zIndex = '10000';
-            finaleMsg.style.boxShadow = '0 0 20px pink';
-            finaleMsg.innerText = '✨ HAPPY BIRTHDAY GLAWINS! YOU ARE LOVED BEYOND MEASURE ✨';
-            document.body.appendChild(finaleMsg);
-            setTimeout(() => finaleMsg.remove(), 4000);
-        }
-        
-        function rippleFirstLove() {
-            for(let i=0;i<20;i++) {
-                const heart = document.createElement('div');
-                heart.className = 'floating-love';
-                heart.innerText = '❤️';
-                heart.style.left = (window.innerWidth/2 - 60 + Math.random() * 120) + 'px';
-                heart.style.top = (window.innerHeight - 100) + 'px';
-                document.body.appendChild(heart);
-                setTimeout(()=>heart.remove(),1200);
-            }
-        }
-        
-        // event listeners
-        document.getElementById('nextBtn').addEventListener('click', nextSlide);
-        document.getElementById('prevBtn').addEventListener('click', prevSlide);
-        
-        // keyboard support left/right
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                nextSlide();
-            } else if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                prevSlide();
-            }
+        // share magic
+        document.getElementById('shareBtn')?.addEventListener('click',()=>{
+            if(navigator.share) navigator.share({title:'Birthday Magic for Glawins', text:'You are invited to a beautiful love card!', url:window.location.href});
+            else alert('💖 Copy this link & share the love!');
         });
         
-        // touch swipe for mobile ultra
-        let touchStartX = 0;
-        let touchEndX = 0;
-        document.body.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-        document.body.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            if (touchEndX < touchStartX - 50) nextSlide();
-            if (touchEndX > touchStartX + 50) prevSlide();
-        }, { passive: true });
+        // navigation
+        document.getElementById('nextBtn').addEventListener('click',()=>{ if(currentIdx<total-1){ currentIdx++; updateSlides(); celebrationBurst(); playChime(); } else { ultimateGrandFinale(); } });
+        document.getElementById('prevBtn').addEventListener('click',()=>{ if(currentIdx>0){ currentIdx--; updateSlides(); playChime(); } });
+        window.addEventListener('keydown',(e)=>{ if(e.key==='ArrowRight'){ if(currentIdx<total-1){currentIdx++; updateSlides(); celebrationBurst();}} if(e.key==='ArrowLeft' && currentIdx>0){currentIdx--; updateSlides();} });
+        let touchX=0; document.body.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX;});
+        document.body.addEventListener('touchend',e=>{ let diff=e.changedTouches[0].screenX-touchX; if(diff<-40 && currentIdx<total-1){currentIdx++; updateSlides(); celebrationBurst();} if(diff>40 && currentIdx>0){currentIdx--; updateSlides();}});
         
-        // init slides display + first slide celebration
-        function initSlides() {
-            slides.forEach((slide, idx) => {
-                if (idx !== 0) slide.style.display = 'none';
-                else slide.style.display = 'block';
-            });
-            updateDots();
-            // initial small confetti for welcome
-            setTimeout(() => {
-                triggerMicroConfetti();
-                playSoftTone();
-            }, 200);
+        function ultimateGrandFinale(){
+            for(let i=0;i<140;i++) createFloatingHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight);
+            alert('✨ HAPPY BIRTHDAY GLAWINS! You are the most loved person ✨');
         }
-        
-        initSlides();
-        
-        // add floating background micro hearts forever but subtle
-        setInterval(() => {
-            if(Math.random() > 0.85) {
-                const randomHeart = document.createElement('div');
-                randomHeart.className = 'floating-love';
-                randomHeart.innerText = '💕';
-                randomHeart.style.left = Math.random() * window.innerWidth + 'px';
-                randomHeart.style.top = window.innerHeight - 10 + 'px';
-                randomHeart.style.fontSize = '0.9rem';
-                randomHeart.style.opacity = '0.7';
-                document.body.appendChild(randomHeart);
-                setTimeout(() => randomHeart.remove(), 1800);
-            }
-        }, 800);
-        
-        // additional birthday grandeur on slide 2 or 4 when entering
-        const originalUpdate = updateSlides;
-        window.updateSlides = updateSlides;
-        // ensure celebration on direct slide
-        const observer = new MutationObserver(() => {});
-        // small hack to boost birthday index slide love when reached
-        function checkAndCelebrate() {
-            if (currentIndex === 2 || currentIndex === 4) {
-                grandCelebration(currentIndex);
-            }
-        }
-        const origUpdate = updateSlides;
-        window.updateSlides = function() {
-            origUpdate();
-            checkAndCelebrate();
-        };
+        fallingPetalsInterval();
         updateSlides();
     })();
 </script>
