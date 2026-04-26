@@ -126,9 +126,10 @@
             margin: 1rem 0;
         }
 
+        /* PHOTO GRID - 6 slots ready for your images */
         .photo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 1rem;
             margin: 1.5rem 0;
         }
@@ -145,12 +146,19 @@
         .photo-placeholder {
             background: linear-gradient(145deg, #ffe0d4, #ffcdc0);
             border-radius: 1.5rem;
-            height: 150px;
+            height: 160px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 3rem;
             margin-bottom: 8px;
+            overflow: hidden;
+        }
+        .photo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 1.5rem;
         }
         .photo-card span { font-weight: 500; color: #b54662; font-size: 0.8rem; }
 
@@ -167,12 +175,13 @@
             justify-content: center;
             gap: 1rem;
             margin: 1rem;
+            flex-wrap: wrap;
         }
         .candle {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             cursor: pointer;
             transition: all 0.2s;
-            filter: drop-shadow(0 0 2px orange);
+            filter: drop-shadow(0 0 3px orange);
         }
         .candle.blown {
             opacity: 0.3;
@@ -181,10 +190,12 @@
         .blow-btn {
             background: #ffc2a1;
             border: none;
-            padding: 8px 20px;
+            padding: 10px 24px;
             border-radius: 60px;
             font-weight: bold;
             margin-top: 8px;
+            cursor: pointer;
+            font-size: 1rem;
         }
 
         .signature-love {
@@ -220,7 +231,7 @@
         .dot { width: 10px; height: 10px; background: #f5b0aa; border-radius: 20px; transition: 0.2s; cursor: pointer; }
         .dot.active-dot { background: #ff4d6d; width: 28px; }
 
-        /* music toggle + voice + share */
+        /* floating tools */
         .floating-tools {
             position: fixed;
             bottom: 20px;
@@ -232,7 +243,7 @@
             justify-content: flex-end;
         }
         .icon-btn {
-            background: rgba(255, 245, 240, 0.9);
+            background: rgba(255, 245, 240, 0.95);
             backdrop-filter: blur(12px);
             border: none;
             border-radius: 40px;
@@ -242,6 +253,20 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             font-size: 0.85rem;
         }
+        .secret-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 15px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 6px 12px;
+            font-size: 11px;
+            cursor: pointer;
+            z-index: 1002;
+            font-family: monospace;
+        }
 
         @media (max-width: 650px) {
             .slide { padding: 1.4rem; }
@@ -249,7 +274,6 @@
             .message-body { font-size: 1rem; }
         }
         
-        /* wish input */
         .wish-box {
             background: #fff7f0;
             border-radius: 2rem;
@@ -265,11 +289,23 @@
             background: white;
             font-family: inherit;
         }
+        .email-wish-btn {
+            background: #ff9f8f;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 40px;
+            margin-top: 8px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
 <div class="progress-bar-container"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- SECRET BUTTON FOR YOU TO SEE HER WISH (only you know this) -->
+<button class="secret-btn" id="secretViewWishBtn">🔒 View Her Secret Wish (You)</button>
+
 <div class="floating-tools">
     <button class="icon-btn" id="musicToggleBtn">🎵 Play Melody</button>
     <button class="icon-btn" id="voiceMsgBtn">🎤 Voice Note</button>
@@ -289,17 +325,51 @@
         <div class="signature-love">✨ with every sparkle, me</div>
     </div>
 
-    <!-- SLIDE 1 - photo gallery (you insert photos) -->
+    <!-- SLIDE 1 - PHOTO GALLERY (6 slots ready for your photos of her and together) -->
     <div class="slide" data-index="1">
-        <div class="emoji-glow">📸💞</div>
+        <div class="emoji-glow">📸💞👩‍❤️‍👨</div>
         <h2>our treasury of moments</h2>
-        <div class="sub">drag & replace images — or just admire the love</div>
+        <div class="sub">✨ photos of you, photos of us ✨</div>
         <div class="photo-grid" id="photoGrid">
-            <div class="photo-card"><div class="photo-placeholder">🌅</div><span>memory 1: sunshine day</span></div>
-            <div class="photo-card"><div class="photo-placeholder">🍕✨</div><span>laugh attack</span></div>
-            <div class="photo-card"><div class="photo-placeholder">🎨💖</div><span>art & us</span></div>
+            <!-- REPLACE the src="..." with YOUR actual image paths -->
+            <div class="photo-card">
+                <div class="photo-placeholder">
+                    <img src="images/glawins-smile.jpg" alt="Glawins smiling" onerror="this.parentElement.innerHTML='🌅'; this.style.display='none'">
+                </div>
+                <span>her beautiful smile ✨</span>
+            </div>
+            <div class="photo-card">
+                <div class="photo-placeholder">
+                    <img src="images/us-together.jpg" alt="Us together" onerror="this.parentElement.innerHTML='💑'; this.style.display='none'">
+                </div>
+                <span>our favorite day ❤️</span>
+            </div>
+            <div class="photo-card">
+                <div class="photo-placeholder">
+                    <img src="images/her-laugh.jpg" alt="Glawins laughing" onerror="this.parentElement.innerHTML='😂'; this.style.display='none'">
+                </div>
+                <span>that contagious laugh 😂</span>
+            </div>
+            <div class="photo-card">
+                <div class="photo-placeholder">
+                    <img src="images/couple-memory.jpg" alt="Couple memory" onerror="this.parentElement.innerHTML='🌅'; this.style.display='none'">
+                </div>
+                <span>memory lane 🎞️</span>
+            </div>
+            <div class="photo-card">
+                <div class="photo-placeholder">
+                    <img src="images/her-candid.jpg" alt="Candid moment" onerror="this.parentElement.innerHTML='🌸'; this.style.display='none'">
+                </div>
+                <span>candid perfection 🌸</span>
+            </div>
+            <div class="photo-card">
+                <div class="photo-placeholder">
+                    <img src="images/us-hug.jpg" alt="Us hugging" onerror="this.parentElement.innerHTML='🤗'; this.style.display='none'">
+                </div>
+                <span>our hug 🤗💖</span>
+            </div>
         </div>
-        <div class="message-body"><p><em>💬 “Every picture holds a whisper of us. Add your own by replacing the placeholders with actual images — right click the div or use developer tools — but the love is real.”</em></p></div>
+        <div class="message-body"><p><em>💬 “Every picture holds a whisper of us. Replace the image paths with your actual photos — just put them in an 'images' folder or use full URLs.”</em></p></div>
         <div class="signature-love">📷 forever developing memories</div>
     </div>
 
@@ -323,7 +393,7 @@
         <div class="signature-love">💖 your biggest fan</div>
     </div>
 
-    <!-- SLIDE 3 - secret love letter + typewriter effect -->
+    <!-- SLIDE 3 - secret love letter + typewriter effect + wish box + email to you -->
     <div class="slide" data-index="3">
         <div class="emoji-glow">💌📜✨</div>
         <h2>a letter just for you</h2>
@@ -332,10 +402,13 @@
             <p id="typewriterText"></p>
         </div>
         <div class="wish-box">
-            <label>🤫 write your secret birthday wish (only you see it):</label>
-            <input type="text" id="secretWish" class="wish-input" placeholder="e.g., travel the world, more joy...">
-            <button id="saveWishBtn" style="margin-top: 8px; background:#ffb7b0; border:none; padding:4px 16px; border-radius:40px;">💾 Seal Wish</button>
-            <p id="wishFeedback" style="font-size:0.7rem;"></p>
+            <label>🤫 write your secret birthday wish (only you see it, then you can email it to me):</label>
+            <input type="text" id="secretWish" class="wish-input" placeholder="e.g., travel the world, more joy, us forever...">
+            <div style="display: flex; gap: 8px; justify-content: center; margin-top: 8px;">
+                <button id="saveWishBtn" style="background:#ffb7b0; border:none; padding:6px 16px; border-radius:40px; cursor:pointer;">💾 Seal Wish</button>
+                <button id="emailWishBtn" class="email-wish-btn">📧 Send Wish to Me</button>
+            </div>
+            <p id="wishFeedback" style="font-size:0.7rem; margin-top:5px;"></p>
         </div>
         <div class="signature-love">forever written in stars</div>
     </div>
@@ -349,8 +422,8 @@
             <p>🌟 Glawins, this is not goodbye — it's a beginning. Every day with you is a slide worth celebrating. Thank you for being you.</p>
             <p>🎀 May this year bring you closer to your dreams. I love you more than confetti can express. ✨</p>
             <div id="voiceNotePlayer" style="margin: 1rem 0; text-align:center; background:#fce4db; border-radius: 2rem; padding: 0.6rem;">
-                <span>🎙️ voice love note (click mic to record)</span>
-                <button id="recordVoiceBtn" style="background:#ff9f8f; border:none; border-radius:50%; padding:8px 14px;">🎤 Record</button>
+                <span>🎙️ voice love note (record a message for yourself or for me)</span>
+                <button id="recordVoiceBtn" style="background:#ff9f8f; border:none; border-radius:50%; padding:8px 14px; margin-top:6px; cursor:pointer;">🎤 Record</button>
                 <audio id="voiceAudio" controls style="width:100%; margin-top:6px; display:none;"></audio>
             </div>
         </div>
@@ -412,13 +485,14 @@
             const candles = document.querySelectorAll('.candle');
             candles.forEach(c => { if(c.getAttribute('data-blown')==='false') { c.classList.add('blown'); c.setAttribute('data-blown','true'); c.style.opacity='0.4'; candlesBlown++; } });
             if(candlesBlown >= 5) {
-                document.getElementById('candleMsg').innerHTML = '✨✨ WISH GRANTED! Happy Birthday Glawins! ✨✨';
+                document.getElementById('candleMsg').innerHTML = '✨✨ WISH GRANTED! Now write your secret wish below! ✨✨';
                 celebrationBurst(); grandBurst();
-            } else { document.getElementById('candleMsg').innerHTML = '💨 blow again! tap the button or click each candle!'; }
+                // auto-scroll to wish box on next slide maybe
+            } else { document.getElementById('candleMsg').innerHTML = '💨 keep blowing! tap each candle or click the blow button!'; }
         }
         function grandBurst() { for(let i=0;i<70;i++) createFloatingHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight); }
         document.getElementById('blowCandlesBtn')?.addEventListener('click', blowCandles);
-        document.querySelectorAll('.candle').forEach(c => { c.addEventListener('click',()=>{ if(c.getAttribute('data-blown')==='false'){ c.classList.add('blown'); c.setAttribute('data-blown','true'); c.style.opacity='0.4'; candlesBlown++; if(candlesBlown>=5){document.getElementById('candleMsg').innerHTML='✨ WISH ACTIVE! ✨'; grandBurst();}} }); });
+        document.querySelectorAll('.candle').forEach(c => { c.addEventListener('click',()=>{ if(c.getAttribute('data-blown')==='false'){ c.classList.add('blown'); c.setAttribute('data-blown','true'); c.style.opacity='0.4'; candlesBlown++; if(candlesBlown>=5){document.getElementById('candleMsg').innerHTML='✨ WISH ACTIVE! ✨ Write your wish now →'; grandBurst();}} }); });
         
         // TYPEWRITER EFFECT for slide 3
         let typewriterStarted = false;
@@ -429,16 +503,42 @@
             const container = document.getElementById('typewriterText');
             container.innerHTML = '';
             let i=0;
-            function typing() { if(i<fullText.length) { container.innerHTML += fullText.charAt(i); i++; setTimeout(typing, 45); } }
+            function typing() { if(i<fullText.length) { container.innerHTML += fullText.charAt(i); i++; setTimeout(typing, 40); } }
             typing();
         }
         
-        // WISH localStorage + feedback
+        // WISH: Save, retrieve, and EMAIL to you
         const savedWish = localStorage.getItem('GlawinsWish');
-        if(savedWish) document.getElementById('secretWish') && (document.getElementById('secretWish').value = savedWish);
+        if(savedWish && document.getElementById('secretWish')) document.getElementById('secretWish').value = savedWish;
         document.getElementById('saveWishBtn')?.addEventListener('click',()=>{ const wish=document.getElementById('secretWish').value; localStorage.setItem('GlawinsWish',wish); document.getElementById('wishFeedback').innerText='✨ Your wish is sealed with stardust ✨'; setTimeout(()=>document.getElementById('wishFeedback').innerText='',2000); });
         
-        // ---------- AUDIO + VOICE RECORDING (simplified, works with MediaRecorder) ----------
+        // EMAIL WISH TO YOU (replace with YOUR email)
+        document.getElementById('emailWishBtn')?.addEventListener('click',()=>{
+            let wish = localStorage.getItem('GlawinsWish') || document.getElementById('secretWish')?.value || 'No wish written yet';
+            if(wish === 'No wish written yet' && document.getElementById('secretWish')?.value) wish = document.getElementById('secretWish').value;
+            const subject = encodeURIComponent(`💖 Glawins's Birthday Wish 💖`);
+            const body = encodeURIComponent(`✨✨✨ HER SECRET WISH ✨✨✨\n\n"${wish}"\n\n— Sent with love from the birthday card magic.`);
+            window.location.href = `mailto:YOUR_EMAIL@example.com?subject=${subject}&body=${body}`;
+            document.getElementById('wishFeedback').innerText = '📧 Email opened! Send it to me 💌';
+            setTimeout(()=>document.getElementById('wishFeedback').innerText='',2500);
+        });
+        
+        // SECRET BUTTON FOR YOU (the creator) to see her wish instantly
+        document.getElementById('secretViewWishBtn')?.addEventListener('click',()=>{
+            const stored = localStorage.getItem('GlawinsWish');
+            if(stored && stored.trim() !== '') {
+                alert(`💖 GLAWINS'S SECRET WISH 💖\n\n"${stored}"\n\n✨ Keep this magical! ✨`);
+            } else {
+                const currentInput = document.getElementById('secretWish')?.value;
+                if(currentInput && currentInput.trim() !== '') {
+                    alert(`💖 CURRENT WISH (not yet saved but typed):\n\n"${currentInput}"`);
+                } else {
+                    alert(`🌸 No wish saved yet. She will write one soon. Be patient, love. 🌸`);
+                }
+            }
+        });
+        
+        // VOICE RECORDING (works in modern browsers)
         let mediaRecorder; let audioChunks=[];
         const recordBtn = document.getElementById('recordVoiceBtn');
         const audioPlayer = document.getElementById('voiceAudio');
@@ -462,12 +562,12 @@
                     };
                     mediaRecorder.start();
                     recordBtn.innerText='⏹️ Stop';
-                }catch(e){ alert('Please allow mic for voice magic'); }
+                }catch(e){ alert('Please allow microphone access to record voice note 💖'); }
             });
         }
         
-        // music (simple web audio bell)
-        let audioCtx=null; let musicActive=false;
+        // music (web audio chime)
+        let audioCtx=null;
         function playChime(){
             if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
             if(audioCtx.state==='suspended') audioCtx.resume();
@@ -481,8 +581,8 @@
         
         // share magic
         document.getElementById('shareBtn')?.addEventListener('click',()=>{
-            if(navigator.share) navigator.share({title:'Birthday Magic for Glawins', text:'You are invited to a beautiful love card!', url:window.location.href});
-            else alert('💖 Copy this link & share the love!');
+            if(navigator.share) navigator.share({title:'Birthday Magic for Glawins', text:'✨ A beautiful love letter birthday card ✨', url:window.location.href});
+            else alert('💖 Copy this link & share the love! 💖');
         });
         
         // navigation
@@ -494,10 +594,15 @@
         
         function ultimateGrandFinale(){
             for(let i=0;i<140;i++) createFloatingHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight);
-            alert('✨ HAPPY BIRTHDAY GLAWINS! You are the most loved person ✨');
+            alert('✨✨✨ HAPPY BIRTHDAY GLAWINS! You are the most loved person in the universe! ✨✨✨');
         }
         fallingPetalsInterval();
         updateSlides();
+        
+        // Instruction for photos (console friendly)
+        console.log("%c📸 PHOTO INSTRUCTIONS: Replace 'images/glawins-smile.jpg' etc. with your actual image paths. Create an 'images' folder or use full URLs.", "color: #ff4d6d; font-size: 14px");
+        console.log("%c🔒 SECRET WISH BUTTON: Click the bottom-left 'View Her Secret Wish' button to see what she wished for!", "color: #ff9f4a; font-size: 12px");
+        console.log("%c📧 EMAIL WISH: Replace 'YOUR_EMAIL@example.com' in the email function with YOUR real email address.", "color: #ff6b81");
     })();
 </script>
 </body>
