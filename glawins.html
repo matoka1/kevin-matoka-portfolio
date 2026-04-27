@@ -3,10 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>✨ Glawins · The Ultimate Birthday Journey ✨ | Love, Slides & Magic</title>
+    <title>✨ Happy Birthday Glawins! ✨ | A Love Letter Just For You</title>
     
     <!-- Google Fonts Premium -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
     
     <style>
         * {
@@ -21,10 +27,49 @@
             font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
             position: relative;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="27" viewBox="0 0 24 27"><path fill="%23ff4d6d" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') 12 10, auto;
+            transition: background 0.4s ease;
         }
 
-        /* falling petals & particles */
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background: radial-gradient(circle at 20% 30%, #1a1a2e, #16213e, #0f3460);
+        }
+        body.dark-mode .slide {
+            background: rgba(20, 20, 40, 0.95);
+            box-shadow: 0 35px 65px rgba(0,0,0,0.5);
+        }
+        body.dark-mode .message-body,
+        body.dark-mode .signature-love,
+        body.dark-mode .sub {
+            color: #f0e6ff;
+        }
+        body.dark-mode .photo-card,
+        body.dark-mode .cake-area,
+        body.dark-mode .wish-box,
+        body.dark-mode .guestbook {
+            background: #2a2a3e;
+        }
+
+        /* Dark mode toggle - beautiful and obvious */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,245,240,0.95);
+            backdrop-filter: blur(12px);
+            border: none;
+            border-radius: 50px;
+            padding: 10px 18px;
+            cursor: pointer;
+            z-index: 1002;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: 0.2s;
+            font-weight: 600;
+        }
+        .dark-mode-toggle:hover { transform: scale(1.05); }
+
+        /* falling petals */
         .petal {
             position: fixed;
             pointer-events: none;
@@ -45,18 +90,16 @@
             left: 0;
             width: 100%;
             height: 5px;
-            background: rgba(255,220,210,0.5);
+            background: rgba(255,220,210,0.4);
             z-index: 10000;
         }
         .progress-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #ff4d6d, #ff9f4a);
+            background: linear-gradient(90deg, #ff4d6d, #ff9f4a, #ffd166);
             transition: width 0.4s ease;
-            border-radius: 0 4px 4px 0;
         }
 
-        /* main container */
         .slides-container {
             width: 100%;
             min-height: 100vh;
@@ -67,28 +110,74 @@
             padding: 2rem 1.5rem 5rem;
         }
 
+        /* Envelope styling */
+        .envelope {
+            position: relative;
+            width: 220px;
+            height: 150px;
+            background: #ffb7a3;
+            margin: 30px auto;
+            border-radius: 0 0 20px 20px;
+            cursor: pointer;
+            transition: 0.4s;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+        }
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: -45px;
+            left: 0;
+            width: 100%;
+            height: 65px;
+            background: #ff9f87;
+            clip-path: polygon(0% 0%, 100% 0%, 50% 80%);
+            transition: 0.4s;
+        }
+        .envelope.opened::before {
+            transform: rotateX(180deg);
+            top: -35px;
+        }
+        .envelope-letter {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            text-align: center;
+            opacity: 0;
+            transition: 0.4s;
+            pointer-events: none;
+            font-weight: 600;
+            color: #ff4d6d;
+        }
+        .envelope.opened .envelope-letter {
+            opacity: 1;
+            transform: translateY(-40px);
+        }
+
         .slide {
-            max-width: 800px;
+            max-width: 850px;
             width: 100%;
             background: rgba(255, 252, 245, 0.98);
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(8px);
             border-radius: 3rem;
-            box-shadow: 0 35px 65px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(255, 225, 215, 0.9);
-            padding: 2rem;
-            transition: all 0.3s;
+            box-shadow: 0 35px 65px rgba(0, 0, 0, 0.3);
+            padding: 2.5rem;
             margin: 0 auto;
-            opacity: 1;
             animation: slideGlow 0.7s ease;
         }
 
         @keyframes slideGlow {
-            0% { opacity: 0; transform: scale(0.96) translateY(20px); }
+            0% { opacity: 0; transform: scale(0.96) translateY(30px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         h1, .slide h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 2.6rem;
+            font-size: 2.8rem;
             background: linear-gradient(135deg, #c44569, #ff7b89, #f9a26c);
             background-clip: text;
             -webkit-background-clip: text;
@@ -97,105 +186,149 @@
         }
 
         .emoji-glow {
-            font-size: 3.5rem;
-            letter-spacing: 10px;
+            font-size: 3.8rem;
+            letter-spacing: 12px;
             animation: gentleWobble 2s infinite;
         }
 
         @keyframes gentleWobble {
             0%,100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
+            50% { transform: translateY(-8px); }
         }
 
         .sub {
-            background: rgba(255, 210, 200, 0.5);
+            background: rgba(255, 210, 200, 0.6);
             display: inline-block;
-            padding: 0.3rem 1.5rem;
+            padding: 0.3rem 1.8rem;
             border-radius: 60px;
-            font-weight: 500;
+            font-weight: 600;
             color: #b14564;
             margin-bottom: 1.2rem;
         }
 
         .message-body {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.22rem;
-            line-height: 1.65;
+            font-size: 1.25rem;
+            line-height: 1.7;
             color: #2c1a15;
-            text-align: left;
             margin: 1rem 0;
         }
 
-        /* PHOTO GRID - 6 slots ready for your images */
+        /* Polaroid Photo Grid */
         .photo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.5rem;
             margin: 1.5rem 0;
         }
 
         .photo-card {
-            background: #fff5ef;
-            border-radius: 2rem;
-            padding: 0.8rem;
+            background: #fff8f0;
+            border-radius: 1.2rem 1.2rem 1.8rem 1.8rem;
+            padding: 0.8rem 0.8rem 1rem;
             text-align: center;
-            transition: transform 0.2s;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: rotate(var(--rotation, 0deg));
         }
-        .photo-card:hover { transform: scale(1.02); background: #ffe7df; }
+        .photo-card:nth-child(1) { --rotation: -2deg; }
+        .photo-card:nth-child(2) { --rotation: 3deg; }
+        .photo-card:nth-child(3) { --rotation: -1deg; }
+        .photo-card:nth-child(4) { --rotation: 2deg; }
+        .photo-card:nth-child(5) { --rotation: -3deg; }
+        .photo-card:nth-child(6) { --rotation: 1deg; }
+        .photo-card:hover {
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
         .photo-placeholder {
             background: linear-gradient(145deg, #ffe0d4, #ffcdc0);
-            border-radius: 1.5rem;
-            height: 160px;
+            border-radius: 1rem;
+            height: 170px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 3rem;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             overflow: hidden;
         }
         .photo-placeholder img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 1.5rem;
+            border-radius: 1rem;
         }
-        .photo-card span { font-weight: 500; color: #b54662; font-size: 0.8rem; }
+        .photo-card span { font-weight: 600; color: #b54662; font-size: 0.85rem; }
 
-        /* candle section */
+        /* Candle Section */
         .cake-area {
-            background: #fff2e9;
+            background: linear-gradient(135deg, #fff2e9, #ffe8df);
             border-radius: 2rem;
-            padding: 1.2rem;
+            padding: 1.5rem;
             text-align: center;
             margin: 1rem 0;
         }
         .candles {
             display: flex;
             justify-content: center;
-            gap: 1rem;
+            gap: 1.2rem;
             margin: 1rem;
             flex-wrap: wrap;
         }
         .candle {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             cursor: pointer;
             transition: all 0.2s;
-            filter: drop-shadow(0 0 3px orange);
+            filter: drop-shadow(0 0 4px rgba(255,140,0,0.8));
         }
+        .candle:hover { transform: scale(1.1); }
         .candle.blown {
             opacity: 0.3;
-            filter: grayscale(0.6);
+            filter: grayscale(0.7);
         }
         .blow-btn {
-            background: #ffc2a1;
+            background: linear-gradient(145deg, #ffb885, #ff9f6e);
             border: none;
-            padding: 10px 24px;
+            padding: 12px 28px;
             border-radius: 60px;
             font-weight: bold;
-            margin-top: 8px;
             cursor: pointer;
             font-size: 1rem;
+            transition: 0.2s;
+        }
+        .blow-btn:hover { transform: scale(1.02); }
+
+        /* Guestbook */
+        .guestbook {
+            background: #fff7f0;
+            border-radius: 2rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .guestbook-entries {
+            max-height: 120px;
+            overflow-y: auto;
+            margin: 10px 0;
+            padding: 8px;
+        }
+        .guestbook-entry {
+            background: #ffe8e0;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        .guestbook-input-area {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .guestbook-input {
+            flex: 1;
+            padding: 8px;
+            border-radius: 40px;
+            border: 1px solid #ffcec0;
+            font-family: inherit;
         }
 
         .signature-love {
@@ -211,91 +344,96 @@
         .nav-buttons {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
+            gap: 1.8rem;
             margin-top: 2rem;
         }
         .nav-btn {
             background: linear-gradient(145deg, #ff4d6d, #ff708d);
             border: none;
-            padding: 0.8rem 2rem;
+            padding: 0.9rem 2.2rem;
             font-weight: bold;
             color: white;
             border-radius: 60px;
             cursor: pointer;
+            font-size: 1rem;
             transition: 0.2s;
-            font-family: 'Poppins', sans-serif;
-            box-shadow: 0 6px 14px rgba(0,0,0,0.2);
         }
+        .nav-btn:hover { transform: translateY(-2px); }
 
-        .progress-dots { display: flex; justify-content: center; gap: 10px; margin: 1.2rem 0; }
-        .dot { width: 10px; height: 10px; background: #f5b0aa; border-radius: 20px; transition: 0.2s; cursor: pointer; }
-        .dot.active-dot { background: #ff4d6d; width: 28px; }
+        .progress-dots { display: flex; justify-content: center; gap: 12px; margin: 1.5rem 0; }
+        .dot { width: 10px; height: 10px; background: #f5b0aa; border-radius: 20px; transition: 0.3s; cursor: pointer; }
+        .dot.active-dot { background: #ff4d6d; width: 32px; }
 
-        /* floating tools */
-        .floating-tools {
+        .movie-mode-btn {
             position: fixed;
-            bottom: 20px;
-            right: 15px;
-            display: flex;
-            gap: 10px;
+            bottom: 25px;
+            right: 20px;
+            background: rgba(255,245,240,0.96);
+            backdrop-filter: blur(16px);
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
             z-index: 1001;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-        }
-        .icon-btn {
-            background: rgba(255, 245, 240, 0.95);
-            backdrop-filter: blur(12px);
-            border: none;
-            border-radius: 40px;
-            padding: 8px 16px;
-            font-weight: 500;
-            cursor: pointer;
+            font-size: 0.9rem;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            font-size: 0.85rem;
-        }
-        .secret-btn {
-            position: fixed;
-            bottom: 20px;
-            left: 15px;
-            background: rgba(0,0,0,0.6);
-            color: white;
-            border: none;
-            border-radius: 40px;
-            padding: 6px 12px;
-            font-size: 11px;
-            cursor: pointer;
-            z-index: 1002;
-            font-family: monospace;
         }
 
-        @media (max-width: 650px) {
-            .slide { padding: 1.4rem; }
-            h1 { font-size: 2rem; }
-            .message-body { font-size: 1rem; }
+        .music-toggle {
+            position: fixed;
+            bottom: 25px;
+            left: 20px;
+            background: rgba(255,245,240,0.96);
+            backdrop-filter: blur(16px);
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 1001;
+            font-size: 0.9rem;
         }
-        
+
+        .social-share {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .social-btn {
+            background: #ffb7a3;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+        .social-btn:hover { transform: scale(1.05); background: #ff9f87; }
+
         .wish-box {
-            background: #fff7f0;
+            background: linear-gradient(135deg, #fff7f0, #fff0e8);
             border-radius: 2rem;
-            padding: 1rem;
+            padding: 1.2rem;
             margin-top: 1rem;
             text-align: center;
         }
         .wish-input {
             width: 90%;
-            padding: 10px;
+            padding: 12px;
             border-radius: 60px;
-            border: 1px solid #ffb7b0;
+            border: 1px solid #ffcec0;
             background: white;
             font-family: inherit;
-        }
-        .email-wish-btn {
-            background: #ff9f8f;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 40px;
             margin-top: 8px;
-            cursor: pointer;
+        }
+
+        @media (max-width: 650px) {
+            .slide { padding: 1.5rem; }
+            h1, .slide h2 { font-size: 2rem; }
+            .emoji-glow { font-size: 2.5rem; }
         }
     </style>
 </head>
@@ -303,81 +441,69 @@
 
 <div class="progress-bar-container"><div class="progress-fill" id="progressFill"></div></div>
 
-<!-- SECRET BUTTON FOR YOU TO SEE HER WISH (only you know this) -->
-<button class="secret-btn" id="secretViewWishBtn">🔒 View Her Secret Wish (You)</button>
-
-<div class="floating-tools">
-    <button class="icon-btn" id="musicToggleBtn">🎵 Play Melody</button>
-    <button class="icon-btn" id="voiceMsgBtn">🎤 Voice Note</button>
-    <button class="icon-btn" id="shareBtn">📤 Share Magic</button>
-</div>
+<button class="dark-mode-toggle" id="darkModeToggle"><i class="fas fa-moon"></i> Night Mode ✨</button>
+<button class="music-toggle" id="musicToggleBtn"><i class="fas fa-music"></i> Play Melody</button>
+<button class="movie-mode-btn" id="movieModeBtn"><i class="fas fa-film"></i> Movie Mode</button>
 
 <div class="slides-container" id="slidesContainer">
-    <!-- SLIDE 0 - intro -->
+    <!-- SLIDE 0 - Envelope Surprise -->
     <div class="slide" data-index="0">
-        <div class="emoji-glow">🎂💖✨🎈</div>
-        <h1>Glawins, this is YOUR story</h1>
-        <div class="sub">a birthday experience made of love & slides</div>
-        <div class="message-body">
-            <p>🌸 Welcome, beautiful soul. Each slide holds a piece of my heart. Swipe, click, and feel the magic.</p>
-            <p>💫 You are about to laugh, melt, and maybe tear up. Let's begin →</p>
+        <div class="emoji-glow">💌✨🎁</div>
+        <h1>A Secret Message for You</h1>
+        <div class="sub">something special is waiting...</div>
+        <div class="envelope" id="envelope">
+            <div class="envelope-letter">
+                ❤️ Open me with love! ❤️
+            </div>
         </div>
-        <div class="signature-love">✨ with every sparkle, me</div>
+        <div class="message-body" id="envelopeMessage" style="display:none;">
+            <p>💖 Surprise, Glawins! This card was made with every beat of my heart. Every slide, every candle, every word — all for YOU.</p>
+            <p>Now, let the journey begin... ➡️</p>
+        </div>
+        <div class="signature-love">click the envelope to begin ✨</div>
     </div>
 
-    <!-- SLIDE 1 - PHOTO GALLERY (6 slots ready for your photos of her and together) -->
+    <!-- SLIDE 1 - Polaroid Photo Gallery -->
     <div class="slide" data-index="1">
-        <div class="emoji-glow">📸💞👩‍❤️‍👨</div>
+        <div class="emoji-glow">📸💞🎞️</div>
         <h2>our treasury of moments</h2>
-        <div class="sub">✨ photos of you, photos of us ✨</div>
+        <div class="sub">✨ polaroid memories, frozen in time ✨</div>
         <div class="photo-grid" id="photoGrid">
-            <!-- REPLACE the src="..." with YOUR actual image paths -->
             <div class="photo-card">
                 <div class="photo-placeholder">
-                    <img src="images/glawins-smile.jpg" alt="Glawins smiling" onerror="this.parentElement.innerHTML='🌅'; this.style.display='none'">
+                    <img src="https://raw.githubusercontent.com/matoka1/kevin-matoka-portfolio/main/glawins-smile.jpg" alt="Glawins smiling">
                 </div>
                 <span>her beautiful smile ✨</span>
             </div>
             <div class="photo-card">
-                <div class="photo-placeholder">
-                    <img src="images/us-together.jpg" alt="Us together" onerror="this.parentElement.innerHTML='💑'; this.style.display='none'">
-                </div>
-                <span>our favorite day ❤️</span>
+                <div class="photo-placeholder"><div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; font-size:3rem;">🌅</div></div>
+                <span>sunshine memories</span>
             </div>
             <div class="photo-card">
-                <div class="photo-placeholder">
-                    <img src="images/her-laugh.jpg" alt="Glawins laughing" onerror="this.parentElement.innerHTML='😂'; this.style.display='none'">
-                </div>
-                <span>that contagious laugh 😂</span>
+                <div class="photo-placeholder"><div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; font-size:3rem;">🎨</div></div>
+                <span>art & laughter</span>
             </div>
             <div class="photo-card">
-                <div class="photo-placeholder">
-                    <img src="images/couple-memory.jpg" alt="Couple memory" onerror="this.parentElement.innerHTML='🌅'; this.style.display='none'">
-                </div>
-                <span>memory lane 🎞️</span>
+                <div class="photo-placeholder"><div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; font-size:3rem;">🌻</div></div>
+                <span>golden days</span>
             </div>
             <div class="photo-card">
-                <div class="photo-placeholder">
-                    <img src="images/her-candid.jpg" alt="Candid moment" onerror="this.parentElement.innerHTML='🌸'; this.style.display='none'">
-                </div>
-                <span>candid perfection 🌸</span>
+                <div class="photo-placeholder"><div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; font-size:3rem;">🍕</div></div>
+                <span>favorite dates</span>
             </div>
             <div class="photo-card">
-                <div class="photo-placeholder">
-                    <img src="images/us-hug.jpg" alt="Us hugging" onerror="this.parentElement.innerHTML='🤗'; this.style.display='none'">
-                </div>
-                <span>our hug 🤗💖</span>
+                <div class="photo-placeholder"><div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; font-size:3rem;">💑</div></div>
+                <span>together always</span>
             </div>
         </div>
-        <div class="message-body"><p><em>💬 “Every picture holds a whisper of us. Replace the image paths with your actual photos — just put them in an 'images' folder or use full URLs.”</em></p></div>
-        <div class="signature-love">📷 forever developing memories</div>
+        <div class="signature-love">📷 hover over photos to see them straighten ✨</div>
     </div>
 
-    <!-- SLIDE 2 - birthday wishes + blow candle -->
+    <!-- SLIDE 2 - Blow Candles -->
     <div class="slide" data-index="2">
-        <div class="emoji-glow">🎂🕯️🎁</div>
+        <div class="emoji-glow">🎂🕯️🎁✨</div>
         <h2>make a wish</h2>
-        <div class="sub">blow the candles, Glawins!</div>
+        <div class="sub">blow the candles and feel the magic!</div>
         <div class="cake-area">
             <div class="candles" id="candleContainer">
                 <div class="candle" data-blown="false">🕯️</div>
@@ -386,45 +512,61 @@
                 <div class="candle" data-blown="false">🕯️</div>
                 <div class="candle" data-blown="false">🕯️</div>
             </div>
-            <button class="blow-btn" id="blowCandlesBtn">💨 Click to Blow / Tap 💨</button>
-            <p id="candleMsg" style="margin-top: 8px; font-style:italic;">🎈 make a wish...</p>
+            <button class="blow-btn" id="blowCandlesBtn"><i class="fas fa-wind"></i> Blow / Tap to Extinguish</button>
+            <p id="candleMsg" style="margin-top: 12px; font-style:italic;">🎈 make a secret wish... then blow!</p>
         </div>
         <div class="message-body"><p>🎂 Happy Birthday my love! I wish you endless smiles, spontaneous adventures, and all the cake your heart desires. You deserve galaxies of happiness.</p></div>
-        <div class="signature-love">💖 your biggest fan</div>
+        <div class="signature-love">💖 your biggest fan, always</div>
     </div>
 
-    <!-- SLIDE 3 - secret love letter + typewriter effect + wish box + email to you -->
+    <!-- SLIDE 3 - Love Letter + Wish + Guestbook -->
     <div class="slide" data-index="3">
-        <div class="emoji-glow">💌📜✨</div>
+        <div class="emoji-glow">💌📜✨🕊️</div>
         <h2>a letter just for you</h2>
         <div class="sub">from my heart to yours</div>
         <div class="message-body" id="typewriterContainer">
             <p id="typewriterText"></p>
         </div>
+        
         <div class="wish-box">
-            <label>🤫 write your secret birthday wish (only you see it, then you can email it to me):</label>
+            <label><i class="fas fa-star"></i> write your secret birthday wish:</label>
             <input type="text" id="secretWish" class="wish-input" placeholder="e.g., travel the world, more joy, us forever...">
-            <div style="display: flex; gap: 8px; justify-content: center; margin-top: 8px;">
-                <button id="saveWishBtn" style="background:#ffb7b0; border:none; padding:6px 16px; border-radius:40px; cursor:pointer;">💾 Seal Wish</button>
-                <button id="emailWishBtn" class="email-wish-btn">📧 Send Wish to Me</button>
+            <button id="saveWishBtn" style="background:#ffb7b0; border:none; padding:8px 20px; border-radius:40px; margin-top:10px; cursor:pointer;"><i class="fas fa-save"></i> Seal My Wish</button>
+            <p id="wishFeedback" style="font-size:0.75rem; margin-top:8px; color:#b85c5c;"></p>
+        </div>
+        
+        <!-- Love Notes Guestbook -->
+        <div class="guestbook">
+            <p><i class="fas fa-book-heart"></i> Love Notes from You <i class="fas fa-heart" style="color:#ff4d6d;"></i></p>
+            <div class="guestbook-entries" id="guestbookEntries"></div>
+            <div class="guestbook-input-area">
+                <input type="text" id="guestbookInput" class="guestbook-input" placeholder="Leave a love note...">
+                <button id="addGuestbookBtn" style="background:#ffb7b0; border:none; padding:8px 18px; border-radius:40px; cursor:pointer;">Post</button>
             </div>
-            <p id="wishFeedback" style="font-size:0.7rem; margin-top:5px;"></p>
         </div>
         <div class="signature-love">forever written in stars</div>
     </div>
 
-    <!-- SLIDE 4 - final celebration & voice note -->
+    <!-- SLIDE 4 - Grand Finale -->
     <div class="slide" data-index="4">
-        <div class="emoji-glow">🌈🎉💕🕊️</div>
+        <div class="emoji-glow">🌈🎉💕🕊️🎀</div>
         <h2>happily ever after</h2>
-        <div class="sub">you are deeply, wildly loved</div>
+        <div class="sub">you are deeply, wildly, eternally loved</div>
         <div class="message-body">
-            <p>🌟 Glawins, this is not goodbye — it's a beginning. Every day with you is a slide worth celebrating. Thank you for being you.</p>
-            <p>🎀 May this year bring you closer to your dreams. I love you more than confetti can express. ✨</p>
-            <div id="voiceNotePlayer" style="margin: 1rem 0; text-align:center; background:#fce4db; border-radius: 2rem; padding: 0.6rem;">
-                <span>🎙️ voice love note (record a message for yourself or for me)</span>
-                <button id="recordVoiceBtn" style="background:#ff9f8f; border:none; border-radius:50%; padding:8px 14px; margin-top:6px; cursor:pointer;">🎤 Record</button>
-                <audio id="voiceAudio" controls style="width:100%; margin-top:6px; display:none;"></audio>
+            <p>🌟 Glawins, this is not goodbye — it's a beautiful beginning. Every day with you is a slide worth celebrating. Thank you for being the most radiant soul.</p>
+            <p>🎀 May this year bring you closer to every dream. I love you more than confetti can express, beyond all the stars. ✨</p>
+            
+            <div id="voiceNotePlayer" style="margin: 1.5rem 0; text-align:center; background:linear-gradient(135deg,#fce4db,#fef0ea); border-radius: 2rem; padding: 1rem;">
+                <button id="recordVoiceBtn" style="background:#ff9f8f; border:none; border-radius:50px; padding:10px 20px; cursor:pointer; font-weight:600;"><i class="fas fa-microphone-alt"></i> Record Voice Note</button>
+                <audio id="voiceAudio" controls style="width:100%; margin-top:8px; display:none; border-radius:50px;"></audio>
+                <p style="font-size:0.7rem; margin-top:5px;">record a message, then play it back 💌</p>
+            </div>
+            
+            <!-- Social Share Buttons -->
+            <div class="social-share">
+                <button class="social-btn" id="shareWhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                <button class="social-btn" id="shareTelegram"><i class="fab fa-telegram"></i> Telegram</button>
+                <button class="social-btn" id="shareCopy"><i class="fas fa-link"></i> Copy Link</button>
             </div>
         </div>
         <div class="signature-love">eternally yours, forever & always ❤️</div>
@@ -432,177 +574,198 @@
 </div>
 
 <div class="nav-buttons">
-    <button class="nav-btn" id="prevBtn">◀ Previous</button>
-    <button class="nav-btn" id="nextBtn">Next ▶</button>
+    <button class="nav-btn" id="prevBtn"><i class="fas fa-arrow-left"></i> Previous</button>
+    <button class="nav-btn" id="nextBtn">Next <i class="fas fa-arrow-right"></i></button>
 </div>
 <div class="progress-dots" id="dotsContainer"></div>
-<footer style="text-align:center; color:#fff3e8; margin-top:1rem;">✨ tap, swipe, blow the candles — you are magic ✨</footer>
 
 <script>
     (function(){
-        // ---------- SLIDES MANAGER ----------
+        // Sound effects
+        let audioCtx = null;
+        function playSound(type) {
+            if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+            if(audioCtx.state==='suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            if(type === 'pop') { osc.frequency.value = 880; gain.gain.value = 0.08; }
+            else if(type === 'whoosh') { osc.frequency.value = 440; gain.gain.value = 0.1; }
+            else if(type === 'ding') { osc.frequency.value = 1318.52; gain.gain.value = 0.06; }
+            osc.type = 'sine';
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime+0.25);
+            osc.stop(audioCtx.currentTime+0.25);
+        }
+        
+        // Dark Mode
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            playSound('pop');
+        });
+        
+        // Envelope on first slide
+        let envelopeOpened = false;
+        const envelope = document.getElementById('envelope');
+        const envelopeMsg = document.getElementById('envelopeMessage');
+        if(envelope) {
+            envelope.addEventListener('click', () => {
+                if(!envelopeOpened) {
+                    envelope.classList.add('opened');
+                    playSound('pop');
+                    setTimeout(() => {
+                        envelopeMsg.style.display = 'block';
+                    }, 300);
+                    envelopeOpened = true;
+                }
+            });
+        }
+        
+        // Slides Manager
         const slides = document.querySelectorAll('.slide');
         let currentIdx = 0;
         const total = slides.length;
+        let movieModeInterval = null;
+        
         function updateSlides() {
-            slides.forEach((s, i) => {
-                s.style.display = i === currentIdx ? 'block' : 'none';
-            });
-            updateDots();
-            updateProgress();
-            triggerMiniConfetti();
+            slides.forEach((s, i) => { s.style.display = i === currentIdx ? 'block' : 'none'; });
+            updateDots(); updateProgress(); triggerMiniConfetti();
             if(currentIdx === 2) initCandles(); 
-            if(currentIdx === 3) startTypewriterEffect();
+            if(currentIdx === 3 && !window.typewriterStarted) startTypewriterEffect();
+            if(currentIdx === 3) loadGuestbook();
+            playSound('pop');
         }
+        
         function updateProgress() { const percent = ((currentIdx+1)/total)*100; document.getElementById('progressFill').style.width = percent+'%'; }
+        
         function updateDots() {
             const cont = document.getElementById('dotsContainer'); cont.innerHTML='';
             for(let i=0;i<total;i++) {
                 let d = document.createElement('div'); d.classList.add('dot');
                 if(i===currentIdx) d.classList.add('active-dot');
-                d.addEventListener('click',()=>{ if(i!==currentIdx){ currentIdx=i; updateSlides(); celebrationBurst(); } });
+                d.addEventListener('click',()=>{ if(i!==currentIdx){ currentIdx=i; updateSlides(); celebrationBurst(); playSound('pop'); } });
                 cont.appendChild(d);
             }
         }
-        function triggerMiniConfetti() { for(let i=0;i<12;i++) createFloatingHeart(Math.random()*window.innerWidth, window.innerHeight-50); }
+        
+        function triggerMiniConfetti() { for(let i=0;i<12;i++) createFloatingHeart(Math.random()*window.innerWidth, window.innerHeight-40); }
         function celebrationBurst() { for(let i=0;i<40;i++) createFloatingHeart(Math.random()*window.innerWidth, window.innerHeight/2); }
+        
         function createFloatingHeart(x,y) {
-            let el=document.createElement('div'); el.className='petal'; el.innerText=['❤️','💖','🌸','✨','🎀','💕'][Math.floor(Math.random()*6)];
+            let el=document.createElement('div'); el.className='petal'; 
+            el.innerText=['❤️','💖','🌸','✨','🎀','💕','🕊️'][Math.floor(Math.random()*7)];
             el.style.left=x+'px'; el.style.top=y+'px'; el.style.fontSize=(Math.random()*1.2+0.9)+'rem';
             document.body.appendChild(el); setTimeout(()=>el.remove(),1500);
         }
-        function fallingPetalsInterval() { setInterval(()=>{ if(Math.random()>0.85){ let p=document.createElement('div'); p.className='petal'; p.innerText=['🌸','🌼','🍂','💮'][Math.floor(Math.random()*4)]; p.style.left=Math.random()*window.innerWidth+'px'; p.style.fontSize=(Math.random()*0.9+0.8)+'rem'; document.body.appendChild(p); setTimeout(()=>p.remove(),5000); } }, 800); }
         
-        // CANDLE BLOW FEATURE
+        // Candle Blow
         let candlesBlown = 0;
         function initCandles() {
             const candles = document.querySelectorAll('.candle');
             candlesBlown = 0;
             candles.forEach(c => { c.classList.remove('blown'); c.setAttribute('data-blown','false'); c.style.opacity='1'; });
-            document.getElementById('candleMsg').innerHTML = '🎂 Make a wish and blow out the candles!';
+            document.getElementById('candleMsg').innerHTML = '🎂 Make a wish and blow out each candle!';
         }
         function blowCandles() {
             const candles = document.querySelectorAll('.candle');
             candles.forEach(c => { if(c.getAttribute('data-blown')==='false') { c.classList.add('blown'); c.setAttribute('data-blown','true'); c.style.opacity='0.4'; candlesBlown++; } });
-            if(candlesBlown >= 5) {
-                document.getElementById('candleMsg').innerHTML = '✨✨ WISH GRANTED! Now write your secret wish below! ✨✨';
-                celebrationBurst(); grandBurst();
-                // auto-scroll to wish box on next slide maybe
-            } else { document.getElementById('candleMsg').innerHTML = '💨 keep blowing! tap each candle or click the blow button!'; }
+            playSound('whoosh');
+            if(candlesBlown >= 5) { 
+                document.getElementById('candleMsg').innerHTML = '✨✨ MAGIC GRANTED! Now write your wish! ✨✨'; 
+                celebrationBurst(); grandBurst(); 
+            } else { document.getElementById('candleMsg').innerHTML = '💨 keep blowing! tap each candle or click blow!'; }
         }
-        function grandBurst() { for(let i=0;i<70;i++) createFloatingHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight); }
+        function grandBurst() { for(let i=0;i<80;i++) createFloatingHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight); }
         document.getElementById('blowCandlesBtn')?.addEventListener('click', blowCandles);
-        document.querySelectorAll('.candle').forEach(c => { c.addEventListener('click',()=>{ if(c.getAttribute('data-blown')==='false'){ c.classList.add('blown'); c.setAttribute('data-blown','true'); c.style.opacity='0.4'; candlesBlown++; if(candlesBlown>=5){document.getElementById('candleMsg').innerHTML='✨ WISH ACTIVE! ✨ Write your wish now →'; grandBurst();}} }); });
+        document.querySelectorAll('.candle').forEach(c => { c.addEventListener('click',()=>{ if(c.getAttribute('data-blown')==='false'){ c.classList.add('blown'); c.setAttribute('data-blown','true'); c.style.opacity='0.4'; candlesBlown++; playSound('whoosh'); if(candlesBlown>=5){document.getElementById('candleMsg').innerHTML='✨ WISH ACTIVE! ✨'; grandBurst();}} }); });
         
-        // TYPEWRITER EFFECT for slide 3
-        let typewriterStarted = false;
+        // Typewriter effect
+        window.typewriterStarted = false;
         function startTypewriterEffect() {
-            if(typewriterStarted) return;
-            typewriterStarted=true;
+            if(window.typewriterStarted) return;
+            window.typewriterStarted=true;
             const fullText = `My beloved Glawins, 💕\n\nEvery beat of my heart spells your name. You are the warmth in winter and the laughter in my ordinary days. I admire your strength, your silly side, and the way you make this world feel like home. On your birthday, I just want you to know: you are the best chapter of my life, and I'll keep writing endless pages with you. I love you, today and beyond. 🕊️`;
             const container = document.getElementById('typewriterText');
             container.innerHTML = '';
             let i=0;
-            function typing() { if(i<fullText.length) { container.innerHTML += fullText.charAt(i); i++; setTimeout(typing, 40); } }
+            function typing() { if(i<fullText.length) { container.innerHTML += fullText.charAt(i); i++; setTimeout(typing, 35); } }
             typing();
         }
         
-        // WISH: Save, retrieve, and EMAIL to you
+        // Wish saving
         const savedWish = localStorage.getItem('GlawinsWish');
         if(savedWish && document.getElementById('secretWish')) document.getElementById('secretWish').value = savedWish;
-        document.getElementById('saveWishBtn')?.addEventListener('click',()=>{ const wish=document.getElementById('secretWish').value; localStorage.setItem('GlawinsWish',wish); document.getElementById('wishFeedback').innerText='✨ Your wish is sealed with stardust ✨'; setTimeout(()=>document.getElementById('wishFeedback').innerText='',2000); });
+        document.getElementById('saveWishBtn')?.addEventListener('click',()=>{ const wish=document.getElementById('secretWish').value; localStorage.setItem('GlawinsWish',wish); document.getElementById('wishFeedback').innerHTML='✨ Your wish is sealed with stardust ✨'; playSound('ding'); setTimeout(()=>document.getElementById('wishFeedback').innerHTML='',2000); });
         
-        // EMAIL WISH TO YOU (replace with YOUR email)
-        document.getElementById('emailWishBtn')?.addEventListener('click',()=>{
-            let wish = localStorage.getItem('GlawinsWish') || document.getElementById('secretWish')?.value || 'No wish written yet';
-            if(wish === 'No wish written yet' && document.getElementById('secretWish')?.value) wish = document.getElementById('secretWish').value;
-            const subject = encodeURIComponent(`💖 Glawins's Birthday Wish 💖`);
-            const body = encodeURIComponent(`✨✨✨ HER SECRET WISH ✨✨✨\n\n"${wish}"\n\n— Sent with love from the birthday card magic.`);
-            window.location.href = `mailto:YOUR_EMAIL@example.com?subject=${subject}&body=${body}`;
-            document.getElementById('wishFeedback').innerText = '📧 Email opened! Send it to me 💌';
-            setTimeout(()=>document.getElementById('wishFeedback').innerText='',2500);
-        });
-        
-        // SECRET BUTTON FOR YOU (the creator) to see her wish instantly
-        document.getElementById('secretViewWishBtn')?.addEventListener('click',()=>{
-            const stored = localStorage.getItem('GlawinsWish');
-            if(stored && stored.trim() !== '') {
-                alert(`💖 GLAWINS'S SECRET WISH 💖\n\n"${stored}"\n\n✨ Keep this magical! ✨`);
-            } else {
-                const currentInput = document.getElementById('secretWish')?.value;
-                if(currentInput && currentInput.trim() !== '') {
-                    alert(`💖 CURRENT WISH (not yet saved but typed):\n\n"${currentInput}"`);
-                } else {
-                    alert(`🌸 No wish saved yet. She will write one soon. Be patient, love. 🌸`);
-                }
+        // Guestbook
+        function loadGuestbook() {
+            const entries = JSON.parse(localStorage.getItem('guestbook') || '[]');
+            const container = document.getElementById('guestbookEntries');
+            if(container) container.innerHTML = entries.map(e => `<div class="guestbook-entry">💌 ${e}</div>`).join('');
+        }
+        document.getElementById('addGuestbookBtn')?.addEventListener('click',()=>{
+            const note = document.getElementById('guestbookInput').value;
+            if(note.trim()) {
+                const entries = JSON.parse(localStorage.getItem('guestbook') || '[]');
+                entries.unshift(note);
+                localStorage.setItem('guestbook', JSON.stringify(entries));
+                loadGuestbook();
+                document.getElementById('guestbookInput').value = '';
+                playSound('ding');
             }
         });
         
-        // VOICE RECORDING (works in modern browsers)
+        // Voice recording
         let mediaRecorder; let audioChunks=[];
         const recordBtn = document.getElementById('recordVoiceBtn');
         const audioPlayer = document.getElementById('voiceAudio');
         if(recordBtn){
             recordBtn.addEventListener('click', async()=>{
-                if(mediaRecorder && mediaRecorder.state === 'recording'){
-                    mediaRecorder.stop(); recordBtn.innerText='🎤 Record'; return;
-                }
-                try{
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    mediaRecorder = new MediaRecorder(stream);
-                    audioChunks=[];
-                    mediaRecorder.ondataavailable = e=> audioChunks.push(e.data);
-                    mediaRecorder.onstop = ()=>{
-                        const blob = new Blob(audioChunks, {type:'audio/wav'});
-                        const url = URL.createObjectURL(blob);
-                        audioPlayer.src = url;
-                        audioPlayer.style.display='block';
-                        audioPlayer.controls=true;
-                        stream.getTracks().forEach(t=>t.stop());
-                    };
-                    mediaRecorder.start();
-                    recordBtn.innerText='⏹️ Stop';
-                }catch(e){ alert('Please allow microphone access to record voice note 💖'); }
-            });
+                if(mediaRecorder && mediaRecorder.state === 'recording'){ mediaRecorder.stop(); recordBtn.innerHTML='🎤 Record'; return; }
+                try{ const stream = await navigator.mediaDevices.getUserMedia({ audio: true }); mediaRecorder = new MediaRecorder(stream); audioChunks=[];
+                mediaRecorder.ondataavailable = e=> audioChunks.push(e.data);
+                mediaRecorder.onstop = ()=>{ const blob = new Blob(audioChunks, {type:'audio/wav'}); const url = URL.createObjectURL(blob); audioPlayer.src = url; audioPlayer.style.display='block'; stream.getTracks().forEach(t=>t.stop()); };
+                mediaRecorder.start(); recordBtn.innerHTML='⏹️ Stop'; }catch(e){ alert('Please allow microphone access to record your voice note 💖'); } });
         }
         
-        // music (web audio chime)
-        let audioCtx=null;
-        function playChime(){
-            if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-            if(audioCtx.state==='suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.frequency.value=880; gain.gain.value=0.1; osc.type='sine';
-            osc.start(); gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime+0.3);
-            osc.stop(audioCtx.currentTime+0.3);
-        }
-        document.getElementById('musicToggleBtn')?.addEventListener('click',()=>{ playChime(); document.getElementById('musicToggleBtn').innerHTML='🎶 Lovely chime ✨'; setTimeout(()=>{document.getElementById('musicToggleBtn').innerHTML='🎵 Play Melody';},1500); });
-        
-        // share magic
-        document.getElementById('shareBtn')?.addEventListener('click',()=>{
-            if(navigator.share) navigator.share({title:'Birthday Magic for Glawins', text:'✨ A beautiful love letter birthday card ✨', url:window.location.href});
-            else alert('💖 Copy this link & share the love! 💖');
+        // Movie Mode
+        let movieActive = false;
+        document.getElementById('movieModeBtn').addEventListener('click', () => {
+            if(movieActive) { clearInterval(movieModeInterval); movieActive=false; document.getElementById('movieModeBtn').innerHTML='<i class="fas fa-film"></i> Movie Mode'; playSound('pop'); }
+            else { movieActive=true; document.getElementById('movieModeBtn').innerHTML='<i class="fas fa-stop"></i> Stop'; playSound('pop'); movieModeInterval = setInterval(()=>{ if(currentIdx < total-1){ currentIdx++; updateSlides(); } else { clearInterval(movieModeInterval); movieActive=false; ultimateGrandFinale(); } }, 7000); }
         });
         
-        // navigation
-        document.getElementById('nextBtn').addEventListener('click',()=>{ if(currentIdx<total-1){ currentIdx++; updateSlides(); celebrationBurst(); playChime(); } else { ultimateGrandFinale(); } });
-        document.getElementById('prevBtn').addEventListener('click',()=>{ if(currentIdx>0){ currentIdx--; updateSlides(); playChime(); } });
-        window.addEventListener('keydown',(e)=>{ if(e.key==='ArrowRight'){ if(currentIdx<total-1){currentIdx++; updateSlides(); celebrationBurst();}} if(e.key==='ArrowLeft' && currentIdx>0){currentIdx--; updateSlides();} });
+        // Social Share
+        document.getElementById('shareWhatsApp')?.addEventListener('click',()=>{ window.open(`https://wa.me/?text=${encodeURIComponent('✨ I received the most magical birthday card ever! ✨')}`); });
+        document.getElementById('shareTelegram')?.addEventListener('click',()=>{ window.open(`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=My special birthday wish!`); });
+        document.getElementById('shareCopy')?.addEventListener('click',()=>{ navigator.clipboard.writeText(window.location.href); alert('✨ Link copied! Share the magic! ✨'); });
+        
+        // Music button
+        document.getElementById('musicToggleBtn').addEventListener('click',()=>{ playSound('pop'); document.getElementById('musicToggleBtn').innerHTML='🎶✨ Lovely ✨'; setTimeout(()=>{document.getElementById('musicToggleBtn').innerHTML='<i class="fas fa-music"></i> Play Melody';},1500); });
+        
+        // Navigation
+        document.getElementById('nextBtn').addEventListener('click',()=>{ if(currentIdx<total-1){ currentIdx++; updateSlides(); celebrationBurst(); } else { ultimateGrandFinale(); } });
+        document.getElementById('prevBtn').addEventListener('click',()=>{ if(currentIdx>0){ currentIdx--; updateSlides(); } });
+        
+        // Keyboard and touch
+        window.addEventListener('keydown',(e)=>{ if(e.key==='ArrowRight' && currentIdx<total-1){ currentIdx++; updateSlides(); } if(e.key==='ArrowLeft' && currentIdx>0){ currentIdx--; updateSlides(); } });
         let touchX=0; document.body.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX;});
-        document.body.addEventListener('touchend',e=>{ let diff=e.changedTouches[0].screenX-touchX; if(diff<-40 && currentIdx<total-1){currentIdx++; updateSlides(); celebrationBurst();} if(diff>40 && currentIdx>0){currentIdx--; updateSlides();}});
+        document.body.addEventListener('touchend',e=>{ let diff=e.changedTouches[0].screenX-touchX; if(diff<-40 && currentIdx<total-1){ currentIdx++; updateSlides(); } if(diff>40 && currentIdx>0){ currentIdx--; updateSlides(); } });
         
         function ultimateGrandFinale(){
-            for(let i=0;i<140;i++) createFloatingHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight);
-            alert('✨✨✨ HAPPY BIRTHDAY GLAWINS! You are the most loved person in the universe! ✨✨✨');
+            canvasConfetti({ particleCount: 300, spread: 100, origin: { y: 0.6 }, startVelocity: 25, colors: ['#ff4d6d', '#ff9f4a', '#ffd166'] });
+            setTimeout(()=>{ canvasConfetti({ particleCount: 200, spread: 120, origin: { y: 0.5 } }); }, 300);
+            setTimeout(()=>{ canvasConfetti({ particleCount: 100, spread: 80, origin: { y: 0.7 } }); }, 600);
+            setTimeout(()=>{ alert('✨✨✨ HAPPY BIRTHDAY GLAWINS! You are the most loved person in the universe! ✨✨✨'); }, 500);
         }
-        fallingPetalsInterval();
+        
+        // Falling petals
+        setInterval(()=>{ if(Math.random()>0.85){ let p=document.createElement('div'); p.className='petal'; p.innerText=['🌸','🌼','✨','💮','🌺'][Math.floor(Math.random()*5)]; p.style.left=Math.random()*window.innerWidth+'px'; p.style.fontSize=(Math.random()*0.9+0.8)+'rem'; document.body.appendChild(p); setTimeout(()=>p.remove(),5000); } }, 700);
+        
         updateSlides();
         
-        // Instruction for photos (console friendly)
-        console.log("%c📸 PHOTO INSTRUCTIONS: Replace 'images/glawins-smile.jpg' etc. with your actual image paths. Create an 'images' folder or use full URLs.", "color: #ff4d6d; font-size: 14px");
-        console.log("%c🔒 SECRET WISH BUTTON: Click the bottom-left 'View Her Secret Wish' button to see what she wished for!", "color: #ff9f4a; font-size: 12px");
-        console.log("%c📧 EMAIL WISH: Replace 'YOUR_EMAIL@example.com' in the email function with YOUR real email address.", "color: #ff6b81");
+        console.log("%c✨ Happy Birthday Glawins! ✨", "color: #ff4d6d; font-size: 20px; font-weight: bold;");
+        console.log("%c💖 This card was made with infinite love for you. 💖", "color: #ff9f4a; font-size: 14px;");
     })();
 </script>
 </body>
