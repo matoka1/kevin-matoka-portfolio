@@ -65,6 +65,12 @@
             background: #fffcf9;
         }
 
+        .auth-container input:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74,144,226,0.2);
+        }
+
         .auth-btn {
             background: linear-gradient(135deg, #4a90e2, #ff69b4);
             color: white;
@@ -80,10 +86,18 @@
 
         .auth-btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74,144,226,0.3);
         }
 
         .error-message {
             color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .success-message {
+            color: #4a90e2;
             font-size: 0.85rem;
             margin-top: 0.5rem;
             display: none;
@@ -117,6 +131,7 @@
             height: 3px;
             background: linear-gradient(90deg, #4a90e2, #ff69b4);
             margin: 1rem auto;
+            border-radius: 4px;
         }
 
         .user-info {
@@ -127,6 +142,7 @@
             padding: 1rem 1.5rem;
             background: white;
             border-radius: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
         .logout-btn {
@@ -164,7 +180,6 @@
         .filter-btn:hover, .filter-btn.active {
             background: linear-gradient(135deg, #4a90e2, #ff69b4);
             color: white;
-            transform: translateY(-2px);
         }
 
         .upload-card {
@@ -255,11 +270,6 @@
             cursor: pointer;
         }
 
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
         .memories-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -273,12 +283,6 @@
             overflow: hidden;
             box-shadow: 0 12px 28px rgba(0,0,0,0.1);
             transition: transform 0.25s;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .memory-card:hover {
@@ -291,7 +295,6 @@
             gap: 2px;
             max-height: 250px;
             overflow: hidden;
-            background: #f5f5f5;
         }
 
         .memory-img, .memory-video {
@@ -409,69 +412,6 @@
             padding: 0.8rem 2rem;
         }
 
-        /* Video Creator Modal */
-        .video-creator-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .video-creator-content {
-            background: white;
-            border-radius: 2rem;
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 2rem;
-        }
-
-        .video-creator-content h2 {
-            text-align: center;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #4a90e2, #ff69b4);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-
-        .video-preview {
-            width: 100%;
-            background: #000;
-            border-radius: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .video-controls {
-            display: flex;
-            gap: 1rem;
-            margin: 1rem 0;
-            flex-wrap: wrap;
-        }
-
-        .video-controls input {
-            flex: 1;
-            padding: 0.5rem;
-            border: 1px solid #f0c0d0;
-            border-radius: 0.5rem;
-        }
-
-        .close-video-modal {
-            position: absolute;
-            top: 20px;
-            right: 40px;
-            color: white;
-            font-size: 40px;
-            cursor: pointer;
-        }
-
         .modal {
             display: none;
             position: fixed;
@@ -498,11 +438,6 @@
             font-size: 40px;
             cursor: pointer;
         }
-
-        @media (max-width: 600px) {
-            body { padding: 1rem; }
-            .love-header h1 { font-size: 2rem; }
-        }
     </style>
 </head>
 <body>
@@ -514,6 +449,7 @@
         <input type="password" id="authPassword" placeholder="enter our secret password 🔑">
         <button id="signInBtn" class="auth-btn">💙 enter our love world 💗</button>
         <div id="authError" class="error-message"></div>
+        <div id="authSuccess" class="success-message"></div>
     </div>
 
     <div id="mainApp" class="main-app">
@@ -597,30 +533,6 @@
     </div>
 </div>
 
-<!-- Video Creator Modal -->
-<div id="videoCreatorModal" class="video-creator-modal">
-    <span class="close-video-modal">&times;</span>
-    <div class="video-creator-content">
-        <h2>🎬 Create Your Love Story Video 🎬</h2>
-        <canvas id="videoCanvas" class="video-preview" width="720" height="540" style="width:100%; height:auto; background:#000;"></canvas>
-        <div class="video-controls">
-            <input type="text" id="videoTitle" placeholder="Video Title (e.g., Our Beautiful Day)">
-            <input type="text" id="videoMusic" placeholder="Add Music URL (optional)">
-        </div>
-        <div class="video-controls">
-            <button id="previewVideoBtn">▶️ Preview</button>
-            <button id="generateVideoBtn">💾 Generate & Download Video</button>
-            <button id="closeVideoCreatorBtn">Close</button>
-        </div>
-        <div id="videoProgress" style="display:none; text-align:center; margin-top:1rem;">
-            <div class="progress-bar" style="display:block;">
-                <div class="progress-fill" id="videoProgressFill" style="width:0%"></div>
-            </div>
-            <p id="videoStatus">Creating your video... 💙💗</p>
-        </div>
-    </div>
-</div>
-
 <div id="mediaModal" class="modal">
     <span class="close-modal">&times;</span>
     <div class="modal-content">
@@ -630,624 +542,281 @@
 </div>
 
 <script>
-    (function() {
-        const SUPABASE_URL = 'https://uhqoihahmocwjgzpiivd.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
+    const SUPABASE_URL = 'https://uhqoihahmocwjgzpiivd.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
+    
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    let currentUser = null;
+    let allMemories = [];
+    let currentFilter = 'all';
+    let visibleCount = 6;
+    
+    // SIMPLE LOGIN - No password check for now (you can add it back later)
+    function login() {
+        document.getElementById('authContainer').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'block';
+        document.getElementById('memoryDate').value = new Date().toISOString().split('T')[0];
+        loadMemories();
+    }
+    
+    async function uploadToStorage(file) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+        const filePath = `memories/${fileName}`;
         
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        let CORRECT_PASSWORD = null;
-        let currentUser = null;
-        let allMemories = [];
-        let currentFilter = 'all';
-        let visibleCount = 6;
-        let currentVideoImages = [];
-        let currentVideoTitle = '';
-        let mediaRecorder = null;
-        let recordedChunks = [];
+        const { error } = await supabase.storage
+            .from('love-memories')
+            .upload(filePath, file, { cacheControl: '3600', upsert: false });
         
-        async function fetchPassword() {
-            const { data, error } = await supabase
-                .from('app_config')
-                .select('value')
-                .eq('key', 'access_password')
-                .single();
+        if (error) throw error;
+        
+        const { data: { publicUrl } } = supabase.storage.from('love-memories').getPublicUrl(filePath);
+        return publicUrl;
+    }
+    
+    async function addMemory() {
+        const dateInput = document.getElementById('memoryDate').value;
+        const titleInput = document.getElementById('memoryTitle').value.trim();
+        const noteInput = document.getElementById('memoryNote').value.trim();
+        const eventType = document.getElementById('eventType').value;
+        const fileInput = document.getElementById('mediaUpload');
+        
+        if (!dateInput) { alert("💙 please pick a date"); return; }
+        if (!titleInput) { alert("💗 give this memory a title"); return; }
+        if (fileInput.files.length === 0) { alert("💙💗 please select at least one picture or video"); return; }
+        
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const publishBtn = document.getElementById('publishBtn');
+        
+        progressBar.style.display = 'block';
+        publishBtn.disabled = true;
+        publishBtn.textContent = '⏳ uploading...';
+        
+        try {
+            const mediaUrls = [];
+            const files = Array.from(fileInput.files);
             
-            if (error) {
-                console.error('Error fetching password:', error);
-                return null;
+            for (let i = 0; i < files.length; i++) {
+                progressFill.style.width = `${(i / files.length) * 100}%`;
+                const url = await uploadToStorage(files[i]);
+                mediaUrls.push(url);
             }
-            return data.value;
-        }
-        
-        async function uploadToStorage(file) {
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
-            const filePath = `memories/${fileName}`;
             
-            const { error } = await supabase.storage
-                .from('love-memories')
-                .upload(filePath, file, {
-                    cacheControl: '3600',
-                    upsert: false
-                });
+            const { error } = await supabase.from('memories').insert([{
+                user_id: 'kevine_couple',
+                date: dateInput,
+                title: titleInput,
+                note: noteInput || "❤️ a moment we'll never forget",
+                event_type: eventType,
+                media_urls: JSON.stringify(mediaUrls),
+                created_at: new Date().toISOString()
+            }]);
             
             if (error) throw error;
             
-            const { data: { publicUrl } } = supabase.storage
-                .from('love-memories')
-                .getPublicUrl(filePath);
-            
-            return publicUrl;
-        }
-        
-        // Built-in Video Generator
-        async function createSlideshowVideo(images, title) {
-            return new Promise(async (resolve, reject) => {
-                const modal = document.getElementById('videoCreatorModal');
-                const canvas = document.getElementById('videoCanvas');
-                const ctx = canvas.getContext('2d');
-                const videoProgress = document.getElementById('videoProgress');
-                const progressFill = document.getElementById('videoProgressFill');
-                const statusText = document.getElementById('videoStatus');
-                
-                modal.style.display = 'flex';
-                document.getElementById('videoTitle').value = title;
-                
-                let currentImageIndex = 0;
-                let animationId = null;
-                let isRecording = false;
-                let stream = null;
-                
-                // Load all images
-                const loadedImages = [];
-                for (let i = 0; i < images.length; i++) {
-                    const img = new Image();
-                    img.crossOrigin = 'Anonymous';
-                    await new Promise((resolveImg) => {
-                        img.onload = () => {
-                            loadedImages.push(img);
-                            resolveImg();
-                        };
-                        img.onerror = () => {
-                            // Use placeholder if image fails to load
-                            const placeholder = new Image();
-                            placeholder.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect width="400" height="300" fill="%23ff69b4"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="white" font-size="20"%3ELove%3C/text%3E%3C/svg%3E';
-                            placeholder.onload = () => {
-                                loadedImages.push(placeholder);
-                                resolveImg();
-                            };
-                            placeholder.onerror = () => resolveImg();
-                        };
-                        img.src = images[i];
-                    });
-                }
-                
-                if (loadedImages.length === 0) {
-                    alert('No images to create video from!');
-                    reject('No images');
-                    return;
-                }
-                
-                function drawFrame() {
-                    if (!canvas || !ctx) return;
-                    const img = loadedImages[currentImageIndex % loadedImages.length];
-                    if (img) {
-                        // Calculate scaling to fit canvas
-                        const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
-                        const x = (canvas.width - img.width * scale) / 2;
-                        const y = (canvas.height - img.height * scale) / 2;
-                        ctx.fillStyle = '#4a90e2';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-                        
-                        // Add text overlay
-                        ctx.fillStyle = 'white';
-                        ctx.shadowBlur = 10;
-                        ctx.shadowColor = 'black';
-                        ctx.font = 'bold 24px "Segoe UI"';
-                        ctx.textAlign = 'center';
-                        ctx.fillText(title || 'Our Love Story', canvas.width / 2, 50);
-                        
-                        const dateText = new Date().toLocaleDateString();
-                        ctx.font = '16px "Segoe UI"';
-                        ctx.fillText(dateText, canvas.width / 2, canvas.height - 30);
-                        ctx.shadowBlur = 0;
-                    }
-                }
-                
-                function animateSlideshow() {
-                    drawFrame();
-                    currentImageIndex = (currentImageIndex + 1) % loadedImages.length;
-                    animationId = setTimeout(() => {
-                        requestAnimationFrame(animateSlideshow);
-                    }, 3000); // Change image every 3 seconds
-                }
-                
-                // Preview button
-                document.getElementById('previewVideoBtn').onclick = () => {
-                    if (animationId) clearTimeout(animationId);
-                    currentImageIndex = 0;
-                    animateSlideshow();
-                };
-                
-                // Generate and download video
-                document.getElementById('generateVideoBtn').onclick = async () => {
-                    if (isRecording) return;
-                    
-                    const videoTitle = document.getElementById('videoTitle').value || 'Our Love Story';
-                    videoProgress.style.display = 'block';
-                    progressFill.style.width = '0%';
-                    statusText.textContent = 'Initializing... 💙';
-                    
-                    try {
-                        // Stop any ongoing animation
-                        if (animationId) clearTimeout(animationId);
-                        
-                        // Reset to first image
-                        currentImageIndex = 0;
-                        drawFrame();
-                        
-                        // Create stream from canvas
-                        stream = canvas.captureStream(30); // 30 fps
-                        
-                        // Create media recorder
-                        const mimeType = MediaRecorder.isTypeSupported('video/webm') ? 'video/webm' : 'video/mp4';
-                        mediaRecorder = new MediaRecorder(stream, { mimeType });
-                        recordedChunks = [];
-                        
-                        mediaRecorder.ondataavailable = (event) => {
-                            if (event.data.size > 0) {
-                                recordedChunks.push(event.data);
-                            }
-                        };
-                        
-                        mediaRecorder.onstop = () => {
-                            const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                            const url = URL.createObjectURL(blob);
-                            const a = document.createElement('a');
-                            a.href = url;
-                            a.download = `kevine_${videoTitle.replace(/[^a-z0-9]/gi, '_')}_${Date.now()}.webm`;
-                            a.click();
-                            URL.revokeObjectURL(url);
-                            statusText.textContent = '✅ Video created successfully! 💙💗';
-                            setTimeout(() => {
-                                videoProgress.style.display = 'none';
-                                progressFill.style.width = '0%';
-                            }, 2000);
-                            isRecording = false;
-                            resolve(url);
-                        };
-                        
-                        mediaRecorder.start();
-                        isRecording = true;
-                        statusText.textContent = 'Recording video... 🎬';
-                        
-                        // Record for 3 seconds per image (total duration)
-                        const totalDuration = loadedImages.length * 3000;
-                        let elapsed = 0;
-                        let frameIndex = 0;
-                        
-                        const recordInterval = setInterval(() => {
-                            if (!isRecording) {
-                                clearInterval(recordInterval);
-                                return;
-                            }
-                            
-                            drawFrame();
-                            frameIndex = (frameIndex + 1) % loadedImages.length;
-                            elapsed += 100;
-                            progressFill.style.width = `${(elapsed / totalDuration) * 100}%`;
-                            statusText.textContent = `Recording... ${Math.floor((elapsed / totalDuration) * 100)}%`;
-                            
-                            if (elapsed >= totalDuration) {
-                                clearInterval(recordInterval);
-                                mediaRecorder.stop();
-                                if (stream) {
-                                    stream.getTracks().forEach(track => track.stop());
-                                }
-                            }
-                        }, 100);
-                        
-                    } catch (err) {
-                        console.error('Video creation error:', err);
-                        statusText.textContent = 'Error creating video. Please try again.';
-                        setTimeout(() => {
-                            videoProgress.style.display = 'none';
-                        }, 2000);
-                        reject(err);
-                    }
-                };
-                
-                // Close modal
-                const closeModal = () => {
-                    if (animationId) clearTimeout(animationId);
-                    if (mediaRecorder && isRecording) {
-                        mediaRecorder.stop();
-                    }
-                    if (stream) {
-                        stream.getTracks().forEach(track => track.stop());
-                    }
-                    modal.style.display = 'none';
-                    videoProgress.style.display = 'none';
-                    isRecording = false;
-                };
-                
-                document.getElementById('closeVideoCreatorBtn').onclick = closeModal;
-                document.querySelector('.close-video-modal').onclick = closeModal;
-            });
-        }
-        
-        // Auto-generate video from photos on the same day
-        async function generateVideoFromDay(selectedDate, title) {
-            // Find all memories from the same date that have photos
-            const sameDayMemories = allMemories.filter(m => m.date === selectedDate);
-            
-            // Collect all image URLs from that day (excluding videos)
-            let allImages = [];
-            for (let mem of sameDayMemories) {
-                let mediaArray = [];
-                try {
-                    mediaArray = JSON.parse(mem.media_urls);
-                } catch {
-                    mediaArray = [mem.media_urls];
-                }
-                // Get only images (not videos)
-                const images = mediaArray.filter(url => !url.match(/\.(mp4|webm|mov)/i));
-                allImages.push(...images);
-            }
-            
-            if (allImages.length === 0) {
-                alert('No photos found from this day to create a video! Upload some photos first.');
-                return;
-            }
-            
-            currentVideoImages = allImages;
-            currentVideoTitle = title;
-            
-            await createSlideshowVideo(allImages, title);
-        }
-        
-        async function addMemory() {
-            const dateInput = document.getElementById('memoryDate').value;
-            const titleInput = document.getElementById('memoryTitle').value.trim();
-            const noteInput = document.getElementById('memoryNote').value.trim();
-            const eventType = document.getElementById('eventType').value;
-            const fileInput = document.getElementById('mediaUpload');
-            
-            if (!dateInput) { alert("💙 please pick a date"); return; }
-            if (!titleInput) { alert("💗 give this memory a title"); return; }
-            if (fileInput.files.length === 0) { alert("💙💗 please select at least one picture or video"); return; }
-            
-            const progressBar = document.getElementById('progressBar');
-            const progressFill = document.getElementById('progressFill');
-            const publishBtn = document.getElementById('publishBtn');
-            
-            progressBar.style.display = 'block';
-            publishBtn.disabled = true;
-            publishBtn.textContent = '⏳ uploading...';
-            
-            try {
-                const mediaUrls = [];
-                const files = Array.from(fileInput.files);
-                
-                for (let i = 0; i < files.length; i++) {
-                    progressFill.style.width = `${(i / files.length) * 100}%`;
-                    const url = await uploadToStorage(files[i]);
-                    mediaUrls.push(url);
-                }
-                
-                progressFill.style.width = '100%';
-                
-                const { error } = await supabase.from('memories').insert([{
-                    user_id: 'kevine_couple',
-                    date: dateInput,
-                    title: titleInput,
-                    note: noteInput || "❤️ a moment we'll never forget",
-                    event_type: eventType,
-                    media_urls: JSON.stringify(mediaUrls),
-                    created_at: new Date().toISOString()
-                }]);
-                
-                if (error) throw error;
-                
-                document.getElementById('memoryDate').value = '';
-                document.getElementById('memoryTitle').value = '';
-                document.getElementById('memoryNote').value = '';
-                document.getElementById('mediaUpload').value = '';
-                document.getElementById('mediaPreview').innerHTML = '';
-                document.getElementById('memoryDate').value = new Date().toISOString().split('T')[0];
-                document.getElementById('eventType').value = 'General';
-                
-                await loadAllMemories();
-                renderMemories();
-                
-                // Ask if user wants to create a video from all photos today
-                const todayPhotos = allMemories.filter(m => m.date === dateInput);
-                let totalPhotos = 0;
-                for (let mem of todayPhotos) {
-                    let media = JSON.parse(mem.media_urls);
-                    totalPhotos += media.filter(url => !url.match(/\.(mp4|webm|mov)/i)).length;
-                }
-                
-                if (totalPhotos >= 2) {
-                    const makeVideo = confirm(`🎬 You now have ${totalPhotos} photos from ${dateInput}! Would you like to create a video slideshow from all these photos?`);
-                    if (makeVideo) {
-                        await generateVideoFromDay(dateInput, titleInput);
-                    }
-                }
-                
-                publishBtn.textContent = "✓ saved! 💙💗";
-                setTimeout(() => { 
-                    publishBtn.textContent = "💗 add to our story 💙";
-                    publishBtn.disabled = false;
-                    progressBar.style.display = 'none';
-                    progressFill.style.width = '0%';
-                }, 2000);
-                
-            } catch (err) {
-                alert('Error: ' + err.message);
-                publishBtn.disabled = false;
-                publishBtn.textContent = "💗 add to our story 💙";
-                progressBar.style.display = 'none';
-            }
-        }
-        
-        async function deleteMemory(memoryId, memoryDate, memoryTitle) {
-            if (confirm(`💔 Remove "${memoryTitle}"? This will delete all photos and videos in this memory.`)) {
-                const { error } = await supabase.from('memories').delete().eq('id', memoryId);
-                
-                if (error) {
-                    alert('Error deleting: ' + error.message);
-                } else {
-                    await loadAllMemories();
-                    renderMemories();
-                    alert('💔 Memory removed successfully');
-                }
-            }
-        }
-        
-        async function loadAllMemories() {
-            const { data, error } = await supabase
-                .from('memories')
-                .select('*')
-                .order('created_at', { ascending: false });
-            
-            if (error) {
-                console.error('Error loading memories:', error);
-                return [];
-            }
-            
-            allMemories = data;
-            return allMemories;
-        }
-        
-        function renderMemories() {
-            const grid = document.getElementById('memoriesGrid');
-            const loadMoreBtn = document.getElementById('loadMoreBtn');
-            
-            let filtered = allMemories;
-            if (currentFilter !== 'all') {
-                filtered = allMemories.filter(m => m.event_type === currentFilter);
-            }
-            
-            const visibleMemories = filtered.slice(0, visibleCount);
-            
-            if (visibleMemories.length === 0) {
-                grid.innerHTML = `<div class="empty-message">🌸 no memories yet... upload your first beautiful moment together! 🌸</div>`;
-                loadMoreBtn.style.display = 'none';
-                return;
-            }
-            
-            let html = '';
-            for (let mem of visibleMemories) {
-                let mediaArray = [];
-                try {
-                    mediaArray = JSON.parse(mem.media_urls);
-                } catch {
-                    mediaArray = [mem.media_urls];
-                }
-                
-                const displayDate = new Date(mem.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-                const displayMedia = mediaArray.slice(0, 3);
-                const remainingCount = mediaArray.length - 3;
-                
-                const mediaHtml = displayMedia.map(url => {
-                    const isVideo = url.match(/\.(mp4|webm|mov)/i);
-                    if (isVideo) {
-                        return `<video class="memory-video" controls preload="metadata"><source src="${url}" type="video/mp4"></video>`;
-                    }
-                    return `<img class="memory-img" src="${url}" alt="memory" loading="lazy">`;
-                }).join('');
-                
-                const eventEmoji = {
-                    'Anniversary': '🎉', 'Vacation': '✈️', 'Date Night': '🌙', 
-                    'Celebration': '🎊', 'Everyday': '💙', 'Special': '✨', 'General': '💗'
-                }[mem.event_type] || '💗';
-                
-                html += `
-                    <div class="memory-card" data-id="${mem.id}" data-date="${mem.date}">
-                        <div class="memory-media">
-                            ${mediaHtml}
-                            ${remainingCount > 0 ? `<div style="display:flex;align-items:center;justify-content:center;background:#f0c0d0;color:#ff69b4;font-size:0.8rem;">+${remainingCount} more</div>` : ''}
-                        </div>
-                        <div class="memory-info">
-                            <div class="memory-date">📆 ${displayDate}</div>
-                            <div class="memory-caption">✨ ${escapeHtml(mem.title)}</div>
-                            <div class="event-tag">${eventEmoji} ${mem.event_type || 'General'}</div>
-                            <div class="memory-note">💬 ${escapeHtml(mem.note)}</div>
-                            <div class="btn-group">
-                                <button class="delete-btn" data-id="${mem.id}" data-title="${escapeHtml(mem.title)}" data-date="${mem.date}">🗑️ Remove</button>
-                                <button class="create-video-btn" data-date="${mem.date}" data-title="${escapeHtml(mem.title)}">🎬 Create Video</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            grid.innerHTML = html;
-            
-            if (filtered.length > visibleCount) {
-                loadMoreBtn.style.display = 'block';
-            } else {
-                loadMoreBtn.style.display = 'none';
-            }
-            
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const id = btn.getAttribute('data-id');
-                    const title = btn.getAttribute('data-title');
-                    const date = btn.getAttribute('data-date');
-                    deleteMemory(id, date, title);
-                });
-            });
-            
-            document.querySelectorAll('.create-video-btn').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    e.stopPropagation();
-                    const date = btn.getAttribute('data-date');
-                    const title = btn.getAttribute('data-title');
-                    await generateVideoFromDay(date, title);
-                });
-            });
-            
-            document.querySelectorAll('.memory-img').forEach(img => {
-                img.addEventListener('click', () => {
-                    document.getElementById('modalImage').style.display = 'block';
-                    document.getElementById('modalVideo').style.display = 'none';
-                    document.getElementById('modalImage').src = img.src;
-                    document.getElementById('mediaModal').style.display = 'flex';
-                });
-            });
-        }
-        
-        function loadMore() {
-            visibleCount += 6;
-            renderMemories();
-        }
-        
-        function setFilter(filter) {
-            currentFilter = filter;
-            visibleCount = 6;
-            renderMemories();
-            
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                if (btn.getAttribute('data-filter') === filter) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-        }
-        
-        document.getElementById('mediaUpload')?.addEventListener('change', (e) => {
-            const preview = document.getElementById('mediaPreview');
-            preview.innerHTML = '';
-            const files = Array.from(e.target.files).slice(0, 6);
-            files.forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    const div = document.createElement('div');
-                    div.className = 'preview-item';
-                    if (file.type.startsWith('video/')) {
-                        const video = document.createElement('video');
-                        video.src = event.target.result;
-                        video.className = 'preview-video';
-                        video.controls = true;
-                        div.appendChild(video);
-                    } else {
-                        const img = document.createElement('img');
-                        img.src = event.target.result;
-                        img.className = 'preview-img';
-                        div.appendChild(img);
-                    }
-                    preview.appendChild(div);
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-        
-        async function loginWithPassword(password) {
-            if (!CORRECT_PASSWORD) {
-                CORRECT_PASSWORD = await fetchPassword();
-            }
-            if (password === CORRECT_PASSWORD) {
-                currentUser = { id: 'kevine_couple' };
-                showApp();
-                return true;
-            }
-            return false;
-        }
-        
-        async function showApp() {
-            document.getElementById('authContainer').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('memoryDate').value = '';
+            document.getElementById('memoryTitle').value = '';
+            document.getElementById('memoryNote').value = '';
+            document.getElementById('mediaUpload').value = '';
+            document.getElementById('mediaPreview').innerHTML = '';
             document.getElementById('memoryDate').value = new Date().toISOString().split('T')[0];
             
-            document.getElementById('memoriesGrid').innerHTML = '<div class="loading-skeleton"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div>';
+            await loadMemories();
             
-            await loadAllMemories();
-            renderMemories();
+            publishBtn.textContent = "✓ saved! 💙💗";
+            setTimeout(() => { 
+                publishBtn.textContent = "💗 add to our story 💙";
+                publishBtn.disabled = false;
+                progressBar.style.display = 'none';
+                progressFill.style.width = '0%';
+            }, 2000);
+            
+        } catch (err) {
+            alert('Error: ' + err.message);
+            publishBtn.disabled = false;
+            publishBtn.textContent = "💗 add to our story 💙";
+            progressBar.style.display = 'none';
+        }
+    }
+    
+    async function deleteMemory(memoryId, memoryTitle) {
+        if (confirm(`💔 Remove "${memoryTitle}"?`)) {
+            const { error } = await supabase.from('memories').delete().eq('id', memoryId);
+            if (error) {
+                alert('Error: ' + error.message);
+            } else {
+                await loadMemories();
+                alert('💔 Memory removed');
+            }
+        }
+    }
+    
+    async function loadMemories() {
+        const { data, error } = await supabase
+            .from('memories')
+            .select('*')
+            .order('created_at', { ascending: false });
+        
+        if (error) {
+            console.error('Error:', error);
+            return;
         }
         
-        function showAuth() {
-            currentUser = null;
-            document.getElementById('authContainer').style.display = 'block';
-            document.getElementById('mainApp').style.display = 'none';
-            document.getElementById('authPassword').value = '';
+        allMemories = data;
+        renderMemories();
+    }
+    
+    function renderMemories() {
+        const grid = document.getElementById('memoriesGrid');
+        
+        let filtered = allMemories;
+        if (currentFilter !== 'all') {
+            filtered = allMemories.filter(m => m.event_type === currentFilter);
         }
         
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        const visibleMemories = filtered.slice(0, visibleCount);
+        
+        if (visibleMemories.length === 0) {
+            grid.innerHTML = `<div class="empty-message">🌸 no memories yet... upload your first beautiful moment together! 🌸</div>`;
+            return;
         }
         
-        document.addEventListener('DOMContentLoaded', async () => {
-            await fetchPassword();
-            showAuth();
+        let html = '';
+        for (let mem of visibleMemories) {
+            let mediaArray = [];
+            try {
+                mediaArray = JSON.parse(mem.media_urls);
+            } catch {
+                mediaArray = [mem.media_urls];
+            }
             
-            document.querySelector('.close-modal').onclick = () => {
-                document.getElementById('mediaModal').style.display = 'none';
-                document.getElementById('modalVideo').pause();
-            };
-            window.onclick = (e) => {
-                if (e.target === document.getElementById('mediaModal')) {
-                    document.getElementById('mediaModal').style.display = 'none';
-                    document.getElementById('modalVideo').pause();
+            const displayDate = new Date(mem.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            const displayMedia = mediaArray.slice(0, 3);
+            
+            const mediaHtml = displayMedia.map(url => {
+                const isVideo = url.match(/\.(mp4|webm|mov)/i);
+                if (isVideo) {
+                    return `<video class="memory-video" controls><source src="${url}" type="video/mp4"></video>`;
                 }
-            };
+                return `<img class="memory-img" src="${url}" alt="memory" loading="lazy">`;
+            }).join('');
             
-            document.getElementById('signInBtn').onclick = async () => {
-                const password = document.getElementById('authPassword').value;
-                const errorDiv = document.getElementById('authError');
-                errorDiv.style.display = 'none';
-                
-                if (!password) {
-                    errorDiv.textContent = '💙💗 please enter our secret password';
-                    errorDiv.style.display = 'block';
-                    return;
-                }
-                
-                const success = await loginWithPassword(password);
-                if (!success) {
-                    errorDiv.textContent = '💔 wrong password. only Kevin & Celine can enter 💔';
-                    errorDiv.style.display = 'block';
-                }
-            };
+            const eventEmoji = {
+                'Anniversary': '🎉', 'Vacation': '✈️', 'Date Night': '🌙', 
+                'Celebration': '🎊', 'Everyday': '💙', 'Special': '✨', 'General': '💗'
+            }[mem.event_type] || '💗';
             
-            document.getElementById('authPassword')?.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') document.getElementById('signInBtn').click();
-            });
-            
-            document.getElementById('logoutBtn').onclick = () => showAuth();
-            document.getElementById('publishBtn').onclick = addMemory;
-            document.getElementById('loadMoreBtn').onclick = loadMore;
-            
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.onclick = () => setFilter(btn.getAttribute('data-filter'));
+            html += `
+                <div class="memory-card">
+                    <div class="memory-media">
+                        ${mediaHtml}
+                    </div>
+                    <div class="memory-info">
+                        <div class="memory-date">📆 ${displayDate}</div>
+                        <div class="memory-caption">✨ ${escapeHtml(mem.title)}</div>
+                        <div class="event-tag">${eventEmoji} ${mem.event_type || 'General'}</div>
+                        <div class="memory-note">💬 ${escapeHtml(mem.note)}</div>
+                        <div class="btn-group">
+                            <button class="delete-btn" data-id="${mem.id}" data-title="${escapeHtml(mem.title)}">🗑️ Remove</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        grid.innerHTML = html;
+        
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = btn.getAttribute('data-id');
+                const title = btn.getAttribute('data-title');
+                deleteMemory(id, title);
             });
         });
-    })();
+        
+        document.querySelectorAll('.memory-img').forEach(img => {
+            img.addEventListener('click', () => {
+                document.getElementById('modalImage').style.display = 'block';
+                document.getElementById('modalVideo').style.display = 'none';
+                document.getElementById('modalImage').src = img.src;
+                document.getElementById('mediaModal').style.display = 'flex';
+            });
+        });
+    }
+    
+    function setFilter(filter) {
+        currentFilter = filter;
+        visibleCount = 6;
+        renderMemories();
+        
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            if (btn.getAttribute('data-filter') === filter) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    
+    document.getElementById('mediaUpload')?.addEventListener('change', (e) => {
+        const preview = document.getElementById('mediaPreview');
+        preview.innerHTML = '';
+        const files = Array.from(e.target.files).slice(0, 6);
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const div = document.createElement('div');
+                div.className = 'preview-item';
+                if (file.type.startsWith('video/')) {
+                    const video = document.createElement('video');
+                    video.src = event.target.result;
+                    video.className = 'preview-video';
+                    video.controls = true;
+                    div.appendChild(video);
+                } else {
+                    const img = document.createElement('img');
+                    img.src = event.target.result;
+                    img.className = 'preview-img';
+                    div.appendChild(img);
+                }
+                preview.appendChild(div);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        // Login button - NO PASSWORD CHECK for now
+        document.getElementById('signInBtn').onclick = login;
+        
+        // Enter key
+        document.getElementById('authPassword')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') login();
+        });
+        
+        document.getElementById('logoutBtn').onclick = () => {
+            document.getElementById('authContainer').style.display = 'block';
+            document.getElementById('mainApp').style.display = 'none';
+        };
+        
+        document.getElementById('publishBtn').onclick = addMemory;
+        
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.onclick = () => setFilter(btn.getAttribute('data-filter'));
+        });
+        
+        document.querySelector('.close-modal').onclick = () => {
+            document.getElementById('mediaModal').style.display = 'none';
+            document.getElementById('modalVideo').pause();
+        };
+    });
 </script>
 </body>
 </html>
