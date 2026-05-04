@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Our Love Story · Blue & Pink Forever</title>
+    <!-- Supabase JS library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e8f4ff 0%, #ffe0f0 50%, #e8f4ff 100%);
+            font-family: 'Segoe UI', 'Quicksand', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+            min-height: 100vh;
+            padding: 2rem 1.5rem 4rem;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* Auth Section */
+        .auth-container {
+            max-width: 500px;
+            margin: 3rem auto;
+            background: white;
+            border-radius: 2rem;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border: 2px solid;
+            border-image: linear-gradient(135deg, #4a90e2, #ff69b4);
+            border-image-slice: 1;
+            text-align: center;
+        }
+
+        .auth-container h2 {
+            background: linear-gradient(135deg, #4a90e2, #ff69b4);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .auth-container input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            margin-bottom: 1rem;
+            border: 2px solid #f0c0d0;
+            border-radius: 1rem;
+            font-family: inherit;
+            font-size: 1rem;
+            background: #fffcf9;
+            transition: all 0.2s;
+        }
+
+        .auth-container input:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74,144,226,0.2);
+        }
+
+        .auth-btn {
+            background: linear-gradient(135deg, #4a90e2, #ff69b4);
+            color: white;
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74,144,226,0.3);
+        }
+
+        .switch-auth {
+            margin-top: 1.5rem;
+            color: #ff69b4;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .switch-auth:hover {
+            text-decoration: underline;
+            color: #4a90e2;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* Main App (hidden until logged in) */
+        .main-app {
+            display: none;
+        }
+
+        .love-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .love-header h1 {
+            font-size: 3.2rem;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #4a90e2, #ff69b4);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: inline-block;
+            padding: 0 1rem;
+        }
+
+        .love-header p {
+            font-size: 1.2rem;
+            color: #ff69b4;
+            margin-top: 0.6rem;
+            font-style: italic;
+        }
+
+        .divider {
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #4a90e2, #ff69b4);
+            margin: 1rem auto 0;
+            border-radius: 4px;
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem 1.5rem;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .user-email {
+            color: #4a90e2;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #ff69b4, #4a90e2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            transform: scale(0.95);
+        }
+
+        .upload-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2.5rem;
+            border: 2px solid;
+            border-image: linear-gradient(135deg, #4a90e2, #ff69b4);
+            border-image-slice: 1;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #4a90e2, #ff69b4);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.3rem;
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 2px solid #f0c0d0;
+            border-radius: 2rem;
+            font-family: inherit;
+            background: #fffcf9;
+            transition: all 0.2s;
+        }
+
+        .input-group input:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74,144,226,0.1);
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .file-label {
+            background: linear-gradient(135deg, #e8f4ff, #ffe0f0);
+            padding: 0.7rem 1.2rem;
+            border-radius: 2rem;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 500;
+            color: #4a90e2;
+            border: 2px dashed #ff69b4;
+            display: inline-block;
+            width: auto;
+        }
+
+        .file-label:hover {
+            background: linear-gradient(135deg, #d4eaff, #ffd0e4);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        button {
+            background: linear-gradient(135deg, #4a90e2, #ff69b4);
+            border: none;
+            padding: 0.7rem 1.8rem;
+            border-radius: 2.5rem;
+            font-weight: 600;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            margin-top: 1.2rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74,144,226,0.3);
+        }
+
+        /* memories grid */
+        .memories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .memory-card {
+            background: white;
+            border-radius: 1.8rem;
+            overflow: hidden;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+            transition: all 0.25s ease;
+            border: 1px solid #f0c0d0;
+        }
+
+        .memory-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 35px rgba(74,144,226,0.2);
+        }
+
+        .memory-img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #e8f4ff, #ffe0f0);
+        }
+
+        .memory-info {
+            padding: 1.2rem 1.2rem 1.4rem;
+        }
+
+        .memory-date {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #ff69b4;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+
+        .memory-caption {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #4a90e2;
+            margin-bottom: 0.4rem;
+            word-break: break-word;
+        }
+
+        .memory-note {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            line-height: 1.4;
+            margin-top: 0.3rem;
+            border-left: 3px solid #ff69b4;
+            padding-left: 0.7rem;
+        }
+
+        .delete-btn {
+            background: #ffe0f0;
+            border: none;
+            font-size: 0.7rem;
+            color: #ff69b4;
+            margin-top: 0.6rem;
+            padding: 0.3rem 0.8rem;
+            box-shadow: none;
+            border-radius: 2rem;
+            font-weight: normal;
+        }
+
+        .delete-btn:hover {
+            background: #ffc0d8;
+            transform: none;
+            color: #e74c3c;
+        }
+
+        .empty-message {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 4rem;
+            background: white;
+            border-radius: 3rem;
+            color: #ff69b4;
+            font-size: 1.2rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #4a90e2;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            font-size: 0.75rem;
+            background: linear-gradient(135deg, #4a90e2, #ff69b4);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            .love-header h1 {
+                font-size: 2rem;
+            }
+            .upload-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Auth Container -->
+    <div id="authContainer" class="auth-container">
+        <h2>💙💗 our private diary 💗💙</h2>
+        <div id="authForm">
+            <input type="email" id="authEmail" placeholder="your email 💌" required>
+            <input type="password" id="authPassword" placeholder="password (min 6 characters)" required>
+            <button id="signInBtn" class="auth-btn">💙 sign in 💗</button>
+            <div class="switch-auth" id="switchToSignUp">✨ first time? create an account ✨</div>
+        </div>
+        <div id="authError" class="error-message"></div>
+    </div>
+
+    <!-- Main App (after login) -->
+    <div id="mainApp" class="main-app">
+        <div class="love-header">
+            <h1>💙 you & me, forever 💗</h1>
+            <p>every picture, every whisper — our private cloud of memories</p>
+            <div class="divider"></div>
+        </div>
+
+        <div class="user-info">
+            <span class="user-email" id="userEmailDisplay">💙 logged in as</span>
+            <button id="logoutBtn" class="logout-btn">💗 sign out 💙</button>
+        </div>
+
+        <div class="upload-card">
+            <div class="form-row">
+                <div class="input-group">
+                    <label>📅 DATE</label>
+                    <input type="date" id="memoryDate" value="">
+                </div>
+                <div class="input-group">
+                    <label>📸 PICTURE</label>
+                    <label class="file-label" for="imageUpload">📂 choose image</label>
+                    <input type="file" id="imageUpload" accept="image/jpeg, image/png, image/jpg, image/gif, image/webp">
+                </div>
+                <div class="input-group">
+                    <label>🏷️ TITLE</label>
+                    <input type="text" id="memoryTitle" placeholder="e.g., First sunset together" autocomplete="off">
+                </div>
+            </div>
+            <div class="form-row" style="margin-top: 0.8rem;">
+                <div class="input-group" style="flex: 2;">
+                    <label>💌 PRIVATE NOTE</label>
+                    <textarea rows="1" id="memoryNote" placeholder="Your little story, feeling, or a secret joke..."></textarea>
+                </div>
+                <div class="input-group" style="flex: 0.5;">
+                    <button id="publishBtn">💗 add memory 💙</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="memoriesGrid" class="memories-grid">
+            <div class="loading">loading your love story... 💙💗</div>
+        </div>
+        <footer>made with 💙 & 💗 — our private cloud archive • synced forever</footer>
+    </div>
+</div>
+
+<script>
+    // Supabase configuration
+    const SUPABASE_URL = 'https://uhqoihahmocwjgzpiivd.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
+    
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    let currentUser = null;
+    
+    // Helper: Convert file to base64
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    // Load memories from Supabase
+    async function loadMemories() {
+        const grid = document.getElementById('memoriesGrid');
+        grid.innerHTML = '<div class="loading">loading your love story... 💙💗</div>';
+        
+        const { data, error } = await supabase
+            .from('memories')
+            .select('*')
+            .eq('user_id', currentUser.id)
+            .order('created_at', { ascending: false });
+        
+        if (error) {
+            console.error('Error loading memories:', error);
+            grid.innerHTML = '<div class="empty-message">💔 error loading memories. please refresh.</div>';
+            return;
+        }
+        
+        if (!data || data.length === 0) {
+            grid.innerHTML = `<div class="empty-message">🌸 no memories yet... upload your first beautiful picture together! 🌸</div>`;
+            return;
+        }
+        
+        let html = '';
+        for (let mem of data) {
+            let displayDate = mem.date;
+            if (mem.date) {
+                const d = new Date(mem.date);
+                if (!isNaN(d.getTime())) {
+                    displayDate = d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                }
+            }
+            
+            html += `
+                <div class="memory-card" data-id="${mem.id}">
+                    <img class="memory-img" src="${mem.image_url}" alt="memory from ${displayDate}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'300\'%3E%3Crect width=\'400\' height=\'300\' fill=\'%23ffe0f0\'/%3E%3Ctext x=\'50%%\' y=\'50%%\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%23ff69b4\' font-size=\'20\'%3E💗💙%3C/text%3E%3C/svg%3E'">
+                    <div class="memory-info">
+                        <div class="memory-date">📆 ${escapeHtml(displayDate)}</div>
+                        <div class="memory-caption">✨ ${escapeHtml(mem.title)}</div>
+                        <div class="memory-note">💬 ${escapeHtml(mem.note)}</div>
+                        <button class="delete-btn" data-id="${mem.id}">🗑️ remove memory</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        grid.innerHTML = html;
+        
+        // Attach delete events
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                if (confirm('💔 remove this memory? (it will be gone forever)')) {
+                    await supabase.from('memories').delete().eq('id', id);
+                    loadMemories(); // Reload after delete
+                }
+            });
+        });
+    }
+    
+    // Add new memory
+    async function addMemory() {
+        const dateInput = document.getElementById('memoryDate').value;
+        const titleInput = document.getElementById('memoryTitle').value.trim();
+        const noteInput = document.getElementById('memoryNote').value.trim();
+        const fileInput = document.getElementById('imageUpload');
+        
+        if (!dateInput) {
+            alert("💙 please pick a date for this sweet memory");
+            return;
+        }
+        if (!titleInput) {
+            alert("💗 give it a short title (e.g., 'our first picnic')");
+            return;
+        }
+        if (fileInput.files.length === 0) {
+            alert("💙💗 please select a picture to upload");
+            return;
+        }
+        
+        const file = fileInput.files[0];
+        let base64Image = "";
+        
+        try {
+            base64Image = await fileToBase64(file);
+        } catch(err) {
+            alert("couldn't read image, try another file");
+            return;
+        }
+        
+        const newMemory = {
+            user_id: currentUser.id,
+            date: dateInput,
+            title: titleInput,
+            note: noteInput || "❤️ a moment we'll never forget",
+            image_url: base64Image,
+            created_at: new Date().toISOString()
+        };
+        
+        const { error } = await supabase
+            .from('memories')
+            .insert([newMemory]);
+        
+        if (error) {
+            console.error('Error adding memory:', error);
+            alert('💔 error saving memory. make sure you\'re logged in and the table exists!');
+            return;
+        }
+        
+        // Reset form
+        document.getElementById('memoryDate').value = "";
+        document.getElementById('memoryTitle').value = "";
+        document.getElementById('memoryNote').value = "";
+        fileInput.value = "";
+        
+        // Reload memories
+        loadMemories();
+        
+        // Feedback
+        const btn = document.getElementById('publishBtn');
+        const originalText = btn.innerText;
+        btn.innerText = "✓ saved! 💙💗";
+        setTimeout(() => { btn.innerText = originalText; }, 1500);
+    }
+    
+    // Auth functions
+    async function signIn(email, password) {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+        
+        if (error) {
+            throw error;
+        }
+        return data;
+    }
+    
+    async function signUp(email, password) {
+        const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: password
+        });
+        
+        if (error) {
+            throw error;
+        }
+        return data;
+    }
+    
+    async function signOut() {
+        await supabase.auth.signOut();
+        showAuth();
+    }
+    
+    function showApp(user) {
+        currentUser = user;
+        document.getElementById('authContainer').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'block';
+        document.getElementById('userEmailDisplay').innerHTML = `💙 logged in as ${user.email} 💗`;
+        
+        // Set default date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('memoryDate').value = today;
+        
+        // Load memories
+        loadMemories();
+    }
+    
+    function showAuth() {
+        currentUser = null;
+        document.getElementById('authContainer').style.display = 'block';
+        document.getElementById('mainApp').style.display = 'none';
+        document.getElementById('authEmail').value = '';
+        document.getElementById('authPassword').value = '';
+        document.getElementById('authError').style.display = 'none';
+    }
+    
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', () => {
+        // Check if user is already logged in
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            if (session) {
+                showApp(session.user);
+            } else {
+                showAuth();
+            }
+        });
+        
+        // Auth form handling
+        let isSignUp = false;
+        
+        document.getElementById('signInBtn').addEventListener('click', async () => {
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            const errorDiv = document.getElementById('authError');
+            
+            if (!email || !password) {
+                errorDiv.textContent = '💙💗 please enter both email and password';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            if (password.length < 6) {
+                errorDiv.textContent = '💗 password must be at least 6 characters';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            try {
+                if (isSignUp) {
+                    const result = await signUp(email, password);
+                    if (result.user) {
+                        errorDiv.textContent = '✨ account created! please sign in ✨';
+                        errorDiv.style.color = '#4a90e2';
+                        errorDiv.style.display = 'block';
+                        isSignUp = false;
+                        document.getElementById('signInBtn').textContent = '💙 sign in 💗';
+                        document.getElementById('switchToSignUp').textContent = '✨ first time? create an account ✨';
+                    }
+                } else {
+                    const result = await signIn(email, password);
+                    showApp(result.user);
+                }
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.style.color = '#e74c3c';
+                errorDiv.style.display = 'block';
+            }
+        });
+        
+        document.getElementById('switchToSignUp').addEventListener('click', () => {
+            isSignUp = !isSignUp;
+            if (isSignUp) {
+                document.getElementById('signInBtn').textContent = '💗 create account 💙';
+                document.getElementById('switchToSignUp').textContent = '← already have an account? sign in';
+                document.getElementById('authError').style.display = 'none';
+            } else {
+                document.getElementById('signInBtn').textContent = '💙 sign in 💗';
+                document.getElementById('switchToSignUp').textContent = '✨ first time? create an account ✨';
+                document.getElementById('authError').style.display = 'none';
+            }
+        });
+        
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+            signOut();
+        });
+        
+        document.getElementById('publishBtn')?.addEventListener('click', () => {
+            if (currentUser) {
+                addMemory();
+            } else {
+                alert('please sign in first');
+            }
+        });
+    });
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+</script>
+</body>
+</html>
