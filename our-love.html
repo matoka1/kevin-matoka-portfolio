@@ -14,7 +14,7 @@
 
         body {
             background: linear-gradient(135deg, #e8f4ff 0%, #ffe0f0 50%, #e8f4ff 100%);
-            font-family: 'Segoe UI', 'Quicksand', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+            font-family: 'Segoe UI', 'Quicksand', system-ui, sans-serif;
             min-height: 100vh;
             padding: 2rem 1.5rem 4rem;
             color: #2c3e50;
@@ -32,10 +32,10 @@
             border-radius: 2rem;
             padding: 2.5rem;
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            border: 2px solid;
-            border-image: linear-gradient(135deg, #4a90e2, #ff69b4);
-            border-image-slice: 1;
             text-align: center;
+            border: 2px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, #4a90e2, #ff69b4) border-box;
         }
 
         .combined-name {
@@ -65,12 +65,6 @@
             background: #fffcf9;
         }
 
-        .auth-container input:focus {
-            outline: none;
-            border-color: #4a90e2;
-            box-shadow: 0 0 0 3px rgba(74,144,226,0.2);
-        }
-
         .auth-btn {
             background: linear-gradient(135deg, #4a90e2, #ff69b4);
             color: white;
@@ -86,7 +80,6 @@
 
         .auth-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(74,144,226,0.3);
         }
 
         .error-message {
@@ -124,7 +117,6 @@
             height: 3px;
             background: linear-gradient(90deg, #4a90e2, #ff69b4);
             margin: 1rem auto;
-            border-radius: 4px;
         }
 
         .user-info {
@@ -135,7 +127,6 @@
             padding: 1rem 1.5rem;
             background: white;
             border-radius: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
         .logout-btn {
@@ -147,14 +138,43 @@
             cursor: pointer;
         }
 
+        .filter-bar {
+            background: white;
+            border-radius: 2rem;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background: #ffe0f0;
+            color: #ff69b4;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: linear-gradient(135deg, #4a90e2, #ff69b4);
+            color: white;
+            transform: translateY(-2px);
+        }
+
         .upload-card {
             background: white;
             border-radius: 2rem;
             padding: 1.5rem 2rem;
             margin-bottom: 2.5rem;
-            border: 2px solid;
-            border-image: linear-gradient(135deg, #4a90e2, #ff69b4);
-            border-image-slice: 1;
+            border: 2px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, #4a90e2, #ff69b4) border-box;
         }
 
         .form-row {
@@ -213,9 +233,8 @@
         }
 
         .preview-item {
-            position: relative;
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
         }
 
         .preview-img, .preview-video {
@@ -236,6 +255,11 @@
             cursor: pointer;
         }
 
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .memories-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -249,7 +273,12 @@
             overflow: hidden;
             box-shadow: 0 12px 28px rgba(0,0,0,0.1);
             transition: transform 0.25s;
-            border: 1px solid #f0c0d0;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .memory-card:hover {
@@ -258,25 +287,18 @@
 
         .memory-media {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 0.25rem;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 2px;
+            max-height: 250px;
+            overflow: hidden;
             background: #f5f5f5;
-            max-height: 300px;
-            overflow-y: auto;
         }
 
         .memory-img, .memory-video {
             width: 100%;
-            height: 180px;
+            height: 150px;
             object-fit: cover;
             cursor: pointer;
-        }
-
-        .create-video-btn {
-            background: linear-gradient(135deg, #ff69b4, #4a90e2);
-            margin-top: 0.5rem;
-            font-size: 0.8rem;
-            padding: 0.3rem 0.8rem;
         }
 
         .memory-info {
@@ -284,7 +306,7 @@
         }
 
         .memory-date {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             color: #ff69b4;
         }
@@ -301,14 +323,39 @@
             color: #7f8c8d;
             border-left: 3px solid #ff69b4;
             padding-left: 0.7rem;
+            margin-top: 0.5rem;
+        }
+
+        .event-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #e8f4ff, #ffe0f0);
+            padding: 0.2rem 0.7rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #4a90e2;
+            margin-top: 0.5rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
         }
 
         .delete-btn {
             background: #ffe0f0;
             color: #ff69b4;
-            margin-top: 0.6rem;
             font-size: 0.7rem;
             padding: 0.3rem 0.8rem;
+            flex: 1;
+        }
+
+        .create-video-btn {
+            background: linear-gradient(135deg, #4a90e2, #ff69b4);
+            font-size: 0.7rem;
+            padding: 0.3rem 0.8rem;
+            flex: 1;
         }
 
         .empty-message {
@@ -320,6 +367,111 @@
             color: #ff69b4;
         }
 
+        .loading-skeleton {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .skeleton-card {
+            background: white;
+            border-radius: 1.8rem;
+            height: 350px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #f0c0d0;
+            border-radius: 2px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #4a90e2, #ff69b4);
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+
+        .load-more-btn {
+            display: block;
+            margin: 2rem auto;
+            padding: 0.8rem 2rem;
+        }
+
+        /* Video Creator Modal */
+        .video-creator-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-creator-content {
+            background: white;
+            border-radius: 2rem;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .video-creator-content h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #4a90e2, #ff69b4);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .video-preview {
+            width: 100%;
+            background: #000;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .video-controls input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #f0c0d0;
+            border-radius: 0.5rem;
+        }
+
+        .close-video-modal {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -327,7 +479,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -336,11 +488,6 @@
         .modal-content {
             max-width: 90%;
             max-height: 90%;
-        }
-
-        .modal-content video, .modal-content img {
-            width: 100%;
-            max-height: 90vh;
         }
 
         .close-modal {
@@ -364,7 +511,6 @@
     <div id="authContainer" class="auth-container">
         <div class="combined-name">💙 KEVINE 💗</div>
         <div class="combined-sub">Kevin + Celine = Forever</div>
-        <h2>🔐 our private sanctuary</h2>
         <input type="password" id="authPassword" placeholder="enter our secret password 🔑">
         <button id="signInBtn" class="auth-btn">💙 enter our love world 💗</button>
         <div id="authError" class="error-message"></div>
@@ -395,6 +541,20 @@
             </div>
             <div class="form-row">
                 <div class="input-group">
+                    <label>🎭 EVENT TYPE</label>
+                    <select id="eventType">
+                        <option value="General">💗 General Memory</option>
+                        <option value="Anniversary">🎉 Anniversary</option>
+                        <option value="Vacation">✈️ Vacation</option>
+                        <option value="Date Night">🌙 Date Night</option>
+                        <option value="Celebration">🎊 Celebration</option>
+                        <option value="Everyday">💙 Everyday Joy</option>
+                        <option value="Special">✨ Special Moment</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-group">
                     <label>💌 MEMORY NOTE</label>
                     <textarea rows="2" id="memoryNote" placeholder="Write down this beautiful moment... 💕"></textarea>
                 </div>
@@ -402,20 +562,62 @@
             <div class="form-row">
                 <div class="input-group">
                     <label>📸 UPLOAD PICTURES & VIDEOS</label>
-                    <label class="file-label" for="mediaUpload">📂 choose files (images/videos)</label>
-                    <input type="file" id="mediaUpload" accept="image/jpeg, image/png, image/jpg, image/gif, image/webp, video/mp4, video/quicktime, video/webm" multiple>
+                    <label class="file-label" for="mediaUpload">📂 choose files</label>
+                    <input type="file" id="mediaUpload" accept="image/*,video/*" multiple>
                 </div>
             </div>
             <div id="mediaPreview" class="media-preview"></div>
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
             <div class="form-row">
                 <button id="publishBtn">💗 add to our story 💙</button>
             </div>
         </div>
 
-        <div id="memoriesGrid" class="memories-grid">
-            <div class="empty-message">loading our beautiful journey... 💙💗</div>
+        <div class="filter-bar" id="filterBar">
+            <button class="filter-btn active" data-filter="all">💗 All Memories</button>
+            <button class="filter-btn" data-filter="Anniversary">🎉 Anniversary</button>
+            <button class="filter-btn" data-filter="Vacation">✈️ Vacation</button>
+            <button class="filter-btn" data-filter="Date Night">🌙 Date Night</button>
+            <button class="filter-btn" data-filter="Celebration">🎊 Celebration</button>
+            <button class="filter-btn" data-filter="Everyday">💙 Everyday Joy</button>
+            <button class="filter-btn" data-filter="Special">✨ Special</button>
         </div>
-        <footer style="text-align: center; margin-top: 2rem;">kevine.love — every picture and video tells our story</footer>
+
+        <div id="memoriesGrid" class="memories-grid">
+            <div class="loading-skeleton">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+            </div>
+        </div>
+        
+        <button id="loadMoreBtn" class="load-more-btn" style="display: none;">💗 Load More Memories 💙</button>
+    </div>
+</div>
+
+<!-- Video Creator Modal -->
+<div id="videoCreatorModal" class="video-creator-modal">
+    <span class="close-video-modal">&times;</span>
+    <div class="video-creator-content">
+        <h2>🎬 Create Your Love Story Video 🎬</h2>
+        <canvas id="videoCanvas" class="video-preview" width="720" height="540" style="width:100%; height:auto; background:#000;"></canvas>
+        <div class="video-controls">
+            <input type="text" id="videoTitle" placeholder="Video Title (e.g., Our Beautiful Day)">
+            <input type="text" id="videoMusic" placeholder="Add Music URL (optional)">
+        </div>
+        <div class="video-controls">
+            <button id="previewVideoBtn">▶️ Preview</button>
+            <button id="generateVideoBtn">💾 Generate & Download Video</button>
+            <button id="closeVideoCreatorBtn">Close</button>
+        </div>
+        <div id="videoProgress" style="display:none; text-align:center; margin-top:1rem;">
+            <div class="progress-bar" style="display:block;">
+                <div class="progress-fill" id="videoProgressFill" style="width:0%"></div>
+            </div>
+            <p id="videoStatus">Creating your video... 💙💗</p>
+        </div>
     </div>
 </div>
 
@@ -433,12 +635,16 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
         
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
-        // Password stored securely in Supabase - we'll fetch it
         let CORRECT_PASSWORD = null;
         let currentUser = null;
+        let allMemories = [];
+        let currentFilter = 'all';
+        let visibleCount = 6;
+        let currentVideoImages = [];
+        let currentVideoTitle = '';
+        let mediaRecorder = null;
+        let recordedChunks = [];
         
-        // Fetch the password from Supabase
         async function fetchPassword() {
             const { data, error } = await supabase
                 .from('app_config')
@@ -448,81 +654,392 @@
             
             if (error) {
                 console.error('Error fetching password:', error);
-                // Fallback - but user should create the config table
-                document.getElementById('authError').textContent = '⚠️ Setup: Please create app_config table in Supabase';
-                document.getElementById('authError').style.display = 'block';
                 return null;
             }
             return data.value;
         }
         
-        function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = reject;
+        async function uploadToStorage(file) {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+            const filePath = `memories/${fileName}`;
+            
+            const { error } = await supabase.storage
+                .from('love-memories')
+                .upload(filePath, file, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+            
+            if (error) throw error;
+            
+            const { data: { publicUrl } } = supabase.storage
+                .from('love-memories')
+                .getPublicUrl(filePath);
+            
+            return publicUrl;
+        }
+        
+        // Built-in Video Generator
+        async function createSlideshowVideo(images, title) {
+            return new Promise(async (resolve, reject) => {
+                const modal = document.getElementById('videoCreatorModal');
+                const canvas = document.getElementById('videoCanvas');
+                const ctx = canvas.getContext('2d');
+                const videoProgress = document.getElementById('videoProgress');
+                const progressFill = document.getElementById('videoProgressFill');
+                const statusText = document.getElementById('videoStatus');
+                
+                modal.style.display = 'flex';
+                document.getElementById('videoTitle').value = title;
+                
+                let currentImageIndex = 0;
+                let animationId = null;
+                let isRecording = false;
+                let stream = null;
+                
+                // Load all images
+                const loadedImages = [];
+                for (let i = 0; i < images.length; i++) {
+                    const img = new Image();
+                    img.crossOrigin = 'Anonymous';
+                    await new Promise((resolveImg) => {
+                        img.onload = () => {
+                            loadedImages.push(img);
+                            resolveImg();
+                        };
+                        img.onerror = () => {
+                            // Use placeholder if image fails to load
+                            const placeholder = new Image();
+                            placeholder.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect width="400" height="300" fill="%23ff69b4"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="white" font-size="20"%3ELove%3C/text%3E%3C/svg%3E';
+                            placeholder.onload = () => {
+                                loadedImages.push(placeholder);
+                                resolveImg();
+                            };
+                            placeholder.onerror = () => resolveImg();
+                        };
+                        img.src = images[i];
+                    });
+                }
+                
+                if (loadedImages.length === 0) {
+                    alert('No images to create video from!');
+                    reject('No images');
+                    return;
+                }
+                
+                function drawFrame() {
+                    if (!canvas || !ctx) return;
+                    const img = loadedImages[currentImageIndex % loadedImages.length];
+                    if (img) {
+                        // Calculate scaling to fit canvas
+                        const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+                        const x = (canvas.width - img.width * scale) / 2;
+                        const y = (canvas.height - img.height * scale) / 2;
+                        ctx.fillStyle = '#4a90e2';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+                        
+                        // Add text overlay
+                        ctx.fillStyle = 'white';
+                        ctx.shadowBlur = 10;
+                        ctx.shadowColor = 'black';
+                        ctx.font = 'bold 24px "Segoe UI"';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(title || 'Our Love Story', canvas.width / 2, 50);
+                        
+                        const dateText = new Date().toLocaleDateString();
+                        ctx.font = '16px "Segoe UI"';
+                        ctx.fillText(dateText, canvas.width / 2, canvas.height - 30);
+                        ctx.shadowBlur = 0;
+                    }
+                }
+                
+                function animateSlideshow() {
+                    drawFrame();
+                    currentImageIndex = (currentImageIndex + 1) % loadedImages.length;
+                    animationId = setTimeout(() => {
+                        requestAnimationFrame(animateSlideshow);
+                    }, 3000); // Change image every 3 seconds
+                }
+                
+                // Preview button
+                document.getElementById('previewVideoBtn').onclick = () => {
+                    if (animationId) clearTimeout(animationId);
+                    currentImageIndex = 0;
+                    animateSlideshow();
+                };
+                
+                // Generate and download video
+                document.getElementById('generateVideoBtn').onclick = async () => {
+                    if (isRecording) return;
+                    
+                    const videoTitle = document.getElementById('videoTitle').value || 'Our Love Story';
+                    videoProgress.style.display = 'block';
+                    progressFill.style.width = '0%';
+                    statusText.textContent = 'Initializing... 💙';
+                    
+                    try {
+                        // Stop any ongoing animation
+                        if (animationId) clearTimeout(animationId);
+                        
+                        // Reset to first image
+                        currentImageIndex = 0;
+                        drawFrame();
+                        
+                        // Create stream from canvas
+                        stream = canvas.captureStream(30); // 30 fps
+                        
+                        // Create media recorder
+                        const mimeType = MediaRecorder.isTypeSupported('video/webm') ? 'video/webm' : 'video/mp4';
+                        mediaRecorder = new MediaRecorder(stream, { mimeType });
+                        recordedChunks = [];
+                        
+                        mediaRecorder.ondataavailable = (event) => {
+                            if (event.data.size > 0) {
+                                recordedChunks.push(event.data);
+                            }
+                        };
+                        
+                        mediaRecorder.onstop = () => {
+                            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `kevine_${videoTitle.replace(/[^a-z0-9]/gi, '_')}_${Date.now()}.webm`;
+                            a.click();
+                            URL.revokeObjectURL(url);
+                            statusText.textContent = '✅ Video created successfully! 💙💗';
+                            setTimeout(() => {
+                                videoProgress.style.display = 'none';
+                                progressFill.style.width = '0%';
+                            }, 2000);
+                            isRecording = false;
+                            resolve(url);
+                        };
+                        
+                        mediaRecorder.start();
+                        isRecording = true;
+                        statusText.textContent = 'Recording video... 🎬';
+                        
+                        // Record for 3 seconds per image (total duration)
+                        const totalDuration = loadedImages.length * 3000;
+                        let elapsed = 0;
+                        let frameIndex = 0;
+                        
+                        const recordInterval = setInterval(() => {
+                            if (!isRecording) {
+                                clearInterval(recordInterval);
+                                return;
+                            }
+                            
+                            drawFrame();
+                            frameIndex = (frameIndex + 1) % loadedImages.length;
+                            elapsed += 100;
+                            progressFill.style.width = `${(elapsed / totalDuration) * 100}%`;
+                            statusText.textContent = `Recording... ${Math.floor((elapsed / totalDuration) * 100)}%`;
+                            
+                            if (elapsed >= totalDuration) {
+                                clearInterval(recordInterval);
+                                mediaRecorder.stop();
+                                if (stream) {
+                                    stream.getTracks().forEach(track => track.stop());
+                                }
+                            }
+                        }, 100);
+                        
+                    } catch (err) {
+                        console.error('Video creation error:', err);
+                        statusText.textContent = 'Error creating video. Please try again.';
+                        setTimeout(() => {
+                            videoProgress.style.display = 'none';
+                        }, 2000);
+                        reject(err);
+                    }
+                };
+                
+                // Close modal
+                const closeModal = () => {
+                    if (animationId) clearTimeout(animationId);
+                    if (mediaRecorder && isRecording) {
+                        mediaRecorder.stop();
+                    }
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                    }
+                    modal.style.display = 'none';
+                    videoProgress.style.display = 'none';
+                    isRecording = false;
+                };
+                
+                document.getElementById('closeVideoCreatorBtn').onclick = closeModal;
+                document.querySelector('.close-video-modal').onclick = closeModal;
             });
         }
         
-        function isVideo(file) {
-            return file.type.startsWith('video/');
+        // Auto-generate video from photos on the same day
+        async function generateVideoFromDay(selectedDate, title) {
+            // Find all memories from the same date that have photos
+            const sameDayMemories = allMemories.filter(m => m.date === selectedDate);
+            
+            // Collect all image URLs from that day (excluding videos)
+            let allImages = [];
+            for (let mem of sameDayMemories) {
+                let mediaArray = [];
+                try {
+                    mediaArray = JSON.parse(mem.media_urls);
+                } catch {
+                    mediaArray = [mem.media_urls];
+                }
+                // Get only images (not videos)
+                const images = mediaArray.filter(url => !url.match(/\.(mp4|webm|mov)/i));
+                allImages.push(...images);
+            }
+            
+            if (allImages.length === 0) {
+                alert('No photos found from this day to create a video! Upload some photos first.');
+                return;
+            }
+            
+            currentVideoImages = allImages;
+            currentVideoTitle = title;
+            
+            await createSlideshowVideo(allImages, title);
         }
         
-        // Preview media
-        document.addEventListener('DOMContentLoaded', () => {
-            const mediaInput = document.getElementById('mediaUpload');
-            if (mediaInput) {
-                mediaInput.addEventListener('change', (e) => {
-                    const preview = document.getElementById('mediaPreview');
-                    preview.innerHTML = '';
-                    const files = Array.from(e.target.files);
-                    files.forEach(file => {
-                        const reader = new FileReader();
-                        reader.onload = (event) => {
-                            const div = document.createElement('div');
-                            div.className = 'preview-item';
-                            if (isVideo(file)) {
-                                const video = document.createElement('video');
-                                video.src = event.target.result;
-                                video.className = 'preview-video';
-                                video.controls = true;
-                                div.appendChild(video);
-                            } else {
-                                const img = document.createElement('img');
-                                img.src = event.target.result;
-                                img.className = 'preview-img';
-                                div.appendChild(img);
-                            }
-                            preview.appendChild(div);
-                        };
-                        reader.readAsDataURL(file);
-                    });
-                });
-            }
-        });
-        
-        async function loadMemories() {
-            const grid = document.getElementById('memoriesGrid');
-            grid.innerHTML = '<div class="empty-message">loading our beautiful journey... 💙💗</div>';
+        async function addMemory() {
+            const dateInput = document.getElementById('memoryDate').value;
+            const titleInput = document.getElementById('memoryTitle').value.trim();
+            const noteInput = document.getElementById('memoryNote').value.trim();
+            const eventType = document.getElementById('eventType').value;
+            const fileInput = document.getElementById('mediaUpload');
             
+            if (!dateInput) { alert("💙 please pick a date"); return; }
+            if (!titleInput) { alert("💗 give this memory a title"); return; }
+            if (fileInput.files.length === 0) { alert("💙💗 please select at least one picture or video"); return; }
+            
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            const publishBtn = document.getElementById('publishBtn');
+            
+            progressBar.style.display = 'block';
+            publishBtn.disabled = true;
+            publishBtn.textContent = '⏳ uploading...';
+            
+            try {
+                const mediaUrls = [];
+                const files = Array.from(fileInput.files);
+                
+                for (let i = 0; i < files.length; i++) {
+                    progressFill.style.width = `${(i / files.length) * 100}%`;
+                    const url = await uploadToStorage(files[i]);
+                    mediaUrls.push(url);
+                }
+                
+                progressFill.style.width = '100%';
+                
+                const { error } = await supabase.from('memories').insert([{
+                    user_id: 'kevine_couple',
+                    date: dateInput,
+                    title: titleInput,
+                    note: noteInput || "❤️ a moment we'll never forget",
+                    event_type: eventType,
+                    media_urls: JSON.stringify(mediaUrls),
+                    created_at: new Date().toISOString()
+                }]);
+                
+                if (error) throw error;
+                
+                document.getElementById('memoryDate').value = '';
+                document.getElementById('memoryTitle').value = '';
+                document.getElementById('memoryNote').value = '';
+                document.getElementById('mediaUpload').value = '';
+                document.getElementById('mediaPreview').innerHTML = '';
+                document.getElementById('memoryDate').value = new Date().toISOString().split('T')[0];
+                document.getElementById('eventType').value = 'General';
+                
+                await loadAllMemories();
+                renderMemories();
+                
+                // Ask if user wants to create a video from all photos today
+                const todayPhotos = allMemories.filter(m => m.date === dateInput);
+                let totalPhotos = 0;
+                for (let mem of todayPhotos) {
+                    let media = JSON.parse(mem.media_urls);
+                    totalPhotos += media.filter(url => !url.match(/\.(mp4|webm|mov)/i)).length;
+                }
+                
+                if (totalPhotos >= 2) {
+                    const makeVideo = confirm(`🎬 You now have ${totalPhotos} photos from ${dateInput}! Would you like to create a video slideshow from all these photos?`);
+                    if (makeVideo) {
+                        await generateVideoFromDay(dateInput, titleInput);
+                    }
+                }
+                
+                publishBtn.textContent = "✓ saved! 💙💗";
+                setTimeout(() => { 
+                    publishBtn.textContent = "💗 add to our story 💙";
+                    publishBtn.disabled = false;
+                    progressBar.style.display = 'none';
+                    progressFill.style.width = '0%';
+                }, 2000);
+                
+            } catch (err) {
+                alert('Error: ' + err.message);
+                publishBtn.disabled = false;
+                publishBtn.textContent = "💗 add to our story 💙";
+                progressBar.style.display = 'none';
+            }
+        }
+        
+        async function deleteMemory(memoryId, memoryDate, memoryTitle) {
+            if (confirm(`💔 Remove "${memoryTitle}"? This will delete all photos and videos in this memory.`)) {
+                const { error } = await supabase.from('memories').delete().eq('id', memoryId);
+                
+                if (error) {
+                    alert('Error deleting: ' + error.message);
+                } else {
+                    await loadAllMemories();
+                    renderMemories();
+                    alert('💔 Memory removed successfully');
+                }
+            }
+        }
+        
+        async function loadAllMemories() {
             const { data, error } = await supabase
                 .from('memories')
                 .select('*')
                 .order('created_at', { ascending: false });
             
             if (error) {
-                grid.innerHTML = '<div class="empty-message">💔 Error loading memories</div>';
-                return;
+                console.error('Error loading memories:', error);
+                return [];
             }
             
-            if (!data || data.length === 0) {
+            allMemories = data;
+            return allMemories;
+        }
+        
+        function renderMemories() {
+            const grid = document.getElementById('memoriesGrid');
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            
+            let filtered = allMemories;
+            if (currentFilter !== 'all') {
+                filtered = allMemories.filter(m => m.event_type === currentFilter);
+            }
+            
+            const visibleMemories = filtered.slice(0, visibleCount);
+            
+            if (visibleMemories.length === 0) {
                 grid.innerHTML = `<div class="empty-message">🌸 no memories yet... upload your first beautiful moment together! 🌸</div>`;
+                loadMoreBtn.style.display = 'none';
                 return;
             }
             
             let html = '';
-            for (let mem of data) {
+            for (let mem of visibleMemories) {
                 let mediaArray = [];
                 try {
                     mediaArray = JSON.parse(mem.media_urls);
@@ -530,27 +1047,38 @@
                     mediaArray = [mem.media_urls];
                 }
                 
-                const displayDate = new Date(mem.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                const displayDate = new Date(mem.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                const displayMedia = mediaArray.slice(0, 3);
+                const remainingCount = mediaArray.length - 3;
                 
-                const mediaHtml = mediaArray.map(url => {
-                    const isVideoFile = url.includes('video/mp4') || url.match(/\.(mp4|webm|mov)/i);
-                    if (isVideoFile || url.includes('blob:') && url.includes('video')) {
-                        return `<video class="memory-video" controls><source src="${url}" type="video/mp4"></video>`;
+                const mediaHtml = displayMedia.map(url => {
+                    const isVideo = url.match(/\.(mp4|webm|mov)/i);
+                    if (isVideo) {
+                        return `<video class="memory-video" controls preload="metadata"><source src="${url}" type="video/mp4"></video>`;
                     }
-                    return `<img class="memory-img" src="${url}" alt="memory">`;
+                    return `<img class="memory-img" src="${url}" alt="memory" loading="lazy">`;
                 }).join('');
                 
+                const eventEmoji = {
+                    'Anniversary': '🎉', 'Vacation': '✈️', 'Date Night': '🌙', 
+                    'Celebration': '🎊', 'Everyday': '💙', 'Special': '✨', 'General': '💗'
+                }[mem.event_type] || '💗';
+                
                 html += `
-                    <div class="memory-card">
+                    <div class="memory-card" data-id="${mem.id}" data-date="${mem.date}">
                         <div class="memory-media">
                             ${mediaHtml}
+                            ${remainingCount > 0 ? `<div style="display:flex;align-items:center;justify-content:center;background:#f0c0d0;color:#ff69b4;font-size:0.8rem;">+${remainingCount} more</div>` : ''}
                         </div>
                         <div class="memory-info">
                             <div class="memory-date">📆 ${displayDate}</div>
                             <div class="memory-caption">✨ ${escapeHtml(mem.title)}</div>
+                            <div class="event-tag">${eventEmoji} ${mem.event_type || 'General'}</div>
                             <div class="memory-note">💬 ${escapeHtml(mem.note)}</div>
-                            <button class="create-video-btn" data-media='${JSON.stringify(mediaArray)}' data-title="${escapeHtml(mem.title)}">🎬 create video slideshow from pictures</button>
-                            <button class="delete-btn" data-id="${mem.id}">🗑️ remove this memory</button>
+                            <div class="btn-group">
+                                <button class="delete-btn" data-id="${mem.id}" data-title="${escapeHtml(mem.title)}" data-date="${mem.date}">🗑️ Remove</button>
+                                <button class="create-video-btn" data-date="${mem.date}" data-title="${escapeHtml(mem.title)}">🎬 Create Video</button>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -558,7 +1086,31 @@
             
             grid.innerHTML = html;
             
-            // Add click handlers for media
+            if (filtered.length > visibleCount) {
+                loadMoreBtn.style.display = 'block';
+            } else {
+                loadMoreBtn.style.display = 'none';
+            }
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = btn.getAttribute('data-id');
+                    const title = btn.getAttribute('data-title');
+                    const date = btn.getAttribute('data-date');
+                    deleteMemory(id, date, title);
+                });
+            });
+            
+            document.querySelectorAll('.create-video-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const date = btn.getAttribute('data-date');
+                    const title = btn.getAttribute('data-title');
+                    await generateVideoFromDay(date, title);
+                });
+            });
+            
             document.querySelectorAll('.memory-img').forEach(img => {
                 img.addEventListener('click', () => {
                     document.getElementById('modalImage').style.display = 'block';
@@ -567,115 +1119,75 @@
                     document.getElementById('mediaModal').style.display = 'flex';
                 });
             });
+        }
+        
+        function loadMore() {
+            visibleCount += 6;
+            renderMemories();
+        }
+        
+        function setFilter(filter) {
+            currentFilter = filter;
+            visibleCount = 6;
+            renderMemories();
             
-            document.querySelectorAll('.memory-video').forEach(video => {
-                video.addEventListener('click', () => {
-                    document.getElementById('modalImage').style.display = 'none';
-                    document.getElementById('modalVideo').style.display = 'block';
-                    document.getElementById('modalVideo').src = video.querySelector('source')?.src || video.src;
-                    document.getElementById('mediaModal').style.display = 'flex';
-                });
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.getAttribute('data-filter') === filter) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
             });
-            
-            // Video creation buttons
-            document.querySelectorAll('.create-video-btn').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    const mediaArray = JSON.parse(btn.getAttribute('data-media'));
-                    const title = btn.getAttribute('data-title');
-                    await createVideoSlideshow(mediaArray, title);
-                });
-            });
-            
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    const id = btn.getAttribute('data-id');
-                    if (confirm('💔 remove this memory?')) {
-                        await supabase.from('memories').delete().eq('id', id);
-                        loadMemories();
+        }
+        
+        document.getElementById('mediaUpload')?.addEventListener('change', (e) => {
+            const preview = document.getElementById('mediaPreview');
+            preview.innerHTML = '';
+            const files = Array.from(e.target.files).slice(0, 6);
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const div = document.createElement('div');
+                    div.className = 'preview-item';
+                    if (file.type.startsWith('video/')) {
+                        const video = document.createElement('video');
+                        video.src = event.target.result;
+                        video.className = 'preview-video';
+                        video.controls = true;
+                        div.appendChild(video);
+                    } else {
+                        const img = document.createElement('img');
+                        img.src = event.target.result;
+                        img.className = 'preview-img';
+                        div.appendChild(img);
                     }
-                });
+                    preview.appendChild(div);
+                };
+                reader.readAsDataURL(file);
             });
-        }
-        
-        // Create video from images
-        async function createVideoSlideshow(mediaUrls, title) {
-            const imageUrls = mediaUrls.filter(url => !url.includes('video') && !url.match(/\.(mp4|webm|mov)/i));
-            
-            if (imageUrls.length === 0) {
-                alert('This memory has no pictures to create a video from!');
-                return;
-            }
-            
-            alert(`🎬 Creating video from ${imageUrls.length} pictures... This will open a new tab with a video maker.\n\nPro tip: Use online tools like "Kapwing" or "Canva" to create professional slideshows from these images.\n\nImages: ${imageUrls.join(', ')}`);
-            
-            // Save images to local storage for easy access
-            localStorage.setItem('slideshow_images', JSON.stringify(imageUrls));
-            localStorage.setItem('slideshow_title', title);
-            
-            // Open a video creation tool suggestion
-            window.open('https://www.canva.com/create/video-slideshow/', '_blank');
-        }
-        
-        async function addMemory() {
-            const dateInput = document.getElementById('memoryDate').value;
-            const titleInput = document.getElementById('memoryTitle').value.trim();
-            const noteInput = document.getElementById('memoryNote').value.trim();
-            const fileInput = document.getElementById('mediaUpload');
-            
-            if (!dateInput) { alert("💙 please pick a date"); return; }
-            if (!titleInput) { alert("💗 give this memory a title"); return; }
-            if (fileInput.files.length === 0) { alert("💙💗 please select at least one picture or video"); return; }
-            
-            const mediaPromises = Array.from(fileInput.files).map(file => fileToBase64(file));
-            const mediaBase64 = await Promise.all(mediaPromises);
-            
-            const { error } = await supabase.from('memories').insert([{
-                user_id: 'kevine-couple',
-                date: dateInput,
-                title: titleInput,
-                note: noteInput || "❤️ a moment we'll never forget",
-                media_urls: JSON.stringify(mediaBase64),
-                created_at: new Date().toISOString()
-            }]);
-            
-            if (error) {
-                alert('Error: ' + error.message);
-                return;
-            }
-            
-            // Reset form
-            document.getElementById('memoryDate').value = '';
-            document.getElementById('memoryTitle').value = '';
-            document.getElementById('memoryNote').value = '';
-            document.getElementById('mediaUpload').value = '';
-            document.getElementById('mediaPreview').innerHTML = '';
-            document.getElementById('memoryDate').value = new Date().toISOString().split('T')[0];
-            
-            loadMemories();
-            
-            const btn = document.getElementById('publishBtn');
-            const originalText = btn.innerText;
-            btn.innerText = "✓ saved to our story! 💙💗";
-            setTimeout(() => { btn.innerText = originalText; }, 1500);
-        }
+        });
         
         async function loginWithPassword(password) {
             if (!CORRECT_PASSWORD) {
                 CORRECT_PASSWORD = await fetchPassword();
             }
             if (password === CORRECT_PASSWORD) {
-                currentUser = { id: 'kevine-celine', email: 'kevin&celine@love.com' };
+                currentUser = { id: 'kevine_couple' };
                 showApp();
                 return true;
             }
             return false;
         }
         
-        function showApp() {
+        async function showApp() {
             document.getElementById('authContainer').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
             document.getElementById('memoryDate').value = new Date().toISOString().split('T')[0];
-            loadMemories();
+            
+            document.getElementById('memoriesGrid').innerHTML = '<div class="loading-skeleton"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div>';
+            
+            await loadAllMemories();
+            renderMemories();
         }
         
         function showAuth() {
@@ -690,12 +1202,10 @@
             return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
         
-        // Initialize
         document.addEventListener('DOMContentLoaded', async () => {
             await fetchPassword();
             showAuth();
             
-            // Modal close
             document.querySelector('.close-modal').onclick = () => {
                 document.getElementById('mediaModal').style.display = 'none';
                 document.getElementById('modalVideo').pause();
@@ -730,10 +1240,12 @@
             });
             
             document.getElementById('logoutBtn').onclick = () => showAuth();
-            document.getElementById('publishBtn').onclick = () => {
-                if (currentUser) addMemory();
-                else alert('please sign in first');
-            };
+            document.getElementById('publishBtn').onclick = addMemory;
+            document.getElementById('loadMoreBtn').onclick = loadMore;
+            
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.onclick = () => setFilter(btn.getAttribute('data-filter'));
+            });
         });
     })();
 </script>
