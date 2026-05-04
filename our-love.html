@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Our Love Story · Blue & Pink Forever</title>
-    <!-- Supabase JS library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -270,7 +269,6 @@
             box-shadow: 0 5px 15px rgba(74,144,226,0.3);
         }
 
-        /* memories grid */
         .memories-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -449,7 +447,7 @@
 </div>
 
 <script>
-    // Supabase configuration
+    // Supabase configuration - declared ONCE
     const SUPABASE_URL = 'https://uhqoihahmocwjgzpiivd.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
     
@@ -520,8 +518,12 @@
                 e.stopPropagation();
                 const id = btn.getAttribute('data-id');
                 if (confirm('💔 remove this memory? (it will be gone forever)')) {
-                    await supabase.from('memories').delete().eq('id', id);
-                    loadMemories(); // Reload after delete
+                    const { error } = await supabase.from('memories').delete().eq('id', id);
+                    if (error) {
+                        alert('Error deleting memory: ' + error.message);
+                    } else {
+                        loadMemories(); // Reload after delete
+                    }
                 }
             });
         });
@@ -581,6 +583,10 @@
         document.getElementById('memoryTitle').value = "";
         document.getElementById('memoryNote').value = "";
         fileInput.value = "";
+        
+        // Set default date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('memoryDate').value = today;
         
         // Reload memories
         loadMemories();
@@ -645,7 +651,7 @@
         document.getElementById('authError').style.display = 'none';
     }
     
-    // Event listeners
+    // Event listeners - everything wrapped in DOMContentLoaded to ensure elements exist
     document.addEventListener('DOMContentLoaded', () => {
         // Check if user is already logged in
         supabase.auth.getSession().then(({ data: { session } }) => {
@@ -659,69 +665,82 @@
         // Auth form handling
         let isSignUp = false;
         
-        document.getElementById('signInBtn').addEventListener('click', async () => {
-            const email = document.getElementById('authEmail').value;
-            const password = document.getElementById('authPassword').value;
-            const errorDiv = document.getElementById('authError');
-            
-            if (!email || !password) {
-                errorDiv.textContent = '💙💗 please enter both email and password';
-                errorDiv.style.display = 'block';
-                return;
-            }
-            
-            if (password.length < 6) {
-                errorDiv.textContent = '💗 password must be at least 6 characters';
-                errorDiv.style.display = 'block';
-                return;
-            }
-            
-            try {
-                if (isSignUp) {
-                    const result = await signUp(email, password);
-                    if (result.user) {
-                        errorDiv.textContent = '✨ account created! please sign in ✨';
-                        errorDiv.style.color = '#4a90e2';
-                        errorDiv.style.display = 'block';
-                        isSignUp = false;
-                        document.getElementById('signInBtn').textContent = '💙 sign in 💗';
-                        document.getElementById('switchToSignUp').textContent = '✨ first time? create an account ✨';
-                    }
-                } else {
-                    const result = await signIn(email, password);
-                    showApp(result.user);
+        const signInBtn = document.getElementById('signInBtn');
+        const switchBtn = document.getElementById('switchToSignUp');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const publishBtn = document.getElementById('publishBtn');
+        
+        if (signInBtn) {
+            signInBtn.addEventListener('click', async () => {
+                const email = document.getElementById('authEmail').value;
+                const password = document.getElementById('authPassword').value;
+                const errorDiv = document.getElementById('authError');
+                
+                if (!email || !password) {
+                    errorDiv.textContent = '💙💗 please enter both email and password';
+                    errorDiv.style.display = 'block';
+                    return;
                 }
-            } catch (error) {
-                errorDiv.textContent = error.message;
-                errorDiv.style.color = '#e74c3c';
-                errorDiv.style.display = 'block';
-            }
-        });
+                
+                if (password.length < 6) {
+                    errorDiv.textContent = '💗 password must be at least 6 characters';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+                
+                try {
+                    if (isSignUp) {
+                        const result = await signUp(email, password);
+                        if (result.user) {
+                            errorDiv.textContent = '✨ account created! please sign in ✨';
+                            errorDiv.style.color = '#4a90e2';
+                            errorDiv.style.display = 'block';
+                            isSignUp = false;
+                            signInBtn.textContent = '💙 sign in 💗';
+                            switchBtn.textContent = '✨ first time? create an account ✨';
+                        }
+                    } else {
+                        const result = await signIn(email, password);
+                        showApp(result.user);
+                    }
+                } catch (error) {
+                    errorDiv.textContent = error.message;
+                    errorDiv.style.color = '#e74c3c';
+                    errorDiv.style.display = 'block';
+                }
+            });
+        }
         
-        document.getElementById('switchToSignUp').addEventListener('click', () => {
-            isSignUp = !isSignUp;
-            if (isSignUp) {
-                document.getElementById('signInBtn').textContent = '💗 create account 💙';
-                document.getElementById('switchToSignUp').textContent = '← already have an account? sign in';
-                document.getElementById('authError').style.display = 'none';
-            } else {
-                document.getElementById('signInBtn').textContent = '💙 sign in 💗';
-                document.getElementById('switchToSignUp').textContent = '✨ first time? create an account ✨';
-                document.getElementById('authError').style.display = 'none';
-            }
-        });
+        if (switchBtn) {
+            switchBtn.addEventListener('click', () => {
+                isSignUp = !isSignUp;
+                if (isSignUp) {
+                    signInBtn.textContent = '💗 create account 💙';
+                    switchBtn.textContent = '← already have an account? sign in';
+                    document.getElementById('authError').style.display = 'none';
+                } else {
+                    signInBtn.textContent = '💙 sign in 💗';
+                    switchBtn.textContent = '✨ first time? create an account ✨';
+                    document.getElementById('authError').style.display = 'none';
+                }
+            });
+        }
         
-        document.getElementById('logoutBtn')?.addEventListener('click', () => {
-            signOut();
-        });
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                signOut();
+            });
+        }
         
-        document.getElementById('publishBtn')?.addEventListener('click', () => {
-            if (currentUser) {
-                addMemory();
-            } else {
-                alert('please sign in first');
-            }
-        });
+        if (publishBtn) {
+            publishBtn.addEventListener('click', () => {
+                if (currentUser) {
+                    addMemory();
+                } else {
+                    alert('please sign in first');
+                }
+            });
+        }
     });
     
     function escapeHtml(str) {
