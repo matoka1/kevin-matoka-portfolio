@@ -2,416 +2,179 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kevine · Kevin & Celine's Love Story</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: linear-gradient(135deg, #e8f4ff 0%, #ffe0f0 50%, #e8f4ff 100%);
-            font-family: 'Segoe UI', 'Quicksand', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             min-height: 100vh;
-            padding: 2rem 1.5rem 4rem;
-            color: #2c3e50;
+            padding: 2rem;
         }
-
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-        }
-
-        .auth-container {
-            max-width: 450px;
-            margin: 5rem auto;
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        .login-box {
+            max-width: 400px;
+            margin: 4rem auto;
             background: white;
             border-radius: 2rem;
-            padding: 2.5rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            padding: 2rem;
             text-align: center;
-            border: 2px solid transparent;
-            background: linear-gradient(white, white) padding-box,
-                        linear-gradient(135deg, #4a90e2, #ff69b4) border-box;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
         }
-
-        .combined-name {
-            font-size: 3rem;
-            font-weight: bold;
+        .login-box h1 {
+            font-size: 2.5rem;
             background: linear-gradient(135deg, #4a90e2, #ff69b4);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            margin-bottom: 0.5rem;
         }
-
-        .combined-sub {
-            color: #b87a5a;
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-        }
-
-        .auth-container input {
+        .login-box input {
             width: 100%;
-            padding: 0.9rem 1rem;
-            margin-bottom: 1rem;
+            padding: 0.8rem;
+            margin: 1rem 0;
             border: 2px solid #f0c0d0;
             border-radius: 1rem;
-            font-family: inherit;
             font-size: 1rem;
-            background: #fffcf9;
         }
-
-        .auth-container input:focus {
-            outline: none;
-            border-color: #4a90e2;
-            box-shadow: 0 0 0 3px rgba(74,144,226,0.2);
-        }
-
-        .auth-btn {
+        .login-box button {
             background: linear-gradient(135deg, #4a90e2, #ff69b4);
             color: white;
             border: none;
-            padding: 0.9rem 2rem;
+            padding: 0.8rem;
             border-radius: 2rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
             width: 100%;
-            transition: all 0.2s;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
         }
-
-        .auth-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(74,144,226,0.3);
-        }
-
-        .error-message {
-            color: #e74c3c;
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-            display: none;
-        }
-
-        .success-message {
-            color: #4a90e2;
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-            display: none;
-        }
-
-        .main-app {
-            display: none;
-        }
-
-        .love-header {
+        .error-msg { color: #e74c3c; font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+        
+        .main-app { display: none; }
+        
+        .header {
             text-align: center;
             margin-bottom: 2rem;
+            position: relative;
         }
-
-        .love-header h1 {
-            font-size: 3.5rem;
+        .header h1 {
+            font-size: 3rem;
             background: linear-gradient(135deg, #4a90e2, #ff69b4);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
         }
-
-        .love-header p {
-            font-size: 1.2rem;
-            color: #ff69b4;
-            font-style: italic;
-        }
-
-        .divider {
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, #4a90e2, #ff69b4);
-            margin: 1rem auto;
-            border-radius: 4px;
-        }
-
-        .user-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding: 1rem 1.5rem;
-            background: white;
-            border-radius: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
         .logout-btn {
-            background: linear-gradient(135deg, #ff69b4, #4a90e2);
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #ff69b4;
             color: white;
             border: none;
-            padding: 0.5rem 1.2rem;
+            padding: 0.5rem 1rem;
             border-radius: 2rem;
             cursor: pointer;
         }
-
-        .filter-bar {
+        
+        .upload-card {
             background: white;
-            border-radius: 2rem;
-            padding: 1rem 1.5rem;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
             margin-bottom: 2rem;
+        }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: #4a90e2;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #f0c0d0;
+            border-radius: 1rem;
+            font-family: inherit;
+        }
+        .file-label {
+            background: #e8f4ff;
+            padding: 0.7rem;
+            border-radius: 1rem;
+            text-align: center;
+            cursor: pointer;
+            border: 1px dashed #ff69b4;
+            display: block;
+        }
+        input[type="file"] { display: none; }
+        .preview { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+        .preview-img { width: 80px; height: 80px; object-fit: cover; border-radius: 0.5rem; }
+        
+        button {
+            background: linear-gradient(135deg, #4a90e2, #ff69b4);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+        
+        .filter-bar {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.8rem;
-            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
             justify-content: center;
         }
-
         .filter-btn {
             background: #ffe0f0;
             color: #ff69b4;
-            border: none;
-            padding: 0.5rem 1.2rem;
+            font-size: 0.8rem;
+            padding: 0.4rem 1rem;
             border-radius: 2rem;
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
+            border: none;
         }
-
-        .filter-btn:hover, .filter-btn.active {
+        .filter-btn.active {
             background: linear-gradient(135deg, #4a90e2, #ff69b4);
             color: white;
         }
-
-        .upload-card {
-            background: white;
-            border-radius: 2rem;
-            padding: 1.5rem 2rem;
-            margin-bottom: 2.5rem;
-            border: 2px solid transparent;
-            background: linear-gradient(white, white) padding-box,
-                        linear-gradient(135deg, #4a90e2, #ff69b4) border-box;
-        }
-
-        .form-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .input-group {
-            flex: 1;
-            min-width: 140px;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            font-weight: 600;
-            background: linear-gradient(135deg, #4a90e2, #ff69b4);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            margin-bottom: 0.3rem;
-        }
-
-        .input-group input, .input-group textarea, .input-group select {
-            width: 100%;
-            padding: 0.7rem 1rem;
-            border: 2px solid #f0c0d0;
-            border-radius: 2rem;
-            font-family: inherit;
-            background: #fffcf9;
-        }
-
-        .file-label {
-            background: linear-gradient(135deg, #e8f4ff, #ffe0f0);
-            padding: 0.7rem 1.2rem;
-            border-radius: 2rem;
-            text-align: center;
-            cursor: pointer;
-            color: #4a90e2;
-            border: 2px dashed #ff69b4;
-            display: inline-block;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        .media-preview {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .preview-item {
-            width: 80px;
-            height: 80px;
-        }
-
-        .preview-img, .preview-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 0.5rem;
-            border: 2px solid #ff69b4;
-        }
-
-        button {
-            background: linear-gradient(135deg, #4a90e2, #ff69b4);
-            border: none;
-            padding: 0.7rem 1.8rem;
-            border-radius: 2.5rem;
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
-        }
-
+        
         .memories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
         }
-
         .memory-card {
             background: white;
-            border-radius: 1.8rem;
+            border-radius: 1.5rem;
             overflow: hidden;
-            box-shadow: 0 12px 28px rgba(0,0,0,0.1);
-            transition: transform 0.25s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-
-        .memory-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .memory-media {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 2px;
-            max-height: 250px;
-            overflow: hidden;
-        }
-
-        .memory-img, .memory-video {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            cursor: pointer;
-        }
-
-        .memory-info {
-            padding: 1.2rem;
-        }
-
-        .memory-date {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #ff69b4;
-        }
-
-        .memory-caption {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #4a90e2;
-            margin: 0.3rem 0;
-        }
-
-        .memory-note {
-            font-size: 0.85rem;
-            color: #7f8c8d;
-            border-left: 3px solid #ff69b4;
-            padding-left: 0.7rem;
-            margin-top: 0.5rem;
-        }
-
+        .memory-img { width: 100%; height: 200px; object-fit: cover; cursor: pointer; }
+        .memory-info { padding: 1rem; }
+        .memory-title { font-weight: bold; color: #4a90e2; margin: 0.3rem 0; }
+        .memory-date { font-size: 0.8rem; color: #ff69b4; }
+        .memory-note { font-size: 0.85rem; color: #666; margin-top: 0.5rem; }
         .event-tag {
             display: inline-block;
-            background: linear-gradient(135deg, #e8f4ff, #ffe0f0);
-            padding: 0.2rem 0.7rem;
-            border-radius: 2rem;
+            background: #ffe0f0;
+            padding: 0.2rem 0.6rem;
+            border-radius: 1rem;
             font-size: 0.7rem;
-            font-weight: 600;
-            color: #4a90e2;
             margin-top: 0.5rem;
         }
-
-        .btn-group {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.8rem;
-        }
-
-        .delete-btn {
-            background: #ffe0f0;
-            color: #ff69b4;
-            font-size: 0.7rem;
-            padding: 0.3rem 0.8rem;
-            flex: 1;
-        }
-
-        .create-video-btn {
-            background: linear-gradient(135deg, #4a90e2, #ff69b4);
-            font-size: 0.7rem;
-            padding: 0.3rem 0.8rem;
-            flex: 1;
-        }
-
-        .empty-message {
-            text-align: center;
-            grid-column: 1 / -1;
-            padding: 4rem;
-            background: white;
-            border-radius: 3rem;
-            color: #ff69b4;
-        }
-
-        .loading-skeleton {
-            grid-column: 1 / -1;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-
-        .skeleton-card {
-            background: white;
-            border-radius: 1.8rem;
-            height: 350px;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: #f0c0d0;
-            border-radius: 2px;
-            margin-top: 1rem;
-            display: none;
-        }
-
-        .progress-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #4a90e2, #ff69b4);
-            border-radius: 2px;
-            transition: width 0.3s;
-        }
-
-        .load-more-btn {
-            display: block;
-            margin: 2rem auto;
-            padding: 0.8rem 2rem;
-        }
-
+        .btn-group { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+        .delete-btn { background: #ffe0f0; color: #ff69b4; font-size: 0.8rem; flex: 1; cursor: pointer; }
+        .video-btn { background: linear-gradient(135deg, #4a90e2, #ff69b4); font-size: 0.8rem; flex: 1; cursor: pointer; }
+        
+        .loading { text-align: center; padding: 2rem; color: #ff69b4; }
+        .progress-bar { width: 100%; height: 4px; background: #f0c0d0; border-radius: 2px; margin-top: 1rem; display: none; }
+        .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #4a90e2, #ff69b4); border-radius: 2px; transition: width 0.3s; }
+        
         .modal {
             display: none;
             position: fixed;
@@ -424,12 +187,7 @@
             justify-content: center;
             align-items: center;
         }
-
-        .modal-content {
-            max-width: 90%;
-            max-height: 90%;
-        }
-
+        .modal-content { max-width: 90%; max-height: 90%; }
         .close-modal {
             position: absolute;
             top: 20px;
@@ -438,385 +196,481 @@
             font-size: 40px;
             cursor: pointer;
         }
+        
+        .video-creator-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .video-creator-content {
+            background: white;
+            border-radius: 2rem;
+            width: 90%;
+            max-width: 800px;
+            padding: 2rem;
+        }
+        canvas {
+            width: 100%;
+            background: #000;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <div id="authContainer" class="auth-container">
-        <div class="combined-name">💙 KEVINE 💗</div>
-        <div class="combined-sub">Kevin + Celine = Forever</div>
-        <input type="password" id="authPassword" placeholder="enter our secret password 🔑">
-        <button id="signInBtn" class="auth-btn">💙 enter our love world 💗</button>
-        <div id="authError" class="error-message"></div>
-        <div id="authSuccess" class="success-message"></div>
-    </div>
-
-    <div id="mainApp" class="main-app">
-        <div class="love-header">
+    <div class="container">
+        <!-- Login Box -->
+        <div id="loginBox" class="login-box">
             <h1>💙 KEVINE 💗</h1>
-            <p>Kevin 🤝 Celine — our journey, our memories, our forever</p>
-            <div class="divider"></div>
+            <p>Kevin + Celine = Forever</p>
+            <input type="password" id="passwordInput" placeholder="Enter secret password 🔑">
+            <button id="loginBtn">💙 Enter Our Love World 💗</button>
+            <div id="loginError" class="error-msg"></div>
         </div>
 
-        <div class="user-info">
-            <span>💙 Kevin & Celine 💗</span>
-            <button id="logoutBtn" class="logout-btn">🔒 exit</button>
-        </div>
+        <!-- Main App -->
+        <div id="mainApp" class="main-app">
+            <div class="header">
+                <button id="logoutBtn" class="logout-btn">🔒 Exit</button>
+                <h1>💙 KEVINE 💗</h1>
+                <p>Kevin 🤝 Celine — our journey, our memories</p>
+            </div>
 
-        <div class="upload-card">
-            <div class="form-row">
-                <div class="input-group">
+            <!-- Upload Card -->
+            <div class="upload-card">
+                <div class="form-group">
                     <label>📅 DATE</label>
                     <input type="date" id="memoryDate">
                 </div>
-                <div class="input-group">
+                <div class="form-group">
                     <label>🏷️ TITLE</label>
-                    <input type="text" id="memoryTitle" placeholder="e.g., Our first sunset 🌅">
+                    <input type="text" id="memoryTitle" placeholder="e.g., Our first sunset">
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="input-group">
+                <div class="form-group">
                     <label>🎭 EVENT TYPE</label>
                     <select id="eventType">
-                        <option value="General">💗 General Memory</option>
+                        <option value="General">💗 General</option>
                         <option value="Anniversary">🎉 Anniversary</option>
                         <option value="Vacation">✈️ Vacation</option>
                         <option value="Date Night">🌙 Date Night</option>
                         <option value="Celebration">🎊 Celebration</option>
-                        <option value="Everyday">💙 Everyday Joy</option>
-                        <option value="Special">✨ Special Moment</option>
+                        <option value="Everyday">💙 Everyday</option>
+                        <option value="Special">✨ Special</option>
                     </select>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="input-group">
-                    <label>💌 MEMORY NOTE</label>
-                    <textarea rows="2" id="memoryNote" placeholder="Write down this beautiful moment... 💕"></textarea>
+                <div class="form-group">
+                    <label>💌 NOTE</label>
+                    <textarea id="memoryNote" rows="2" placeholder="Write about this beautiful moment..."></textarea>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="input-group">
-                    <label>📸 UPLOAD PICTURES & VIDEOS</label>
-                    <label class="file-label" for="mediaUpload">📂 choose files</label>
-                    <input type="file" id="mediaUpload" accept="image/*,video/*" multiple>
+                <div class="form-group">
+                    <label>📸 PHOTOS & VIDEOS</label>
+                    <label class="file-label" for="fileInput">📂 Choose files</label>
+                    <input type="file" id="fileInput" accept="image/*,video/*" multiple>
+                    <div id="preview" class="preview"></div>
                 </div>
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <button id="publishBtn">💗 Add to Our Story 💙</button>
             </div>
-            <div id="mediaPreview" class="media-preview"></div>
-            <div class="progress-bar" id="progressBar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <div class="form-row">
-                <button id="publishBtn">💗 add to our story 💙</button>
-            </div>
-        </div>
 
-        <div class="filter-bar" id="filterBar">
-            <button class="filter-btn active" data-filter="all">💗 All Memories</button>
-            <button class="filter-btn" data-filter="Anniversary">🎉 Anniversary</button>
-            <button class="filter-btn" data-filter="Vacation">✈️ Vacation</button>
-            <button class="filter-btn" data-filter="Date Night">🌙 Date Night</button>
-            <button class="filter-btn" data-filter="Celebration">🎊 Celebration</button>
-            <button class="filter-btn" data-filter="Everyday">💙 Everyday Joy</button>
-            <button class="filter-btn" data-filter="Special">✨ Special</button>
-        </div>
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <button class="filter-btn active" data-filter="all">💗 All</button>
+                <button class="filter-btn" data-filter="Anniversary">🎉 Anniversary</button>
+                <button class="filter-btn" data-filter="Vacation">✈️ Vacation</button>
+                <button class="filter-btn" data-filter="Date Night">🌙 Date Night</button>
+                <button class="filter-btn" data-filter="Celebration">🎊 Celebration</button>
+                <button class="filter-btn" data-filter="Everyday">💙 Everyday</button>
+                <button class="filter-btn" data-filter="Special">✨ Special</button>
+            </div>
 
-        <div id="memoriesGrid" class="memories-grid">
-            <div class="loading-skeleton">
-                <div class="skeleton-card"></div>
-                <div class="skeleton-card"></div>
-                <div class="skeleton-card"></div>
+            <!-- Memories Grid -->
+            <div id="memoriesGrid" class="memories-grid">
+                <div class="loading">Loading your memories... 💙💗</div>
             </div>
         </div>
-        
-        <button id="loadMoreBtn" class="load-more-btn" style="display: none;">💗 Load More Memories 💙</button>
     </div>
-</div>
 
-<div id="mediaModal" class="modal">
-    <span class="close-modal">&times;</span>
-    <div class="modal-content">
-        <video id="modalVideo" controls style="width:100%"></video>
-        <img id="modalImage" style="width:100%">
+    <!-- Image Modal -->
+    <div id="mediaModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" style="width:100%">
+        </div>
     </div>
-</div>
 
-<script>
-    const SUPABASE_URL = 'https://uhqoihahmocwjgzpiivd.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
-    
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
-    let currentUser = null;
-    let allMemories = [];
-    let currentFilter = 'all';
-    let visibleCount = 6;
-    
-    // SIMPLE LOGIN - No password check for now (you can add it back later)
-    function login() {
-        document.getElementById('authContainer').style.display = 'none';
-        document.getElementById('mainApp').style.display = 'block';
-        document.getElementById('memoryDate').value = new Date().toISOString().split('T')[0];
-        loadMemories();
-    }
-    
-    async function uploadToStorage(file) {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
-        const filePath = `memories/${fileName}`;
-        
-        const { error } = await supabase.storage
-            .from('love-memories')
-            .upload(filePath, file, { cacheControl: '3600', upsert: false });
-        
-        if (error) throw error;
-        
-        const { data: { publicUrl } } = supabase.storage.from('love-memories').getPublicUrl(filePath);
-        return publicUrl;
-    }
-    
-    async function addMemory() {
-        const dateInput = document.getElementById('memoryDate').value;
-        const titleInput = document.getElementById('memoryTitle').value.trim();
-        const noteInput = document.getElementById('memoryNote').value.trim();
-        const eventType = document.getElementById('eventType').value;
-        const fileInput = document.getElementById('mediaUpload');
-        
-        if (!dateInput) { alert("💙 please pick a date"); return; }
-        if (!titleInput) { alert("💗 give this memory a title"); return; }
-        if (fileInput.files.length === 0) { alert("💙💗 please select at least one picture or video"); return; }
-        
-        const progressBar = document.getElementById('progressBar');
-        const progressFill = document.getElementById('progressFill');
-        const publishBtn = document.getElementById('publishBtn');
-        
-        progressBar.style.display = 'block';
-        publishBtn.disabled = true;
-        publishBtn.textContent = '⏳ uploading...';
-        
-        try {
-            const mediaUrls = [];
-            const files = Array.from(fileInput.files);
+    <!-- Video Creator Modal -->
+    <div id="videoCreatorModal" class="video-creator-modal">
+        <span class="close-modal" id="closeVideoModal">&times;</span>
+        <div class="video-creator-content">
+            <h2 style="text-align:center; margin-bottom:1rem;">🎬 Create Your Love Story Video 🎬</h2>
+            <canvas id="videoCanvas" width="720" height="540"></canvas>
+            <input type="text" id="videoTitleInput" placeholder="Video Title" style="width:100%; padding:0.5rem; margin-bottom:1rem; border-radius:0.5rem; border:1px solid #f0c0d0;">
+            <div style="display:flex; gap:1rem;">
+                <button id="previewVideoBtn" style="flex:1;">▶️ Preview</button>
+                <button id="generateVideoBtn" style="flex:1;">💾 Generate & Download</button>
+                <button id="closeVideoCreatorBtn" style="flex:1;">Close</button>
+            </div>
+            <div id="videoProgressBar" style="display:none; margin-top:1rem;">
+                <div class="progress-bar" style="display:block;"><div class="progress-fill" id="videoProgressFill" style="width:0%"></div></div>
+                <p id="videoStatus" style="text-align:center; margin-top:0.5rem;">Creating video...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const SUPABASE_URL = 'https://uhqoihahmocwjgzpiivd.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
+            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             
-            for (let i = 0; i < files.length; i++) {
-                progressFill.style.width = `${(i / files.length) * 100}%`;
-                const url = await uploadToStorage(files[i]);
-                mediaUrls.push(url);
-            }
+            const BUCKET_NAME = 'kevine_storage'; // NEW BUCKET NAME
+            const CORRECT_PASSWORD = 'kevine2025';
             
-            const { error } = await supabase.from('memories').insert([{
-                user_id: 'kevine_couple',
-                date: dateInput,
-                title: titleInput,
-                note: noteInput || "❤️ a moment we'll never forget",
-                event_type: eventType,
-                media_urls: JSON.stringify(mediaUrls),
-                created_at: new Date().toISOString()
-            }]);
+            let allMemories = [];
+            let currentFilter = 'all';
+            let videoAnimationId = null;
             
-            if (error) throw error;
+            // DOM Elements
+            const loginBox = document.getElementById('loginBox');
+            const mainApp = document.getElementById('mainApp');
+            const passwordInput = document.getElementById('passwordInput');
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const publishBtn = document.getElementById('publishBtn');
+            const memoryDate = document.getElementById('memoryDate');
+            const memoryTitle = document.getElementById('memoryTitle');
+            const memoryNote = document.getElementById('memoryNote');
+            const eventType = document.getElementById('eventType');
+            const fileInput = document.getElementById('fileInput');
+            const preview = document.getElementById('preview');
+            const memoriesGrid = document.getElementById('memoriesGrid');
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            const loginError = document.getElementById('loginError');
             
-            document.getElementById('memoryDate').value = '';
-            document.getElementById('memoryTitle').value = '';
-            document.getElementById('memoryNote').value = '';
-            document.getElementById('mediaUpload').value = '';
-            document.getElementById('mediaPreview').innerHTML = '';
-            document.getElementById('memoryDate').value = new Date().toISOString().split('T')[0];
-            
-            await loadMemories();
-            
-            publishBtn.textContent = "✓ saved! 💙💗";
-            setTimeout(() => { 
-                publishBtn.textContent = "💗 add to our story 💙";
-                publishBtn.disabled = false;
-                progressBar.style.display = 'none';
-                progressFill.style.width = '0%';
-            }, 2000);
-            
-        } catch (err) {
-            alert('Error: ' + err.message);
-            publishBtn.disabled = false;
-            publishBtn.textContent = "💗 add to our story 💙";
-            progressBar.style.display = 'none';
-        }
-    }
-    
-    async function deleteMemory(memoryId, memoryTitle) {
-        if (confirm(`💔 Remove "${memoryTitle}"?`)) {
-            const { error } = await supabase.from('memories').delete().eq('id', memoryId);
-            if (error) {
-                alert('Error: ' + error.message);
-            } else {
-                await loadMemories();
-                alert('💔 Memory removed');
-            }
-        }
-    }
-    
-    async function loadMemories() {
-        const { data, error } = await supabase
-            .from('memories')
-            .select('*')
-            .order('created_at', { ascending: false });
-        
-        if (error) {
-            console.error('Error:', error);
-            return;
-        }
-        
-        allMemories = data;
-        renderMemories();
-    }
-    
-    function renderMemories() {
-        const grid = document.getElementById('memoriesGrid');
-        
-        let filtered = allMemories;
-        if (currentFilter !== 'all') {
-            filtered = allMemories.filter(m => m.event_type === currentFilter);
-        }
-        
-        const visibleMemories = filtered.slice(0, visibleCount);
-        
-        if (visibleMemories.length === 0) {
-            grid.innerHTML = `<div class="empty-message">🌸 no memories yet... upload your first beautiful moment together! 🌸</div>`;
-            return;
-        }
-        
-        let html = '';
-        for (let mem of visibleMemories) {
-            let mediaArray = [];
-            try {
-                mediaArray = JSON.parse(mem.media_urls);
-            } catch {
-                mediaArray = [mem.media_urls];
-            }
-            
-            const displayDate = new Date(mem.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-            const displayMedia = mediaArray.slice(0, 3);
-            
-            const mediaHtml = displayMedia.map(url => {
-                const isVideo = url.match(/\.(mp4|webm|mov)/i);
-                if (isVideo) {
-                    return `<video class="memory-video" controls><source src="${url}" type="video/mp4"></video>`;
+            function login() {
+                const password = passwordInput.value;
+                if (!password) {
+                    loginError.textContent = 'Please enter the password';
+                    loginError.style.display = 'block';
+                    return;
                 }
-                return `<img class="memory-img" src="${url}" alt="memory" loading="lazy">`;
-            }).join('');
-            
-            const eventEmoji = {
-                'Anniversary': '🎉', 'Vacation': '✈️', 'Date Night': '🌙', 
-                'Celebration': '🎊', 'Everyday': '💙', 'Special': '✨', 'General': '💗'
-            }[mem.event_type] || '💗';
-            
-            html += `
-                <div class="memory-card">
-                    <div class="memory-media">
-                        ${mediaHtml}
-                    </div>
-                    <div class="memory-info">
-                        <div class="memory-date">📆 ${displayDate}</div>
-                        <div class="memory-caption">✨ ${escapeHtml(mem.title)}</div>
-                        <div class="event-tag">${eventEmoji} ${mem.event_type || 'General'}</div>
-                        <div class="memory-note">💬 ${escapeHtml(mem.note)}</div>
-                        <div class="btn-group">
-                            <button class="delete-btn" data-id="${mem.id}" data-title="${escapeHtml(mem.title)}">🗑️ Remove</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-        
-        grid.innerHTML = html;
-        
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const id = btn.getAttribute('data-id');
-                const title = btn.getAttribute('data-title');
-                deleteMemory(id, title);
-            });
-        });
-        
-        document.querySelectorAll('.memory-img').forEach(img => {
-            img.addEventListener('click', () => {
-                document.getElementById('modalImage').style.display = 'block';
-                document.getElementById('modalVideo').style.display = 'none';
-                document.getElementById('modalImage').src = img.src;
-                document.getElementById('mediaModal').style.display = 'flex';
-            });
-        });
-    }
-    
-    function setFilter(filter) {
-        currentFilter = filter;
-        visibleCount = 6;
-        renderMemories();
-        
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            if (btn.getAttribute('data-filter') === filter) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-    }
-    
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
-    
-    document.getElementById('mediaUpload')?.addEventListener('change', (e) => {
-        const preview = document.getElementById('mediaPreview');
-        preview.innerHTML = '';
-        const files = Array.from(e.target.files).slice(0, 6);
-        files.forEach(file => {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const div = document.createElement('div');
-                div.className = 'preview-item';
-                if (file.type.startsWith('video/')) {
-                    const video = document.createElement('video');
-                    video.src = event.target.result;
-                    video.className = 'preview-video';
-                    video.controls = true;
-                    div.appendChild(video);
+                if (password === CORRECT_PASSWORD) {
+                    loginBox.style.display = 'none';
+                    mainApp.style.display = 'block';
+                    memoryDate.value = new Date().toISOString().split('T')[0];
+                    loadMemories();
+                    loginError.style.display = 'none';
                 } else {
-                    const img = document.createElement('img');
-                    img.src = event.target.result;
-                    img.className = 'preview-img';
-                    div.appendChild(img);
+                    loginError.textContent = 'Wrong password. Only Kevin & Celine can enter.';
+                    loginError.style.display = 'block';
                 }
-                preview.appendChild(div);
+            }
+            
+            function logout() {
+                loginBox.style.display = 'block';
+                mainApp.style.display = 'none';
+                passwordInput.value = '';
+            }
+            
+            fileInput.addEventListener('change', function(e) {
+                preview.innerHTML = '';
+                Array.from(e.target.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const img = document.createElement('img');
+                        img.src = event.target.result;
+                        img.className = 'preview-img';
+                        preview.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+            
+            async function uploadToStorage(file) {
+                const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${file.name.split('.').pop()}`;
+                const filePath = `memories/${fileName}`;
+                
+                const { error } = await supabase.storage
+                    .from(BUCKET_NAME)
+                    .upload(filePath, file);
+                
+                if (error) throw error;
+                
+                const { data: { publicUrl } } = supabase.storage
+                    .from(BUCKET_NAME)
+                    .getPublicUrl(filePath);
+                
+                return publicUrl;
+            }
+            
+            async function addMemory() {
+                const date = memoryDate.value;
+                const title = memoryTitle.value.trim();
+                const note = memoryNote.value.trim();
+                const type = eventType.value;
+                const files = fileInput.files;
+                
+                if (!date) { alert("Please pick a date"); return; }
+                if (!title) { alert("Please give a title"); return; }
+                if (files.length === 0) { alert("Please select photos or videos"); return; }
+                
+                progressBar.style.display = 'block';
+                publishBtn.disabled = true;
+                publishBtn.textContent = 'Uploading...';
+                
+                try {
+                    const mediaUrls = [];
+                    for (let i = 0; i < files.length; i++) {
+                        progressFill.style.width = `${(i / files.length) * 100}%`;
+                        const url = await uploadToStorage(files[i]);
+                        mediaUrls.push(url);
+                    }
+                    
+                    const { error } = await supabase.from('memories').insert({
+                        user_id: 'kevine_couple',
+                        date: date,
+                        title: title,
+                        note: note || 'A beautiful memory',
+                        event_type: type,
+                        media_urls: JSON.stringify(mediaUrls),
+                        created_at: new Date().toISOString()
+                    });
+                    
+                    if (error) throw error;
+                    
+                    memoryTitle.value = '';
+                    memoryNote.value = '';
+                    fileInput.value = '';
+                    preview.innerHTML = '';
+                    await loadMemories();
+                    
+                    publishBtn.textContent = "Saved!";
+                    setTimeout(() => {
+                        publishBtn.textContent = "Add to Our Story";
+                        publishBtn.disabled = false;
+                        progressBar.style.display = 'none';
+                        progressFill.style.width = '0%';
+                    }, 2000);
+                } catch (err) {
+                    alert('Error: ' + err.message);
+                    publishBtn.disabled = false;
+                    publishBtn.textContent = "Add to Our Story";
+                    progressBar.style.display = 'none';
+                }
+            }
+            
+            async function deleteMemory(id, title) {
+                if (confirm(`Remove "${title}"?`)) {
+                    const { error } = await supabase.from('memories').delete().eq('id', id);
+                    if (!error) await loadMemories();
+                    else alert('Error: ' + error.message);
+                }
+            }
+            
+            async function loadMemories() {
+                memoriesGrid.innerHTML = '<div class="loading">Loading your memories...</div>';
+                const { data, error } = await supabase.from('memories').select('*').order('created_at', { ascending: false });
+                if (error) {
+                    memoriesGrid.innerHTML = '<div class="loading">Error loading memories</div>';
+                    return;
+                }
+                allMemories = data;
+                renderMemories();
+            }
+            
+            function renderMemories() {
+                let filtered = currentFilter === 'all' ? allMemories : allMemories.filter(m => m.event_type === currentFilter);
+                if (filtered.length === 0) {
+                    memoriesGrid.innerHTML = '<div class="loading">🌸 No memories yet... upload your first beautiful moment! 🌸</div>';
+                    return;
+                }
+                
+                let html = '';
+                for (let mem of filtered) {
+                    let mediaArray = JSON.parse(mem.media_urls);
+                    const displayDate = new Date(mem.date).toLocaleDateString();
+                    html += `
+                        <div class="memory-card">
+                            <img class="memory-img" src="${mediaArray[0]}" onclick="showImage('${mediaArray[0]}')" onerror="this.src='https://placehold.co/400x300/4a90e2/white?text=❤️'">
+                            <div class="memory-info">
+                                <div class="memory-date">📆 ${displayDate}</div>
+                                <div class="memory-title">✨ ${escapeHtml(mem.title)}</div>
+                                <div class="event-tag">${mem.event_type || 'General'}</div>
+                                <div class="memory-note">💬 ${escapeHtml(mem.note)}</div>
+                                <div class="btn-group">
+                                    <button class="delete-btn" onclick="deleteMemory('${mem.id}', '${escapeHtml(mem.title)}')">🗑️ Remove</button>
+                                    <button class="video-btn" onclick="createVideoFromMemory('${mem.id}')">🎬 Create Video</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                memoriesGrid.innerHTML = html;
+            }
+            
+            window.createVideoFromMemory = async function(memoryId) {
+                const memory = allMemories.find(m => m.id == memoryId);
+                if (!memory) return;
+                let mediaArray = JSON.parse(memory.media_urls);
+                let images = mediaArray.filter(url => !url.match(/\.(mp4|webm|mov)/i));
+                if (images.length === 0) {
+                    alert('No photos found!');
+                    return;
+                }
+                document.getElementById('videoTitleInput').value = memory.title;
+                openVideoCreator(images, memory.title);
             };
-            reader.readAsDataURL(file);
-        });
-    });
-    
-    document.addEventListener('DOMContentLoaded', () => {
-        // Login button - NO PASSWORD CHECK for now
-        document.getElementById('signInBtn').onclick = login;
-        
-        // Enter key
-        document.getElementById('authPassword')?.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') login();
-        });
-        
-        document.getElementById('logoutBtn').onclick = () => {
-            document.getElementById('authContainer').style.display = 'block';
-            document.getElementById('mainApp').style.display = 'none';
-        };
-        
-        document.getElementById('publishBtn').onclick = addMemory;
-        
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.onclick = () => setFilter(btn.getAttribute('data-filter'));
-        });
-        
-        document.querySelector('.close-modal').onclick = () => {
-            document.getElementById('mediaModal').style.display = 'none';
-            document.getElementById('modalVideo').pause();
-        };
-    });
-</script>
+            
+            function openVideoCreator(images, title) {
+                const modal = document.getElementById('videoCreatorModal');
+                const canvas = document.getElementById('videoCanvas');
+                const ctx = canvas.getContext('2d');
+                modal.style.display = 'flex';
+                
+                let loadedImages = [];
+                let currentIndex = 0;
+                
+                Promise.all(images.map(src => {
+                    return new Promise((resolve) => {
+                        const img = new Image();
+                        img.crossOrigin = 'Anonymous';
+                        img.onload = () => { loadedImages.push(img); resolve(); };
+                        img.onerror = () => resolve();
+                        img.src = src;
+                    });
+                })).then(() => {
+                    if (loadedImages.length === 0) return;
+                    
+                    function drawFrame() {
+                        const img = loadedImages[currentIndex % loadedImages.length];
+                        if (img) {
+                            const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+                            const x = (canvas.width - img.width * scale) / 2;
+                            const y = (canvas.height - img.height * scale) / 2;
+                            ctx.fillStyle = '#4a90e2';
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+                            ctx.fillStyle = 'white';
+                            ctx.font = 'bold 24px "Segoe UI"';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(title || 'Our Love Story', canvas.width / 2, 50);
+                            ctx.font = '16px "Segoe UI"';
+                            ctx.fillText(new Date().toLocaleDateString(), canvas.width / 2, canvas.height - 30);
+                        }
+                    }
+                    
+                    function animate() {
+                        drawFrame();
+                        currentIndex = (currentIndex + 1) % loadedImages.length;
+                        videoAnimationId = setTimeout(() => requestAnimationFrame(animate), 3000);
+                    }
+                    
+                    document.getElementById('previewVideoBtn').onclick = () => {
+                        if (videoAnimationId) clearTimeout(videoAnimationId);
+                        currentIndex = 0;
+                        animate();
+                    };
+                    
+                    document.getElementById('generateVideoBtn').onclick = async () => {
+                        const videoTitle = document.getElementById('videoTitleInput').value || 'Our Love Story';
+                        const progressDiv = document.getElementById('videoProgressBar');
+                        const progressFill = document.getElementById('videoProgressFill');
+                        const statusText = document.getElementById('videoStatus');
+                        
+                        if (videoAnimationId) clearTimeout(videoAnimationId);
+                        currentIndex = 0;
+                        drawFrame();
+                        
+                        progressDiv.style.display = 'block';
+                        const stream = canvas.captureStream(30);
+                        const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+                        const chunks = [];
+                        
+                        recorder.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
+                        recorder.onstop = () => {
+                            const blob = new Blob(chunks, { type: 'video/webm' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `kevine_${videoTitle.replace(/[^a-z0-9]/gi, '_')}.webm`;
+                            a.click();
+                            URL.revokeObjectURL(url);
+                            progressDiv.style.display = 'none';
+                            stream.getTracks().forEach(t => t.stop());
+                        };
+                        
+                        recorder.start();
+                        const totalDuration = loadedImages.length * 3000;
+                        let elapsed = 0;
+                        const interval = setInterval(() => {
+                            elapsed += 100;
+                            progressFill.style.width = `${(elapsed / totalDuration) * 100}%`;
+                            statusText.textContent = `Recording... ${Math.floor((elapsed / totalDuration) * 100)}%`;
+                            if (elapsed >= totalDuration) {
+                                clearInterval(interval);
+                                recorder.stop();
+                            }
+                        }, 100);
+                    };
+                });
+                
+                const closeModal = () => {
+                    if (videoAnimationId) clearTimeout(videoAnimationId);
+                    modal.style.display = 'none';
+                    document.getElementById('videoProgressBar').style.display = 'none';
+                };
+                
+                document.getElementById('closeVideoCreatorBtn').onclick = closeModal;
+                document.getElementById('closeVideoModal').onclick = closeModal;
+            }
+            
+            function setFilter(filter) {
+                currentFilter = filter;
+                renderMemories();
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    if (btn.getAttribute('data-filter') === filter) btn.classList.add('active');
+                    else btn.classList.remove('active');
+                });
+            }
+            
+            window.showImage = function(src) {
+                document.getElementById('modalImage').src = src;
+                document.getElementById('mediaModal').style.display = 'flex';
+            };
+            
+            function escapeHtml(str) {
+                if (!str) return '';
+                return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            }
+            
+            loginBtn.onclick = login;
+            logoutBtn.onclick = logout;
+            publishBtn.onclick = addMemory;
+            passwordInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') login(); });
+            
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.onclick = () => setFilter(btn.getAttribute('data-filter'));
+            });
+            
+            document.querySelectorAll('.close-modal').forEach(el => {
+                el.onclick = () => {
+                    document.getElementById('mediaModal').style.display = 'none';
+                    document.getElementById('videoCreatorModal').style.display = 'none';
+                };
+            });
+            
+            window.deleteMemory = deleteMemory;
+        })();
+    </script>
 </body>
 </html>
