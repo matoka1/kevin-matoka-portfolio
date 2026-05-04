@@ -25,7 +25,6 @@
             margin: 0 auto;
         }
 
-        /* Auth Section */
         .auth-container {
             max-width: 500px;
             margin: 3rem auto;
@@ -104,7 +103,6 @@
             display: none;
         }
 
-        /* Main App (hidden until logged in) */
         .main-app {
             display: none;
         }
@@ -387,19 +385,17 @@
 <body>
 
 <div class="container">
-    <!-- Auth Container -->
     <div id="authContainer" class="auth-container">
         <h2>💙💗 our private diary 💗💙</h2>
-        <div id="authForm">
-            <input type="email" id="authEmail" placeholder="your email 💌" required>
-            <input type="password" id="authPassword" placeholder="password (min 6 characters)" required>
+        <div>
+            <input type="email" id="authEmail" placeholder="your email 💌">
+            <input type="password" id="authPassword" placeholder="password (min 6 characters)">
             <button id="signInBtn" class="auth-btn">💙 sign in 💗</button>
             <div class="switch-auth" id="switchToSignUp">✨ first time? create an account ✨</div>
         </div>
         <div id="authError" class="error-message"></div>
     </div>
 
-    <!-- Main App (after login) -->
     <div id="mainApp" class="main-app">
         <div class="love-header">
             <h1>💙 you & me, forever 💗</h1>
@@ -416,7 +412,7 @@
             <div class="form-row">
                 <div class="input-group">
                     <label>📅 DATE</label>
-                    <input type="date" id="memoryDate" value="">
+                    <input type="date" id="memoryDate">
                 </div>
                 <div class="input-group">
                     <label>📸 PICTURE</label>
@@ -425,7 +421,7 @@
                 </div>
                 <div class="input-group">
                     <label>🏷️ TITLE</label>
-                    <input type="text" id="memoryTitle" placeholder="e.g., First sunset together" autocomplete="off">
+                    <input type="text" id="memoryTitle" placeholder="e.g., First sunset together">
                 </div>
             </div>
             <div class="form-row" style="margin-top: 0.8rem;">
@@ -447,311 +443,232 @@
 </div>
 
 <script>
-    // Supabase configuration - declared ONCE
-    const SUPABASE_URL = 'https://uhqoihahmocwjgzpiivd.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
-    
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
-    let currentUser = null;
-    
-    // Helper: Convert file to base64
-    function fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
-    }
-
-    // Load memories from Supabase
-    async function loadMemories() {
-        const grid = document.getElementById('memoriesGrid');
-        grid.innerHTML = '<div class="loading">loading your love story... 💙💗</div>';
+    (function() {
+        // Supabase configuration - declared ONCE inside an IIFE to avoid any conflicts
+        const SUPABASE_URL = 'https://uhqoihahmocwjgzpiivd.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
         
-        const { data, error } = await supabase
-            .from('memories')
-            .select('*')
-            .eq('user_id', currentUser.id)
-            .order('created_at', { ascending: false });
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let currentUser = null;
         
-        if (error) {
-            console.error('Error loading memories:', error);
-            grid.innerHTML = '<div class="empty-message">💔 error loading memories. please refresh.</div>';
-            return;
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
         }
         
-        if (!data || data.length === 0) {
-            grid.innerHTML = `<div class="empty-message">🌸 no memories yet... upload your first beautiful picture together! 🌸</div>`;
-            return;
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
         
-        let html = '';
-        for (let mem of data) {
-            let displayDate = mem.date;
-            if (mem.date) {
-                const d = new Date(mem.date);
-                if (!isNaN(d.getTime())) {
-                    displayDate = d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-                }
+        async function loadMemories() {
+            const grid = document.getElementById('memoriesGrid');
+            if (!grid) return;
+            grid.innerHTML = '<div class="loading">loading your love story... 💙💗</div>';
+            
+            const { data, error } = await supabase
+                .from('memories')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .order('created_at', { ascending: false });
+            
+            if (error) {
+                console.error('Error loading memories:', error);
+                grid.innerHTML = '<div class="empty-message">💔 error loading memories. Make sure the "memories" table exists in Supabase.</div>';
+                return;
             }
             
-            html += `
-                <div class="memory-card" data-id="${mem.id}">
-                    <img class="memory-img" src="${mem.image_url}" alt="memory from ${displayDate}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'300\'%3E%3Crect width=\'400\' height=\'300\' fill=\'%23ffe0f0\'/%3E%3Ctext x=\'50%%\' y=\'50%%\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%23ff69b4\' font-size=\'20\'%3E💗💙%3C/text%3E%3C/svg%3E'">
-                    <div class="memory-info">
-                        <div class="memory-date">📆 ${escapeHtml(displayDate)}</div>
-                        <div class="memory-caption">✨ ${escapeHtml(mem.title)}</div>
-                        <div class="memory-note">💬 ${escapeHtml(mem.note)}</div>
-                        <button class="delete-btn" data-id="${mem.id}">🗑️ remove memory</button>
-                    </div>
-                </div>
-            `;
-        }
-        
-        grid.innerHTML = html;
-        
-        // Attach delete events
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                e.stopPropagation();
-                const id = btn.getAttribute('data-id');
-                if (confirm('💔 remove this memory? (it will be gone forever)')) {
-                    const { error } = await supabase.from('memories').delete().eq('id', id);
-                    if (error) {
-                        alert('Error deleting memory: ' + error.message);
-                    } else {
-                        loadMemories(); // Reload after delete
+            if (!data || data.length === 0) {
+                grid.innerHTML = `<div class="empty-message">🌸 no memories yet... upload your first beautiful picture together! 🌸</div>`;
+                return;
+            }
+            
+            let html = '';
+            for (let mem of data) {
+                let displayDate = mem.date;
+                if (mem.date) {
+                    const d = new Date(mem.date);
+                    if (!isNaN(d.getTime())) {
+                        displayDate = d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
                     }
                 }
+                
+                html += `
+                    <div class="memory-card">
+                        <img class="memory-img" src="${mem.image_url}" alt="memory from ${displayDate}" loading="lazy">
+                        <div class="memory-info">
+                            <div class="memory-date">📆 ${escapeHtml(displayDate)}</div>
+                            <div class="memory-caption">✨ ${escapeHtml(mem.title)}</div>
+                            <div class="memory-note">💬 ${escapeHtml(mem.note)}</div>
+                            <button class="delete-btn" data-id="${mem.id}">🗑️ remove memory</button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            grid.innerHTML = html;
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const id = btn.getAttribute('data-id');
+                    if (confirm('💔 remove this memory?')) {
+                        await supabase.from('memories').delete().eq('id', id);
+                        loadMemories();
+                    }
+                });
             });
-        });
-    }
-    
-    // Add new memory
-    async function addMemory() {
-        const dateInput = document.getElementById('memoryDate').value;
-        const titleInput = document.getElementById('memoryTitle').value.trim();
-        const noteInput = document.getElementById('memoryNote').value.trim();
-        const fileInput = document.getElementById('imageUpload');
-        
-        if (!dateInput) {
-            alert("💙 please pick a date for this sweet memory");
-            return;
-        }
-        if (!titleInput) {
-            alert("💗 give it a short title (e.g., 'our first picnic')");
-            return;
-        }
-        if (fileInput.files.length === 0) {
-            alert("💙💗 please select a picture to upload");
-            return;
         }
         
-        const file = fileInput.files[0];
-        let base64Image = "";
-        
-        try {
-            base64Image = await fileToBase64(file);
-        } catch(err) {
-            alert("couldn't read image, try another file");
-            return;
+        async function addMemory() {
+            const dateInput = document.getElementById('memoryDate').value;
+            const titleInput = document.getElementById('memoryTitle').value.trim();
+            const noteInput = document.getElementById('memoryNote').value.trim();
+            const fileInput = document.getElementById('imageUpload');
+            
+            if (!dateInput) { alert("💙 please pick a date"); return; }
+            if (!titleInput) { alert("💗 give it a title"); return; }
+            if (fileInput.files.length === 0) { alert("💙💗 please select a picture"); return; }
+            
+            const base64Image = await fileToBase64(fileInput.files[0]);
+            
+            const { error } = await supabase.from('memories').insert([{
+                user_id: currentUser.id,
+                date: dateInput,
+                title: titleInput,
+                note: noteInput || "❤️ a moment we'll never forget",
+                image_url: base64Image,
+                created_at: new Date().toISOString()
+            }]);
+            
+            if (error) {
+                alert('Error: ' + error.message);
+                return;
+            }
+            
+            document.getElementById('memoryDate').value = '';
+            document.getElementById('memoryTitle').value = '';
+            document.getElementById('memoryNote').value = '';
+            fileInput.value = '';
+            document.getElementById('memoryDate').value = new Date().toISOString().split('T')[0];
+            
+            loadMemories();
+            
+            const btn = document.getElementById('publishBtn');
+            const originalText = btn.innerText;
+            btn.innerText = "✓ saved! 💙💗";
+            setTimeout(() => { btn.innerText = originalText; }, 1500);
         }
         
-        const newMemory = {
-            user_id: currentUser.id,
-            date: dateInput,
-            title: titleInput,
-            note: noteInput || "❤️ a moment we'll never forget",
-            image_url: base64Image,
-            created_at: new Date().toISOString()
-        };
-        
-        const { error } = await supabase
-            .from('memories')
-            .insert([newMemory]);
-        
-        if (error) {
-            console.error('Error adding memory:', error);
-            alert('💔 error saving memory. make sure you\'re logged in and the table exists!');
-            return;
+        async function signIn(email, password) {
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+            return data;
         }
         
-        // Reset form
-        document.getElementById('memoryDate').value = "";
-        document.getElementById('memoryTitle').value = "";
-        document.getElementById('memoryNote').value = "";
-        fileInput.value = "";
-        
-        // Set default date to today
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('memoryDate').value = today;
-        
-        // Reload memories
-        loadMemories();
-        
-        // Feedback
-        const btn = document.getElementById('publishBtn');
-        const originalText = btn.innerText;
-        btn.innerText = "✓ saved! 💙💗";
-        setTimeout(() => { btn.innerText = originalText; }, 1500);
-    }
-    
-    // Auth functions
-    async function signIn(email, password) {
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
-        
-        if (error) {
-            throw error;
+        async function signUp(email, password) {
+            const { data, error } = await supabase.auth.signUp({ email, password });
+            if (error) throw error;
+            return data;
         }
-        return data;
-    }
-    
-    async function signUp(email, password) {
-        const { data, error } = await supabase.auth.signUp({
-            email: email,
-            password: password
-        });
         
-        if (error) {
-            throw error;
+        function showApp(user) {
+            currentUser = user;
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('userEmailDisplay').innerHTML = `💙 logged in as ${user.email} 💗`;
+            document.getElementById('memoryDate').value = new Date().toISOString().split('T')[0];
+            loadMemories();
         }
-        return data;
-    }
-    
-    async function signOut() {
-        await supabase.auth.signOut();
-        showAuth();
-    }
-    
-    function showApp(user) {
-        currentUser = user;
-        document.getElementById('authContainer').style.display = 'none';
-        document.getElementById('mainApp').style.display = 'block';
-        document.getElementById('userEmailDisplay').innerHTML = `💙 logged in as ${user.email} 💗`;
         
-        // Set default date to today
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('memoryDate').value = today;
+        function showAuth() {
+            currentUser = null;
+            document.getElementById('authContainer').style.display = 'block';
+            document.getElementById('mainApp').style.display = 'none';
+        }
         
-        // Load memories
-        loadMemories();
-    }
-    
-    function showAuth() {
-        currentUser = null;
-        document.getElementById('authContainer').style.display = 'block';
-        document.getElementById('mainApp').style.display = 'none';
-        document.getElementById('authEmail').value = '';
-        document.getElementById('authPassword').value = '';
-        document.getElementById('authError').style.display = 'none';
-    }
-    
-    // Event listeners - everything wrapped in DOMContentLoaded to ensure elements exist
-    document.addEventListener('DOMContentLoaded', () => {
-        // Check if user is already logged in
-        supabase.auth.getSession().then(({ data: { session } }) => {
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            const { data: { session } } = await supabase.auth.getSession();
             if (session) {
                 showApp(session.user);
             } else {
                 showAuth();
             }
-        });
-        
-        // Auth form handling
-        let isSignUp = false;
-        
-        const signInBtn = document.getElementById('signInBtn');
-        const switchBtn = document.getElementById('switchToSignUp');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const publishBtn = document.getElementById('publishBtn');
-        
-        if (signInBtn) {
-            signInBtn.addEventListener('click', async () => {
-                const email = document.getElementById('authEmail').value;
-                const password = document.getElementById('authPassword').value;
-                const errorDiv = document.getElementById('authError');
-                
-                if (!email || !password) {
-                    errorDiv.textContent = '💙💗 please enter both email and password';
-                    errorDiv.style.display = 'block';
-                    return;
-                }
-                
-                if (password.length < 6) {
-                    errorDiv.textContent = '💗 password must be at least 6 characters';
-                    errorDiv.style.display = 'block';
-                    return;
-                }
-                
-                try {
-                    if (isSignUp) {
-                        const result = await signUp(email, password);
-                        if (result.user) {
-                            errorDiv.textContent = '✨ account created! please sign in ✨';
-                            errorDiv.style.color = '#4a90e2';
-                            errorDiv.style.display = 'block';
+            
+            let isSignUp = false;
+            const signInBtn = document.getElementById('signInBtn');
+            const switchBtn = document.getElementById('switchToSignUp');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const publishBtn = document.getElementById('publishBtn');
+            const authError = document.getElementById('authError');
+            
+            if (signInBtn) {
+                signInBtn.onclick = async () => {
+                    const email = document.getElementById('authEmail').value;
+                    const password = document.getElementById('authPassword').value;
+                    authError.style.display = 'none';
+                    
+                    if (!email || !password) {
+                        authError.textContent = 'Please enter email and password';
+                        authError.style.display = 'block';
+                        return;
+                    }
+                    
+                    try {
+                        if (isSignUp) {
+                            await signUp(email, password);
+                            authError.textContent = '✨ Account created! Please sign in. ✨';
+                            authError.style.color = '#4a90e2';
+                            authError.style.display = 'block';
                             isSignUp = false;
                             signInBtn.textContent = '💙 sign in 💗';
                             switchBtn.textContent = '✨ first time? create an account ✨';
+                        } else {
+                            const result = await signIn(email, password);
+                            showApp(result.user);
                         }
-                    } else {
-                        const result = await signIn(email, password);
-                        showApp(result.user);
+                    } catch (err) {
+                        authError.textContent = err.message;
+                        authError.style.color = '#e74c3c';
+                        authError.style.display = 'block';
                     }
-                } catch (error) {
-                    errorDiv.textContent = error.message;
-                    errorDiv.style.color = '#e74c3c';
-                    errorDiv.style.display = 'block';
-                }
-            });
-        }
-        
-        if (switchBtn) {
-            switchBtn.addEventListener('click', () => {
-                isSignUp = !isSignUp;
-                if (isSignUp) {
-                    signInBtn.textContent = '💗 create account 💙';
-                    switchBtn.textContent = '← already have an account? sign in';
-                    document.getElementById('authError').style.display = 'none';
-                } else {
-                    signInBtn.textContent = '💙 sign in 💗';
-                    switchBtn.textContent = '✨ first time? create an account ✨';
-                    document.getElementById('authError').style.display = 'none';
-                }
-            });
-        }
-        
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', () => {
-                signOut();
-            });
-        }
-        
-        if (publishBtn) {
-            publishBtn.addEventListener('click', () => {
-                if (currentUser) {
-                    addMemory();
-                } else {
-                    alert('please sign in first');
-                }
-            });
-        }
-    });
-    
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
-    }
+                };
+            }
+            
+            if (switchBtn) {
+                switchBtn.onclick = () => {
+                    isSignUp = !isSignUp;
+                    if (isSignUp) {
+                        signInBtn.textContent = '💗 create account 💙';
+                        switchBtn.textContent = '← already have an account? sign in';
+                    } else {
+                        signInBtn.textContent = '💙 sign in 💗';
+                        switchBtn.textContent = '✨ first time? create an account ✨';
+                    }
+                    authError.style.display = 'none';
+                };
+            }
+            
+            if (logoutBtn) {
+                logoutBtn.onclick = async () => {
+                    await supabase.auth.signOut();
+                    showAuth();
+                };
+            }
+            
+            if (publishBtn) {
+                publishBtn.onclick = () => {
+                    if (currentUser) addMemory();
+                    else alert('please sign in first');
+                };
+            }
+        });
+    })();
 </script>
 </body>
 </html>
