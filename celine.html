@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>💖 Celine • Will you go on a date with me? 💖</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            font-family: 'Segoe UI', 'Quicksand', 'Poppins', system-ui, -apple-system, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        .card {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 252, 250, 0.98);
+            border-radius: 60px;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        h1 {
+            font-size: 1.9rem;
+            background: linear-gradient(135deg, #c44569, #e66767);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .celine-name {
+            display: inline-block;
+            background: #ffecb3;
+            padding: 0.2rem 1rem;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            color: #b3415a;
+            margin: 0.5rem 0;
+        }
+        .button-zone {
+            position: relative;
+            min-height: 110px;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .btn {
+            border: none;
+            font-size: 1.4rem;
+            font-weight: bold;
+            padding: 12px 28px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-family: inherit;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.15);
+            transition: 0.1s;
+        }
+        .btn-yes { background: #4caf50; color: white; box-shadow: 0 6px 0 #2e6b2e; }
+        .btn-yes:hover { background: #45a049; transform: scale(1.02); }
+        .btn-no { background: #f05454; color: white; box-shadow: 0 6px 0 #9e3434; position: relative; }
+        .tease {
+            background: #fff0dd;
+            border-radius: 60px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ce5a75;
+            animation: pop 0.5s ease;
+        }
+        @keyframes pop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .planner {
+            background: #fff7f0;
+            border-radius: 45px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: left;
+            border: 2px solid #ffe0cc;
+        }
+        .hidden { display: none; }
+        .form-group { margin-bottom: 1rem; }
+        label { font-weight: 600; color: #b44562; display: block; margin-bottom: 5px; }
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 50px;
+            border: 2px solid #ffcfcf;
+            font-size: 1rem;
+            font-family: inherit;
+            background: white;
+        }
+        .date-summary {
+            background: #ffecec;
+            border-radius: 35px;
+            padding: 12px;
+            margin: 1rem 0;
+            text-align: center;
+            font-weight: 500;
+            color: #b44562;
+        }
+        .confirm-btn {
+            background: #ff8a9f;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
+        .confirm-btn:hover { background: #ff6b84; transform: scale(0.98); }
+        .final-msg {
+            background: #e0f2e3;
+            border-radius: 40px;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .btn-group { display: flex; gap: 12px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+        .small-btn {
+            background: #4caf50;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .small-btn.blue { background: #2196F3; }
+        .small-btn.whatsapp { background: #25D366; }
+        footer { margin-top: 1rem; font-size: 0.7rem; color: #dc8da0; }
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid white;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-left: 8px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .no-moving { transition: top 0.1s linear, left 0.1s linear; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>🌸 Celine, <span class="celine-name">will you go on a date with me?</span> 🌸</h1>
+    <div class="button-zone" id="btnZone">
+        <button class="btn btn-yes" id="yesBtn">💖 YES 💖</button>
+        <button class="btn btn-no" id="noBtn">😤 NO 😤</button>
+    </div>
+
+    <div id="teasePanel" class="tease hidden">
+        😂😂 I KNEW YOU'D SAY YES, CELINE! 😂😂<br>✨ You just made my day ✨
+    </div>
+
+    <div id="planner" class="planner hidden">
+        <h2 style="text-align:center; color:#c44569;">💕 Our dream date 💕</h2>
+        <div class="form-group">
+            <label>🍕 Favorite food?</label>
+            <input type="text" id="food" placeholder="Sushi, Pizza, Pasta..." value="Sushi & Dessert">
+        </div>
+        <div class="form-group">
+            <label>📍 Favorite place?</label>
+            <input type="text" id="place" placeholder="Cafe, Beach, Park..." value="Cozy Café by the sea">
+        </div>
+        <div class="form-group">
+            <label>⏰ Best time? (evening = 8pm or 9pm 🎑)</label>
+            <select id="time">
+                <option>Morning 10am ☕</option>
+                <option>Afternoon 1pm 🌞</option>
+                <option>Sunset 5:30pm 🌅</option>
+                <option>Evening 7:30pm ✨</option>
+                <option selected>Evening 8pm 🌙</option>
+                <option>Evening 9pm ⭐</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>📅 Pick a date</label>
+            <input type="date" id="date">
+        </div>
+        <div class="date-summary" id="summary">✨ Your perfect plan will appear here ✨</div>
+        <button class="confirm-btn" id="sendBtn">💘 YES, SEND TO KEVIN 💘</button>
+        <div id="finalDiv" class="final-msg hidden"></div>
+    </div>
+    <footer>💖 The "No" button always runs away — because you're the only YES I want 💖</footer>
+</div>
+
+<script>
+    (function(){
+        // ✅ YOUR EMAILJS CREDENTIALS
+        const EMAILJS_PUBLIC_KEY = "5N0NW9UzzS3wyyVQp";
+        const SERVICE_ID = "service_ro22rnf";
+        const TEMPLATE_ID = "template_ub93sai";
+        
+        // Initialize EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+        
+        // DOM elements
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const tease = document.getElementById('teasePanel');
+        const planner = document.getElementById('planner');
+        const zone = document.getElementById('btnZone');
+        const foodInp = document.getElementById('food');
+        const placeInp = document.getElementById('place');
+        const timeSel = document.getElementById('time');
+        const datePicker = document.getElementById('date');
+        const summaryDiv = document.getElementById('summary');
+        const sendBtn = document.getElementById('sendBtn');
+        const finalDiv = document.getElementById('finalDiv');
+        
+        let yesPressed = false;
+        let movingActive = false;
+        let confirmed = false;
+        
+        // Set default date (tomorrow)
+        let d = new Date();
+        d.setDate(d.getDate() + 1);
+        datePicker.value = d.toISOString().split('T')[0];
+        
+        // MOVING NO BUTTON - dodges every time she tries to click!
+        function getBoundaries() {
+            const zoneRect = zone.getBoundingClientRect();
+            const noRect = noBtn.getBoundingClientRect();
+            return {
+                maxX: Math.max(0, zoneRect.width - noRect.width - 10),
+                maxY: Math.max(0, zoneRect.height - noRect.height - 10)
+            };
+        }
+        
+        function moveNo() {
+            if (!movingActive) {
+                const zoneRect = zone.getBoundingClientRect();
+                const noRect = noBtn.getBoundingClientRect();
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = (noRect.left - zoneRect.left) + 'px';
+                noBtn.style.top = (noRect.top - zoneRect.top) + 'px';
+                noBtn.style.margin = '0';
+                noBtn.classList.add('no-moving');
+                movingActive = true;
+            }
+            const { maxX, maxY } = getBoundaries();
+            const newX = Math.random() * maxX;
+            const newY = Math.random() * maxY;
+            noBtn.style.left = Math.min(maxX, Math.max(0, newX)) + 'px';
+            noBtn.style.top = Math.min(maxY, Math.max(0, newY)) + 'px';
+            noBtn.style.transform = 'scale(1.05)';
+            setTimeout(() => { if (noBtn) noBtn.style.transform = ''; }, 100);
+        }
+        
+        noBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            moveNo();
+        });
+        noBtn.addEventListener('mouseenter', () => { if (movingActive) moveNo(); });
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNo(); });
+        
+        // YES BUTTON - reveals the tease and planner
+        yesBtn.addEventListener('click', () => {
+            if (yesPressed) return;
+            yesPressed = true;
+            tease.classList.remove('hidden');
+            createConfetti(30);
+            setTimeout(() => {
+                planner.classList.remove('hidden');
+                updateSummary();
+                planner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                createConfetti(20);
+            }, 450);
+            yesBtn.textContent = "💚 YES! MY CELINE 💚";
+        });
+        
+        function updateSummary() {
+            summaryDiv.innerHTML = `📝 <strong>For Celine:</strong> ${foodInp.value || '?'} · at ${placeInp.value || '?'} · ${timeSel.value} · ${datePicker.value} 💖`;
+        }
+        
+        foodInp.addEventListener('input', updateSummary);
+        placeInp.addEventListener('input', updateSummary);
+        timeSel.addEventListener('change', updateSummary);
+        datePicker.addEventListener('change', updateSummary);
+        
+        // Send email to Kevin (tiongikevin99@gmail.com)
+        async function sendEmailToKevin(details) {
+            const templateParams = {
+                to_email: "tiongikevin99@gmail.com",
+                from_name: "💕 Celine 💕",
+                food_choice: details.food,
+                place_choice: details.place,
+                time_choice: details.time,
+                date_choice: details.date,
+                message: "I said YES! Can't wait for our date! 💖"
+            };
+            
+            try {
+                const response = await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams);
+                console.log("✅ Email sent!", response);
+                return true;
+            } catch (error) {
+                console.error("❌ Email error:", error);
+                return false;
+            }
+        }
+        
+        // SEND BUTTON - confirms and emails you
+        sendBtn.addEventListener('click', async () => {
+            if (confirmed) {
+                finalDiv.classList.remove('hidden');
+                finalDiv.innerHTML = "💕 Already sent! Kevin got your message 💕";
+                return;
+            }
+            
+            const food = foodInp.value.trim() || "something delicious";
+            const place = placeInp.value.trim() || "somewhere magical";
+            const time = timeSel.value;
+            let dateVal = datePicker.value;
+            let displayDate = dateVal;
+            if (dateVal) {
+                let dateObj = new Date(dateVal);
+                if (!isNaN(dateObj)) {
+                    displayDate = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+                }
+            }
+            
+            const details = { food, place, time, date: displayDate };
+            
+            sendBtn.innerHTML = "📧 Sending to Kevin... <span class='loading'></span>";
+            sendBtn.disabled = true;
+            
+            const emailSent = await sendEmailToKevin(details);
+            confirmed = true;
+            
+            const shareText = `🎀 CELINE SAID YES! 🎀\n\n🍕 Food: ${food}\n📍 Place: ${place}\n⏰ Time: ${time}\n📅 Date: ${displayDate}\n\nCan't wait! 💖`;
+            
+            finalDiv.classList.remove('hidden');
+            finalDiv.innerHTML = `
+                <div style="margin-bottom:10px;">🎉 OUR DATE IS SET! 🎉<br>🍕 ${food} | 📍 ${place}<br>⏰ ${time} | 📅 ${displayDate}</div>
+                <div>${emailSent ? "✅ Email sent to Kevin! He's over the moon ✨" : "⚠️ Copy the response below and send to Kevin!"}</div>
+                <div class="btn-group">
+                    <button class="small-btn" id="copyBtn">📋 COPY</button>
+                    <button class="small-btn blue" id="shareBtn">📱 SHARE</button>
+                    <button class="small-btn whatsapp" id="whatsappBtn">💬 WhatsApp</button>
+                </div>
+            `;
+            
+            document.getElementById('copyBtn')?.addEventListener('click', () => {
+                navigator.clipboard.writeText(shareText);
+                alert("✨ Copied! Send it to Kevin ✨");
+            });
+            
+            document.getElementById('shareBtn')?.addEventListener('click', () => {
+                if (navigator.share) {
+                    navigator.share({ title: 'Our Date 💖', text: shareText });
+                } else {
+                    alert("📸 Screenshot this and send to Kevin!\n\n" + shareText);
+                }
+            });
+            
+            document.getElementById('whatsappBtn')?.addEventListener('click', () => {
+                window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank');
+            });
+            
+            createConfetti(60);
+            sendBtn.innerHTML = "✓ DATE LOCKED & SENT ✓";
+            sendBtn.style.background = "#9bc49b";
+            sendBtn.disabled = false;
+        });
+        
+        function createConfetti(count = 35) {
+            const emojis = ['🌸', '💖', '✨', '💕', '🎉', '💘', '😘', '🍒', '💗'];
+            for (let i = 0; i < count; i++) {
+                let div = document.createElement('div');
+                div.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                div.style.position = 'fixed';
+                div.style.left = Math.random() * window.innerWidth + 'px';
+                div.style.top = '-30px';
+                div.style.fontSize = (Math.random() * 26 + 16) + 'px';
+                div.style.pointerEvents = 'none';
+                div.style.zIndex = '9999';
+                div.style.transition = 'transform 1.4s ease-out, opacity 1s';
+                document.body.appendChild(div);
+                setTimeout(() => {
+                    div.style.transform = `translateY(${window.innerHeight + 60}px) rotate(${Math.random() * 360}deg)`;
+                    div.style.opacity = '0';
+                    setTimeout(() => div.remove(), 1500);
+                }, 10);
+            }
+        }
+        
+        window.addEventListener('resize', () => {
+            if (movingActive && noBtn) {
+                let left = parseFloat(noBtn.style.left);
+                let top = parseFloat(noBtn.style.top);
+                if (isNaN(left)) left = 0;
+                if (isNaN(top)) top = 0;
+                const { maxX, maxY } = getBoundaries();
+                noBtn.style.left = Math.min(maxX, Math.max(0, left)) + 'px';
+                noBtn.style.top = Math.min(maxY, Math.max(0, top)) + 'px';
+            }
+        });
+        
+        updateSummary();
+    })();
+</script>
+</body>
+</html>
