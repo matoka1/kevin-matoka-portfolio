@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="login-screen">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,9 +33,12 @@
         body.login-screen {
             padding: 0;
             min-height: 100vh;
-            overflow: hidden;
+            height: 100vh;
+            overflow: hidden !important;
+            overscroll-behavior: none;
         }
         .login-stage {
+            height: 100vh;
             min-height: 100vh;
             position: relative;
             display: flex;
@@ -92,7 +95,7 @@
         .error-msg { color:#ffb3b3;font-size:.8rem;margin-top:.75rem;display:none;min-height:1em; }
         .shake { animation:shake .4s; }
         @keyframes shake { 0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)} }
-        @media(max-width:600px){.login-stage{padding:1rem}.login-box{padding:2.1rem 1.35rem 1.7rem;border-radius:1.5rem}.login-box h1{font-size:3.15rem}.login-stats{gap:.5rem}.login-lock{width:50px;height:50px}}
+        @media(max-width:600px){.login-stage{padding:1rem;overflow:hidden}.login-box{padding:2.1rem 1.35rem 1.7rem;border-radius:1.5rem;max-height:calc(100vh - 2rem);overflow-y:auto}.login-box h1{font-size:3.15rem}.login-stats{gap:.5rem}.login-lock{width:50px;height:50px}}
 
         /* ---------- MAIN APP ---------- */
         .main-app { display: none; animation: fadeIn 0.4s ease; }
@@ -692,6 +695,25 @@
     
 /* ===== KEVINE V2 ENHANCEMENTS ===== */
 body{padding:0;background:#faf8fb;color:#24212a;overflow-x:hidden}
+body.app-active{overflow-y:auto!important;overflow-x:hidden!important;height:auto!important;min-height:100vh!important;overscroll-behavior:auto}
+html{min-height:100%;height:auto;overflow-x:hidden;overflow-y:scroll}
+html.login-screen{height:100%;overflow:hidden!important}
+html.app-active{height:auto!important;min-height:100%;overflow-x:hidden!important;overflow-y:scroll!important}
+body.login-screen{overflow:hidden!important;height:100vh!important;min-height:100vh!important}
+body.app-active{overflow:visible!important;height:auto!important;min-height:100vh!important}
+body.app-active .container{
+    min-height:100vh;
+    height:100vh;
+    max-height:100vh;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-y:auto;
+    scrollbar-width:auto;
+}
+body.app-active .main-app{display:block!important; min-height:max-content; overflow:visible!important}
+body.login-screen .container{max-width:none;padding:0;height:100vh;max-height:100vh;overflow:hidden!important}
+body.login-screen .main-app{display:none!important}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 10% 10%,rgba(74,144,226,.10),transparent 28%),radial-gradient(circle at 90% 20%,rgba(255,105,180,.10),transparent 30%);z-index:-1}
 .container{max-width:1280px;padding:0 1.25rem}
 .main-app{padding-bottom:4rem}
@@ -759,7 +781,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
         </div>
 
         <!-- MAIN APP -->
-        <div id="mainApp" class="main-app"> class="main-app">
+        <div id="mainApp" class="main-app">
             <div class="header">
                 <button id="logoutBtn" class="logout-btn">🔒 Exit</button>
                 <h1>💙 KEVINE 💗</h1>
@@ -950,6 +972,57 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
             const loginError = $('loginError');
             const togglePw = $('togglePw');
             const logoutBtn = $('logoutBtn');
+
+            // ---------- LOGIN PERSISTENCE ----------
+            // Keep the couple logged in across page refreshes on this browser.
+            const LOGIN_STORAGE_KEY = 'kevine_authenticated';
+
+            function setPageMode(isAuthenticated) {
+                if (isAuthenticated) {
+                    document.documentElement.classList.remove('login-screen');
+                    document.documentElement.classList.add('app-active');
+                    document.body.classList.remove('login-screen');
+                    document.body.classList.add('app-active');
+                    document.documentElement.style.overflowY = 'scroll';
+                    document.documentElement.style.overflowX = 'hidden';
+                    document.body.style.overflow = 'visible';
+                    document.body.style.height = 'auto';
+                    document.body.style.minHeight = '100vh';
+                    document.querySelector('.container').style.height = '100vh';
+                    document.querySelector('.container').style.maxHeight = '100vh';
+                    document.querySelector('.container').style.overflowY = 'auto';
+                    document.querySelector('.container').style.overflowX = 'hidden';
+                    loginStage.style.display = 'none';
+                    mainApp.style.display = 'block';
+                } else {
+                    document.documentElement.classList.remove('app-active');
+                    document.documentElement.classList.add('login-screen');
+                    document.body.classList.remove('app-active');
+                    document.body.classList.add('login-screen');
+                    document.documentElement.style.overflow = 'hidden';
+                    document.body.style.overflow = 'hidden';
+                    document.body.style.height = '100vh';
+                    document.body.style.minHeight = '100vh';
+                    document.querySelector('.container').style.height = '100vh';
+                    document.querySelector('.container').style.maxHeight = '100vh';
+                    document.querySelector('.container').style.overflowY = 'hidden';
+                    document.querySelector('.container').style.overflowX = 'hidden';
+                    loginStage.style.display = 'flex';
+                    mainApp.style.display = 'none';
+                }
+            }
+
+            function restoreLoginState() {
+                if (localStorage.getItem(LOGIN_STORAGE_KEY) === 'true') {
+                    setPageMode(true);
+                    memoryDate.value = new Date().toISOString().split('T')[0];
+                    updateCountdown();
+                    loadMemories();
+                    return true;
+                }
+                setPageMode(false);
+                return false;
+            }
             const uploadCard = $('uploadCard');
             const uploadToggle = $('uploadToggle');
             const publishBtn = $('publishBtn');
@@ -1018,8 +1091,8 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 
                 setTimeout(() => {
                     if (password === CORRECT_PASSWORD) {
-                        loginStage.style.display = 'none';
-                        mainApp.style.display = 'block';
+                        localStorage.setItem(LOGIN_STORAGE_KEY, 'true');
+                        setPageMode(true);
                         memoryDate.value = new Date().toISOString().split('T')[0];
                         updateCountdown();
                         setInterval(updateCountdown, 86400000);
@@ -1042,12 +1115,16 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
             }
 
             function logout() {
-                loginStage.style.display = 'flex';
-                mainApp.style.display = 'none';
+                localStorage.removeItem(LOGIN_STORAGE_KEY);
+                setPageMode(false);
                 passwordInput.value = '';
                 loginBtn.disabled = false;
                 loginBtn.innerHTML = '<span>Open Our Story</span><span>→</span>';
+                passwordInput.focus();
             }
+
+            // Restore the last authenticated state immediately on refresh.
+            restoreLoginState();
 
             // ---------- UPLOAD COLLAPSE ----------
             uploadToggle.addEventListener('click', () => {
