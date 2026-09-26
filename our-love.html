@@ -6,178 +6,760 @@
     <title>Kevine · Kevin & Celine's Love Story</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        :root {
+            --blue: #4a90e2;
+            --pink: #ff69b4;
+            --grad: linear-gradient(135deg, #4a90e2, #ff69b4);
+            --soft-pink: #ffe0f0;
+            --soft-blue: #e8f4ff;
+            --border: #f0c0d0;
+            --text: #333;
+            --muted: #666;
+            --danger: #e74c3c;
+        }
         body {
             background: linear-gradient(135deg, #e8f4ff 0%, #ffe0f0 50%, #e8f4ff 100%);
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
-            padding: 2rem;
+            padding: 1.5rem;
+            color: var(--text);
+            line-height: 1.5;
         }
         .container { max-width: 1200px; margin: 0 auto; }
-        
+        button { font-family: inherit; }
+
+        /* ---------- PREMIUM LOGIN / ENTRANCE ---------- */
+        body.login-screen {
+            padding: 0;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        .login-stage {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.25rem;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 18% 20%, rgba(74,144,226,.30), transparent 32%),
+                radial-gradient(circle at 82% 80%, rgba(255,105,180,.28), transparent 34%),
+                linear-gradient(135deg, #071426 0%, #111a35 46%, #24152d 100%);
+        }
+        .login-stage::before {
+            content: '';
+            position: absolute; inset: -30%;
+            background: conic-gradient(from 180deg, transparent, rgba(255,255,255,.06), transparent 28%);
+            animation: entranceRotate 18s linear infinite;
+        }
+        @keyframes entranceRotate { to { transform: rotate(360deg); } }
+        .heart-field { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+        .heart-field span { position:absolute; color:rgba(255,255,255,.18); font-size:1.2rem; animation: floatHeart 9s linear infinite; }
+        .heart-field span:nth-child(1){left:8%;bottom:-5%;animation-delay:0s}.heart-field span:nth-child(2){left:24%;bottom:-8%;animation-delay:2s}.heart-field span:nth-child(3){left:74%;bottom:-7%;animation-delay:4s}.heart-field span:nth-child(4){left:90%;bottom:-6%;animation-delay:6s}.heart-field span:nth-child(5){left:52%;bottom:-8%;animation-delay:1s}
+        @keyframes floatHeart { 0%{transform:translateY(0) scale(.8);opacity:0} 15%{opacity:.7} 100%{transform:translateY(-115vh) rotate(18deg) scale(1.25);opacity:0} }
         .login-box {
-            max-width: 400px;
-            margin: 4rem auto;
-            background: white;
-            border-radius: 2rem;
-            padding: 2rem;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            width:min(470px, 100%); max-width:none; margin:0; position:relative; z-index:2;
+            padding:2.6rem 2.4rem 2.2rem; text-align:center; color:white;
+            background:rgba(255,255,255,.095); border:1px solid rgba(255,255,255,.20);
+            border-radius:2rem; box-shadow:0 30px 90px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.12);
+            backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+            animation: entranceIn .8s cubic-bezier(.2,.8,.2,1);
         }
-        .login-box h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(135deg, #4a90e2, #ff69b4);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-        .login-box input {
-            width: 100%;
-            padding: 0.8rem;
-            margin: 1rem 0;
-            border: 2px solid #f0c0d0;
-            border-radius: 1rem;
-            font-size: 1rem;
-        }
-        .login-box button {
-            background: linear-gradient(135deg, #4a90e2, #ff69b4);
-            color: white;
-            border: none;
-            padding: 0.8rem;
-            border-radius: 2rem;
-            width: 100%;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-        }
-        .error-msg { color: #e74c3c; font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-        
-        .main-app { display: none; }
-        
+        @keyframes entranceIn { from{opacity:0;transform:translateY(28px) scale(.97)} to{opacity:1;transform:none} }
+        .login-lock { width:58px;height:58px;margin:0 auto 1rem;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,rgba(74,144,226,.95),rgba(255,105,180,.95));box-shadow:0 12px 35px rgba(255,105,180,.22);font-size:1.45rem; }
+        .login-box h1 { font-size:clamp(3rem,10vw,4.4rem); letter-spacing:.08em; line-height:1; background:linear-gradient(110deg,#fff,#bfe1ff 45%,#ffb6da); background-clip:text; -webkit-background-clip:text; color:transparent; text-shadow:0 8px 30px rgba(255,255,255,.08); }
+        .login-names { margin:.75rem 0 .35rem; font-size:1.05rem; font-weight:600; letter-spacing:.02em; }
+        .login-names .heart { color:#ff8fc6; margin:0 .3rem; }
+        .login-sub { color:rgba(255,255,255,.68); margin:0 0 1.35rem; font-size:.88rem; }
+        .since-pill { display:inline-flex;align-items:center;gap:.45rem;padding:.45rem .8rem;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.07);font-size:.76rem;color:rgba(255,255,255,.78);margin-bottom:1.45rem; }
+        .login-stats { display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:1.35rem; }
+        .login-stat { padding:.75rem .55rem;border-radius:1rem;background:rgba(255,255,255,.065);border:1px solid rgba(255,255,255,.09); }
+        .login-stat strong { display:block;font-size:1.05rem;color:white; }
+        .login-stat span { font-size:.68rem;color:rgba(255,255,255,.56); }
+        .secret-label { display:flex;justify-content:space-between;align-items:center;margin:0 0 .5rem;font-size:.74rem;color:rgba(255,255,255,.65);text-align:left; }
+        .password-wrap { position:relative; }
+        .login-box input { width:100%;padding:1rem 3rem 1rem 1rem;margin:0;border:1px solid rgba(255,255,255,.16);border-radius:1rem;font-size:1rem;color:white;background:rgba(0,0,0,.18);transition:.2s; }
+        .login-box input::placeholder { color:rgba(255,255,255,.4); }
+        .login-box input:focus { outline:none;border-color:rgba(255,143,198,.8);box-shadow:0 0 0 4px rgba(255,105,180,.10),0 8px 30px rgba(0,0,0,.12); }
+        .toggle-pw { position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:white;cursor:pointer;font-size:1.05rem;padding:6px;opacity:.65; }
+        .toggle-pw:hover { opacity:1; }
+        .login-box button[type="submit"] { display:flex;align-items:center;justify-content:center;gap:.55rem;background:linear-gradient(110deg,#4a90e2,#8b70e8 48%,#ff69b4);color:white;border:0;padding:1rem;border-radius:1rem;width:100%;cursor:pointer;font-size:.98rem;font-weight:700;letter-spacing:.01em;margin-top:.8rem;box-shadow:0 14px 30px rgba(102,92,220,.28);transition:transform .2s,box-shadow .2s,opacity .2s; }
+        .login-box button[type="submit"]:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 18px 38px rgba(102,92,220,.38)}
+        .login-box button[type="submit"]:disabled{opacity:.65;cursor:not-allowed}
+        .login-footer { margin-top:1.2rem;color:rgba(255,255,255,.42);font-size:.68rem; }
+        .error-msg { color:#ffb3b3;font-size:.8rem;margin-top:.75rem;display:none;min-height:1em; }
+        .shake { animation:shake .4s; }
+        @keyframes shake { 0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)} }
+        @media(max-width:600px){.login-stage{padding:1rem}.login-box{padding:2.1rem 1.35rem 1.7rem;border-radius:1.5rem}.login-box h1{font-size:3.15rem}.login-stats{gap:.5rem}.login-lock{width:50px;height:50px}}
+
+        /* ---------- MAIN APP ---------- */
+        .main-app { display: none; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
         .anniversary-banner {
-            background: linear-gradient(135deg, #4a90e2, #ff69b4);
+            background: var(--grad);
             color: white;
             text-align: center;
             padding: 1rem;
             border-radius: 1rem;
             margin-bottom: 1.5rem;
-            animation: pulse 2s infinite;
         }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-        .countdown { font-size: 1.3rem; font-weight: bold; margin-top: 0.3rem; }
-        
+        .anniversary-banner h2 { font-size: 1.1rem; font-weight: 600; }
+        .countdown { font-size: 1.05rem; margin-top: 0.4rem; opacity: 0.95; line-height: 1.6; }
+
         .header {
             text-align: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             position: relative;
+            padding-top: 2.5rem;
         }
-        .header h1 { font-size: 3rem; background: linear-gradient(135deg, #4a90e2, #ff69b4); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        .header h1 {
+            font-size: 2.5rem;
+            background: var(--grad);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .header p { color: var(--muted); font-size: 0.95rem; margin-top: 0.25rem; }
         .logout-btn {
-            position: absolute; top: 0; right: 0;
-            background: #ff69b4; color: white; border: none;
-            padding: 0.5rem 1rem; border-radius: 2rem; cursor: pointer;
+            position: absolute;
+            top: 0; right: 0;
+            background: var(--pink);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: opacity 0.2s;
         }
-        
-        .action-bar { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
-        .search-input { flex: 2; padding: 0.7rem; border: 1px solid #f0c0d0; border-radius: 1rem; font-size: 1rem; }
-        .export-btn { background: linear-gradient(135deg, #4a90e2, #ff69b4); flex: 1; }
-        
+        .logout-btn:hover { opacity: 0.85; }
+
+        /* ---------- UPLOAD CARD (collapsible) ---------- */
         .upload-card {
-            background: white; border-radius: 1.5rem; padding: 1.5rem; margin-bottom: 2rem;
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
         }
+        .upload-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+        .upload-header h3 { color: var(--blue); font-size: 1.05rem; }
+        .upload-toggle {
+            background: var(--soft-pink);
+            border: none;
+            color: var(--pink);
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            line-height: 1;
+            transition: transform 0.3s;
+        }
+        .upload-card.collapsed .upload-toggle { transform: rotate(-90deg); }
+        .upload-body {
+            margin-top: 1.25rem;
+            overflow: hidden;
+            transition: max-height 0.35s ease, opacity 0.25s ease;
+            max-height: 2000px;
+            opacity: 1;
+        }
+        .upload-card.collapsed .upload-body {
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
+        }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 0.3rem; color: #4a90e2; }
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%; padding: 0.7rem; border: 1px solid #f0c0d0; border-radius: 1rem; font-family: inherit;
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+            color: var(--blue);
+            font-size: 0.85rem;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background: white;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--pink);
+            box-shadow: 0 0 0 3px rgba(255,105,180,0.12);
         }
         .file-label {
-            background: #e8f4ff; padding: 0.7rem; border-radius: 1rem; text-align: center;
-            cursor: pointer; border: 1px dashed #ff69b4; display: block;
+            background: var(--soft-blue);
+            padding: 0.9rem;
+            border-radius: 1rem;
+            text-align: center;
+            cursor: pointer;
+            border: 1px dashed var(--pink);
+            display: block;
+            font-size: 0.9rem;
+            color: var(--blue);
+            font-weight: 500;
+            transition: background 0.2s;
         }
+        .file-label:hover { background: #d8ebff; }
         input[type="file"] { display: none; }
-        .preview { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
-        .preview-img { width: 80px; height: 80px; object-fit: cover; border-radius: 0.5rem; }
-        
-        button {
-            background: linear-gradient(135deg, #4a90e2, #ff69b4);
-            color: white; border: none; padding: 0.7rem 1.5rem;
-            border-radius: 2rem; cursor: pointer; font-weight: bold;
+        .preview { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+        .preview-item { position: relative; }
+        .preview-img {
+            width: 80px; height: 80px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            display: block;
         }
-        button:disabled { opacity: 0.6; cursor: not-allowed; }
-        
+        .preview-remove {
+            position: absolute;
+            top: -6px; right: -6px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.7rem;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn {
+            background: var(--grad);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: transform 0.15s, opacity 0.15s;
+        }
+        .btn:hover:not(:disabled) { transform: translateY(-1px); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-block { width: 100%; }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            margin-top: 0.75rem;
+            display: none;
+            overflow: hidden;
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--grad);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        /* ---------- ACTION BAR ---------- */
+        .action-bar {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .search-wrap {
+            flex: 1 1 240px;
+            position: relative;
+        }
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            background: white;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--pink);
+            box-shadow: 0 0 0 3px rgba(255,105,180,0.12);
+        }
+        .search-icon {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+        .export-btn { flex: 0 0 auto; }
+
+        /* ---------- FILTERS ---------- */
         .filter-bar {
-            display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; justify-content: center;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+            justify-content: center;
         }
         .filter-btn {
-            background: #ffe0f0; color: #ff69b4; font-size: 0.8rem;
-            padding: 0.4rem 1rem; border-radius: 2rem; cursor: pointer; border: none;
+            background: var(--soft-pink);
+            color: var(--pink);
+            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            border: none;
+            font-weight: 500;
+            transition: all 0.2s;
         }
-        .filter-btn.active { background: linear-gradient(135deg, #4a90e2, #ff69b4); color: white; }
-        
+        .filter-btn:hover { background: #ffd0e8; }
+        .filter-btn.active {
+            background: var(--grad);
+            color: white;
+            box-shadow: 0 4px 10px rgba(255,105,180,0.3);
+        }
+
+        /* ---------- MEMORIES GRID ---------- */
         .memories-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
         }
         .memory-card {
-            background: white; border-radius: 1.5rem; overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s;
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.25s, box-shadow 0.25s;
+            display: flex;
+            flex-direction: column;
         }
-        .memory-card:hover { transform: translateY(-5px); }
-        .memory-img { width: 100%; height: 200px; object-fit: cover; cursor: pointer; }
-        .memory-info { padding: 1rem; }
-        .memory-title { font-weight: bold; color: #4a90e2; margin: 0.3rem 0; }
-        .memory-date { font-size: 0.8rem; color: #ff69b4; }
-        .memory-note { font-size: 0.85rem; color: #666; margin-top: 0.5rem; }
-        .event-tag {
-            display: inline-block; background: #ffe0f0; padding: 0.2rem 0.6rem;
-            border-radius: 1rem; font-size: 0.7rem; margin-top: 0.5rem;
+        .memory-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
         }
-        .btn-group { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
-        .delete-btn { background: #ffe0f0; color: #ff69b4; font-size: 0.8rem; flex: 1; cursor: pointer; }
-        .video-btn { background: linear-gradient(135deg, #4a90e2, #ff69b4); font-size: 0.8rem; flex: 1; cursor: pointer; }
-        
-        .loading { text-align: center; padding: 2rem; color: #ff69b4; }
-        .progress-bar { width: 100%; height: 4px; background: #f0c0d0; border-radius: 2px; margin-top: 1rem; display: none; }
-        .progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #4a90e2, #ff69b4); border-radius: 2px; transition: width 0.3s; }
-        
+        .memory-media {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            background: #f5f5f5;
+            overflow: hidden;
+        }
+        .memory-img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+            display: block;
+            transition: transform 0.4s;
+        }
+        .memory-card:hover .memory-img { transform: scale(1.05); }
+        .media-count {
+            position: absolute;
+            bottom: 8px; right: 8px;
+            background: rgba(0,0,0,0.65);
+            color: white;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 1rem;
+            font-weight: 600;
+        }
+        .play-badge {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.6);
+            color: white;
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+        .memory-info { padding: 1rem; flex: 1; display: flex; flex-direction: column; }
+        .memory-date { font-size: 0.75rem; color: var(--pink); font-weight: 600; }
+        .memory-title { font-weight: bold; color: var(--blue); margin: 0.3rem 0; font-size: 1.05rem; }
+        .memory-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.4rem 0; }
+        .tag {
+            display: inline-block;
+            background: var(--soft-pink);
+            padding: 0.15rem 0.6rem;
+            border-radius: 1rem;
+            font-size: 0.7rem;
+            color: var(--pink);
+            font-weight: 500;
+        }
+        .tag.blue { background: var(--soft-blue); color: var(--blue); }
+        .memory-note {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-top: 0.4rem;
+            flex: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .btn-group { display: flex; gap: 0.5rem; margin-top: 0.85rem; }
+        .delete-btn, .video-btn {
+            font-size: 0.78rem;
+            flex: 1;
+            padding: 0.5rem 0.5rem;
+            border-radius: 1.5rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .delete-btn { background: var(--soft-pink); color: var(--pink); }
+        .video-btn { background: var(--grad); color: white; }
+        .delete-btn:hover, .video-btn:hover { opacity: 0.85; }
+
+        .loading {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--pink);
+            grid-column: 1 / -1;
+            font-size: 1rem;
+        }
+        .spinner {
+            display: inline-block;
+            width: 24px; height: 24px;
+            border: 3px solid var(--soft-pink);
+            border-top-color: var(--pink);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 0.5rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ---------- MODALS ---------- */
         .modal, .video-creator-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center;
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.92);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            animation: modalIn 0.2s ease;
         }
-        .modal-content, .video-creator-content {
-            background: white; border-radius: 2rem; max-width: 90%; max-height: 90%;
+        @keyframes modalIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal.active, .video-creator-modal.active { display: flex; }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 92vw;
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .video-creator-content { width: 90%; max-width: 800px; padding: 2rem; overflow-y: auto; max-height: 90vh; }
+        .lightbox-media {
+            max-width: 92vw;
+            max-height: 82vh;
+            border-radius: 1rem;
+            object-fit: contain;
+            display: block;
+        }
+        .lightbox-caption {
+            color: white;
+            text-align: center;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .lightbox-counter {
+            color: white;
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-top: 0.25rem;
+        }
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: none;
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .nav-btn:hover { background: rgba(255,255,255,0.3); }
+        .nav-prev { left: 1rem; }
+        .nav-next { right: 1rem; }
         .close-modal {
-            position: absolute; top: 20px; right: 40px; color: white; font-size: 40px; cursor: pointer;
+            position: absolute;
+            top: 1rem; right: 1rem;
+            color: white;
+            font-size: 2.5rem;
+            cursor: pointer;
+            line-height: 1;
+            background: none;
+            border: none;
+            width: 44px; height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s;
         }
-        canvas { width: 100%; background: #000; border-radius: 1rem; margin-bottom: 1rem; }
-        
+        .close-modal:hover { background: rgba(255,255,255,0.15); }
+
+        .video-creator-content {
+            background: white;
+            border-radius: 2rem;
+            width: 100%;
+            max-width: 800px;
+            padding: 1.75rem;
+            overflow-y: auto;
+            max-height: 92vh;
+            position: relative;
+        }
+        .video-creator-content h2 {
+            text-align: center;
+            margin-bottom: 1.25rem;
+            font-size: 1.3rem;
+            background: var(--grad);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .video-creator-content .close-modal {
+            color: var(--pink);
+            font-size: 2rem;
+            top: 0.5rem;
+            right: 0.5rem;
+        }
+        .video-creator-content .close-modal:hover { background: var(--soft-pink); }
+
         .date-range {
-            display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            align-items: end;
         }
-        .date-range input { flex: 1; padding: 0.5rem; border: 1px solid #f0c0d0; border-radius: 0.5rem; }
-        
+        .date-range .field { display: flex; flex-direction: column; }
+        .date-range label {
+            font-size: 0.75rem;
+            color: var(--blue);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .date-range input {
+            padding: 0.6rem 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 0.8rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+        .auto-pick-btn {
+            background: var(--blue) !important;
+            padding: 0.6rem 1rem !important;
+            font-size: 0.85rem !important;
+            border-radius: 0.8rem !important;
+            white-space: nowrap;
+        }
+        .photo-count {
+            text-align: center;
+            margin-bottom: 0.75rem;
+            color: var(--pink);
+            font-size: 0.85rem;
+            min-height: 1.2em;
+            font-weight: 500;
+        }
+        .photo-count.error { color: var(--danger); }
+        .photo-count.success { color: #27ae60; }
+        .photo-count.warn { color: #e67e22; }
+
+        .video-canvas-wrap {
+            background: #000;
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        .video-title-input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.8rem;
+            border: 1px solid var(--border);
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+        .video-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.75rem;
+        }
+        .video-actions .btn { padding: 0.7rem 0.5rem; font-size: 0.85rem; }
+        .btn-secondary { background: var(--soft-pink); color: var(--pink); }
+        .btn-neutral { background: #eee; color: #555; }
+
+        /* ---------- TOAST ---------- */
+        .toast-container {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            pointer-events: none;
+        }
+        .toast {
+            background: white;
+            color: var(--text);
+            padding: 0.75rem 1.25rem;
+            border-radius: 2rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-left: 4px solid var(--pink);
+            animation: toastIn 0.3s ease;
+            pointer-events: auto;
+        }
+        .toast.success { border-left-color: #27ae60; }
+        .toast.error { border-left-color: var(--danger); }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(-12px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        /* ---------- EMPTY STATE ---------- */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--muted);
+        }
+        .empty-state .emoji { font-size: 3rem; display: block; margin-bottom: 0.5rem; }
+
+        /* ---------- RESPONSIVE ---------- */
         @media (max-width: 600px) {
             body { padding: 1rem; }
+            .header h1 { font-size: 2rem; }
+            .header { padding-top: 2.75rem; }
             .memories-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .date-range { grid-template-columns: 1fr; }
+            .video-actions { grid-template-columns: 1fr; }
+            .lightbox-media { max-height: 70vh; }
+            .nav-btn { width: 40px; height: 40px; font-size: 1.2rem; }
+            .nav-prev { left: 0.25rem; }
+            .nav-next { right: 0.25rem; }
+            .video-creator-content { padding: 1.25rem; border-radius: 1.5rem; }
         }
+    
+/* ===== KEVINE V2 ENHANCEMENTS ===== */
+body{padding:0;background:#faf8fb;color:#24212a;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 10% 10%,rgba(74,144,226,.10),transparent 28%),radial-gradient(circle at 90% 20%,rgba(255,105,180,.10),transparent 30%);z-index:-1}
+.container{max-width:1280px;padding:0 1.25rem}
+.main-app{padding-bottom:4rem}
+.header{padding:2.25rem 0 1.25rem;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.header h1{font-size:clamp(2rem,4vw,3.25rem);letter-spacing:-.04em}
+.header p{font-size:1rem;margin-top:.45rem}
+.header-copy{min-width:0}.header-actions{display:flex;gap:.55rem;align-items:center}
+.logout-btn{position:static;white-space:nowrap}
+.anniversary-banner{position:relative;overflow:hidden;padding:1.5rem 1.75rem;border-radius:1.5rem;margin-bottom:1.25rem;box-shadow:0 14px 35px rgba(115,70,130,.15)}
+.anniversary-banner:after{content:"❤";position:absolute;font-size:8rem;right:1rem;top:-2rem;opacity:.08;transform:rotate(-12deg)}
+.anniversary-banner h2{font-size:1.35rem;position:relative;z-index:1}.countdown{position:relative;z-index:1}
+.story-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;margin:1rem 0 1.4rem}
+.stat-card{background:rgba(255,255,255,.92);border:1px solid rgba(240,192,208,.65);border-radius:1.2rem;padding:1rem 1.1rem;box-shadow:0 8px 25px rgba(0,0,0,.045)}
+.stat-icon{font-size:1.35rem}.stat-value{font-size:1.5rem;font-weight:800;color:#333;margin-top:.15rem}.stat-label{font-size:.78rem;color:#777}
+.content-shell{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:1.25rem;align-items:start}
+.memories-panel{background:rgba(255,255,255,.74);border:1px solid rgba(255,255,255,.9);border-radius:1.5rem;padding:1rem;box-shadow:0 10px 35px rgba(0,0,0,.045)}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin:.25rem .25rem 1rem}.section-head h2{font-size:1.2rem}.section-head span{font-size:.8rem;color:#777}
+.memories-grid{grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem}
+.memory-card{border:1px solid #f0e7ed;box-shadow:0 7px 20px rgba(0,0,0,.055);border-radius:1.25rem}.memory-media{height:210px}.memory-info{padding:.9rem}.memory-title{font-size:1rem}.memory-note{font-size:.82rem}
+.memory-card:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(0,0,0,.10)}
+.side-card{background:rgba(255,255,255,.9);border:1px solid #f0e7ed;border-radius:1.35rem;padding:1.1rem;box-shadow:0 10px 28px rgba(0,0,0,.05);position:sticky;top:1rem}
+.side-card h3{font-size:1rem;margin-bottom:.75rem}.side-list{display:grid;gap:.6rem}.side-item{display:flex;gap:.65rem;align-items:flex-start;padding:.65rem;border-radius:.9rem;background:#faf7fa}.side-item b{display:block;font-size:.82rem}.side-item small{color:#777;font-size:.72rem}
+.quick-actions{display:grid;gap:.55rem;margin-top:1rem}.quick-actions button{width:100%;padding:.7rem;border:1px solid #f0c0d0;border-radius:.9rem;background:white;color:#555;font-weight:700;cursor:pointer}.quick-actions button:hover{background:#fff3f8}
+.upload-card{border:1px solid #f0e7ed;box-shadow:0 8px 28px rgba(0,0,0,.05)}
+.upload-card:not(.collapsed){box-shadow:0 14px 35px rgba(255,105,180,.10)}
+.action-bar{margin-top:1rem}.search-input{background:rgba(255,255,255,.95)}
+.filter-bar{justify-content:flex-start;overflow-x:auto;padding-bottom:.25rem;scrollbar-width:none}.filter-bar::-webkit-scrollbar{display:none}.filter-btn{white-space:nowrap}
+.empty-state{padding:4rem 1rem}.empty-state .emoji{font-size:3.5rem}
+.fade-up{animation:fadeUp .45s ease both}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.scroll-top{position:fixed;right:1.25rem;bottom:1.25rem;width:44px;height:44px;border:0;border-radius:50%;background:var(--grad);color:white;box-shadow:0 8px 22px rgba(0,0,0,.18);cursor:pointer;display:none;z-index:900}.scroll-top.show{display:block}
+@media(max-width:900px){.content-shell{grid-template-columns:1fr}.side-card{position:static}.story-stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.container{padding:0 .8rem}.header{padding-top:1.5rem}.header-actions{align-self:flex-start}.header h1{font-size:2rem}.story-stats{gap:.55rem}.stat-card{padding:.8rem}.stat-value{font-size:1.25rem}.memories-panel{padding:.7rem}.memories-grid{grid-template-columns:1fr}.memory-media{height:230px}.anniversary-banner{padding:1.2rem}.login-box{margin:2rem auto}}
+
     </style>
 </head>
-<body>
+<body class="login-screen">
+    <div class="toast-container" id="toastContainer"></div>
+
     <div class="container">
-        <div id="loginBox" class="login-box">
-            <h1>💙 KEVINE 💗</h1>
-            <p>Kevin + Celine = Forever</p>
-            <p style="color:#ff69b4; margin:0.5rem 0;">💑 Together since March 15, 2026 💑</p>
-            <input type="password" id="passwordInput" placeholder="Enter secret password 🔑">
-            <button id="loginBtn">💙 Enter Our Love World 💗</button>
-            <div id="loginError" class="error-msg"></div>
+        <!-- LOGIN -->
+        <!-- PREMIUM LOGIN / ENTRANCE -->
+        <div id="loginStage" class="login-stage">
+            <div class="heart-field" aria-hidden="true"><span>♥</span><span>♡</span><span>♥</span><span>♡</span><span>♥</span></div>
+            <div id="loginBox" class="login-box">
+                <div class="login-lock">🔐</div>
+                <h1>KEVINE</h1>
+                <div class="login-names">Kevin <span class="heart">♡</span> Celine</div>
+                <div class="login-sub">Our little corner of the world</div>
+                <div class="since-pill">💗 Together since March 15, 2026</div>
+                <div class="login-stats">
+                    <div class="login-stat"><strong id="loginDays">0</strong><span>days together</span></div>
+                    <div class="login-stat"><strong id="loginNext">0</strong><span>days to anniversary</span></div>
+                </div>
+                <form id="loginForm">
+                    <div class="secret-label"><span>PRIVATE ACCESS</span><span>🔒 Just for us</span></div>
+                    <div class="password-wrap">
+                        <input type="password" id="passwordInput" placeholder="Enter our secret password" autocomplete="current-password" aria-label="Secret password">
+                        <button type="button" class="toggle-pw" id="togglePw" aria-label="Show password">👁️</button>
+                    </div>
+                    <button type="submit" id="loginBtn"><span>Open Our Story</span><span>→</span></button>
+                </form>
+                <div id="loginError" class="error-msg" role="alert"></div>
+                <div class="login-footer">A private place for our memories, moments & story ♡</div>
+            </div>
         </div>
 
-        <div id="mainApp" class="main-app">
+        <!-- MAIN APP -->
+        <div id="mainApp" class="main-app"> class="main-app">
             <div class="header">
                 <button id="logoutBtn" class="logout-btn">🔒 Exit</button>
                 <h1>💙 KEVINE 💗</h1>
@@ -189,56 +771,78 @@
                 <div id="countdownText" class="countdown"></div>
             </div>
 
-            <div class="upload-card">
-                <div class="form-group">
-                    <label>📅 DATE</label>
-                    <input type="date" id="memoryDate">
-                </div>
-                <div class="form-group">
-                    <label>🏷️ TITLE</label>
-                    <input type="text" id="memoryTitle" placeholder="e.g., Our first sunset">
-                </div>
-                <div class="form-group">
-                    <label>🏷️ TAGS (comma separated)</label>
-                    <input type="text" id="memoryTags" placeholder="e.g., sunset, beach, romantic">
-                </div>
-                <div class="form-group">
-                    <label>🎭 EVENT TYPE</label>
-                    <select id="eventType">
-                        <option value="General">💗 General</option>
-                        <option value="Anniversary">🎉 Anniversary</option>
-                        <option value="Vacation">✈️ Vacation</option>
-                        <option value="Date Night">🌙 Date Night</option>
-                        <option value="Celebration">🎊 Celebration</option>
-                        <option value="Everyday">💙 Everyday</option>
-                        <option value="Special">✨ Special</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>💌 NOTE</label>
-                    <textarea id="memoryNote" rows="2" placeholder="Write about this beautiful moment..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>📍 LOCATION (optional)</label>
-                    <input type="text" id="memoryLocation" placeholder="e.g., Paris, France">
-                </div>
-                <div class="form-group">
-                    <label>📸 PHOTOS & VIDEOS</label>
-                    <label class="file-label" for="fileInput">📂 Choose files</label>
-                    <input type="file" id="fileInput" accept="image/*,video/*" multiple>
-                    <div id="preview" class="preview"></div>
-                </div>
-                <div class="progress-bar" id="progressBar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <button id="publishBtn">💗 Add to Our Story 💙</button>
+
+            <div class="story-stats" id="storyStats">
+                <div class="stat-card"><div class="stat-icon">📸</div><div class="stat-value" id="statMemories">0</div><div class="stat-label">Memories</div></div>
+                <div class="stat-card"><div class="stat-icon">💗</div><div class="stat-value" id="statDays">0</div><div class="stat-label">Days together</div></div>
+                <div class="stat-card"><div class="stat-icon">🎬</div><div class="stat-value" id="statMedia">0</div><div class="stat-label">Photos & videos</div></div>
+                <div class="stat-card"><div class="stat-icon">📍</div><div class="stat-value" id="statPlaces">0</div><div class="stat-label">Places remembered</div></div>
             </div>
 
+            <!-- Upload card (collapsible) -->
+            <div class="upload-card collapsed" id="uploadCard">
+                <div class="upload-header" id="uploadToggle">
+                    <h3>💗 Add a new memory</h3>
+                    <button class="upload-toggle" type="button" aria-label="Toggle">▾</button>
+                </div>
+                <div class="upload-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>📅 DATE</label>
+                            <input type="date" id="memoryDate">
+                        </div>
+                        <div class="form-group">
+                            <label>🎭 EVENT TYPE</label>
+                            <select id="eventType">
+                                <option value="General">💗 General</option>
+                                <option value="Anniversary">🎉 Anniversary</option>
+                                <option value="Vacation">✈️ Vacation</option>
+                                <option value="Date Night">🌙 Date Night</option>
+                                <option value="Celebration">🎊 Celebration</option>
+                                <option value="Everyday">💙 Everyday</option>
+                                <option value="Special">✨ Special</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>🏷️ TITLE</label>
+                        <input type="text" id="memoryTitle" placeholder="e.g., Our first sunset" maxlength="100">
+                    </div>
+                    <div class="form-group">
+                        <label>🏷️ TAGS (comma separated)</label>
+                        <input type="text" id="memoryTags" placeholder="e.g., sunset, beach, romantic">
+                    </div>
+                    <div class="form-group">
+                        <label>💌 NOTE</label>
+                        <textarea id="memoryNote" rows="2" placeholder="Write about this beautiful moment..." maxlength="500"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>📍 LOCATION (optional)</label>
+                        <input type="text" id="memoryLocation" placeholder="e.g., Paris, France">
+                    </div>
+                    <div class="form-group">
+                        <label>📸 PHOTOS & VIDEOS</label>
+                        <label class="file-label" for="fileInput">📂 Choose files</label>
+                        <input type="file" id="fileInput" accept="image/*,video/*" multiple>
+                        <div id="preview" class="preview"></div>
+                    </div>
+                    <div class="progress-bar" id="progressBar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <button id="publishBtn" class="btn btn-block" style="margin-top:0.75rem;">💗 Add to Our Story 💙</button>
+                </div>
+            </div>
+
+            <!-- Search + export -->
             <div class="action-bar">
-                <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search memories by title, note, or tags...">
-                <button id="exportBtn" class="export-btn">💾 Export All Memories</button>
+                <div class="search-wrap">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search memories by title, note, or tags...">
+                </div>
+                <button id="exportBtn" class="btn export-btn">💾 Export</button>
             </div>
 
+            <!-- Filters -->
             <div class="filter-bar">
                 <button class="filter-btn active" data-filter="all">💗 All</button>
                 <button class="filter-btn" data-filter="Anniversary">🎉 Anniversary</button>
@@ -249,43 +853,70 @@
                 <button class="filter-btn" data-filter="Special">✨ Special</button>
             </div>
 
-            <div id="memoriesGrid" class="memories-grid">
-                <div class="loading">Loading your memories... 💙💗</div>
+            <div class="content-shell">
+                <section class="memories-panel">
+                    <div class="section-head"><h2>💞 Our memories</h2><span id="resultCount">0 memories</span></div>
+                    <div id="memoriesGrid" class="memories-grid">
+                <div class="loading"><div class="spinner"></div><div>Loading your memories... 💙💗</div></div>
+                    </div>
+                </section>
+                <aside class="side-card">
+                    <h3>✨ Our story</h3>
+                    <div class="side-list" id="recentList"></div>
+                    <div class="quick-actions">
+                        <button id="jumpUploadBtn">💗 Add memory</button>
+                        <button id="jumpTopBtn">⬆️ Back to top</button>
+                    </div>
+                </aside>
             </div>
         </div>
     </div>
+    <button class="scroll-top" id="scrollTopBtn" aria-label="Back to top">↑</button>
 
+    <!-- LIGHTBOX -->
     <div id="mediaModal" class="modal">
-        <span class="close-modal">&times;</span>
-        <div class="modal-content">
-            <img id="modalImage" style="width:100%">
+        <button class="close-modal" id="closeLightbox" aria-label="Close">&times;</button>
+        <div class="lightbox-content">
+            <button class="nav-btn nav-prev" id="lightboxPrev" aria-label="Previous">‹</button>
+            <img id="modalImage" class="lightbox-media" alt="">
+            <button class="nav-btn nav-next" id="lightboxNext" aria-label="Next">›</button>
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+            <div class="lightbox-counter" id="lightboxCounter"></div>
         </div>
     </div>
 
+    <!-- VIDEO CREATOR -->
     <div id="videoCreatorModal" class="video-creator-modal">
-        <span class="close-modal" id="closeVideoModal">&times;</span>
         <div class="video-creator-content">
-            <h2 style="text-align:center; margin-bottom:1rem;">🎬 Create Your Love Story Video 🎬</h2>
-            
-            <!-- Date Range Selection -->
+            <button class="close-modal" id="closeVideoModal" aria-label="Close">&times;</button>
+            <h2>🎬 Create Your Love Story Video 🎬</h2>
+
             <div class="date-range">
-                <input type="date" id="videoStartDate" placeholder="Start Date">
-                <input type="date" id="videoEndDate" placeholder="End Date">
-                <button id="autoPickPhotosBtn" style="background:#4a90e2;">🤖 Auto Pick Photos</button>
+                <div class="field">
+                    <label>START DATE</label>
+                    <input type="date" id="videoStartDate">
+                </div>
+                <div class="field">
+                    <label>END DATE</label>
+                    <input type="date" id="videoEndDate">
+                </div>
+                <button id="autoPickPhotosBtn" class="btn auto-pick-btn">🤖 Auto Pick Photos</button>
             </div>
-            
-            <div id="photoCountDisplay" style="text-align:center; margin-bottom:0.5rem; color:#ff69b4;"></div>
-            
-            <canvas id="videoCanvas" width="720" height="540"></canvas>
-            <input type="text" id="videoTitleInput" placeholder="Video Title" style="width:100%; padding:0.5rem; margin-bottom:1rem; border-radius:0.5rem; border:1px solid #f0c0d0;">
-            <div style="display:flex; gap:1rem;">
-                <button id="previewVideoBtn" style="flex:1;">▶️ Preview</button>
-                <button id="generateVideoBtn" style="flex:1;">💾 Generate & Download</button>
-                <button id="closeVideoCreatorBtn" style="flex:1;">Close</button>
+
+            <div id="photoCountDisplay" class="photo-count"></div>
+
+            <div class="video-canvas-wrap">
+                <canvas id="videoCanvas" width="720" height="540"></canvas>
+            </div>
+            <input type="text" id="videoTitleInput" class="video-title-input" placeholder="Video Title" value="Our Love Story">
+            <div class="video-actions">
+                <button id="previewVideoBtn" class="btn btn-secondary">▶️ Preview</button>
+                <button id="generateVideoBtn" class="btn">💾 Download</button>
+                <button id="closeVideoCreatorBtn" class="btn btn-neutral">Close</button>
             </div>
             <div id="videoProgressBar" style="display:none; margin-top:1rem;">
                 <div class="progress-bar" style="display:block;"><div class="progress-fill" id="videoProgressFill" style="width:0%"></div></div>
-                <p id="videoStatus" style="text-align:center; margin-top:0.5rem;">Creating video...</p>
+                <p id="videoStatus" style="text-align:center; margin-top:0.5rem; font-size:0.85rem; color:var(--muted);">Creating video...</p>
             </div>
         </div>
     </div>
@@ -295,76 +926,686 @@
             const SUPABASE_URL = 'https://uhqoihahmocwjgzpiivd.supabase.co';
             const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVocW9paGFobW9jd2pnenBpaXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2OTUyMTQsImV4cCI6MjA4MTI3MTIxNH0.6HEb9Vy9xR3CFJBRRXPULAQa50wtMgRkPufrh_mGhSY';
             const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            
+
             const BUCKET_NAME = 'kevine_storage';
             const CORRECT_PASSWORD = 'kevine2025';
             const START_DATE = new Date('2026-03-15');
-            
+
             let allMemories = [];
             let currentFilter = 'all';
             let currentSearch = '';
             let videoAnimationId = null;
             let currentVideoImages = [];
-            
-            // DOM Elements
-            const loginBox = document.getElementById('loginBox');
-            const mainApp = document.getElementById('mainApp');
-            const passwordInput = document.getElementById('passwordInput');
-            const loginBtn = document.getElementById('loginBtn');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const publishBtn = document.getElementById('publishBtn');
-            const exportBtn = document.getElementById('exportBtn');
-            const searchInput = document.getElementById('searchInput');
-            const memoryDate = document.getElementById('memoryDate');
-            const memoryTitle = document.getElementById('memoryTitle');
-            const memoryNote = document.getElementById('memoryNote');
-            const memoryTags = document.getElementById('memoryTags');
-            const memoryLocation = document.getElementById('memoryLocation');
-            const eventType = document.getElementById('eventType');
-            const fileInput = document.getElementById('fileInput');
-            const preview = document.getElementById('preview');
-            const memoriesGrid = document.getElementById('memoriesGrid');
-            const progressBar = document.getElementById('progressBar');
-            const progressFill = document.getElementById('progressFill');
-            const loginError = document.getElementById('loginError');
-            const countdownText = document.getElementById('countdownText');
-            
+
+            // DOM
+            const $ = id => document.getElementById(id);
+            const loginBox = $('loginBox');
+            const loginStage = $('loginStage');
+            const mainApp = $('mainApp');
+            const loginDays = $('loginDays');
+            const loginNext = $('loginNext');
+            const passwordInput = $('passwordInput');
+            const loginForm = $('loginForm');
+            const loginBtn = $('loginBtn');
+            const loginError = $('loginError');
+            const togglePw = $('togglePw');
+            const logoutBtn = $('logoutBtn');
+            const uploadCard = $('uploadCard');
+            const uploadToggle = $('uploadToggle');
+            const publishBtn = $('publishBtn');
+            const exportBtn = $('exportBtn');
+            const searchInput = $('searchInput');
+            const memoryDate = $('memoryDate');
+            const memoryTitle = $('memoryTitle');
+            const memoryNote = $('memoryNote');
+            const memoryTags = $('memoryTags');
+            const memoryLocation = $('memoryLocation');
+            const eventType = $('eventType');
+            const fileInput = $('fileInput');
+            const preview = $('preview');
+            const memoriesGrid = $('memoriesGrid');
+            const progressBar = $('progressBar');
+            const progressFill = $('progressFill');
+            const countdownText = $('countdownText');
+            const toastContainer = $('toastContainer');
+
+            // ---------- TOAST ----------
+            function toast(message, type = 'info', duration = 3000) {
+                const el = document.createElement('div');
+                el.className = `toast ${type}`;
+                el.textContent = message;
+                toastContainer.appendChild(el);
+                setTimeout(() => {
+                    el.style.transition = 'opacity 0.3s, transform 0.3s';
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(-12px)';
+                    setTimeout(() => el.remove(), 300);
+                }, duration);
+            }
+
+            // ---------- COUNTDOWN ----------
             function updateCountdown() {
                 const today = new Date();
                 const nextAnniversary = new Date(today.getFullYear(), 2, 15);
                 if (today > nextAnniversary) nextAnniversary.setFullYear(today.getFullYear() + 1);
                 const days = Math.ceil((nextAnniversary - today) / (1000 * 60 * 60 * 24));
                 const daysTogether = Math.floor((today - START_DATE) / (1000 * 60 * 60 * 24));
-                countdownText.innerHTML = `💑 ${daysTogether} days together 💑<br>🎉 Next anniversary in ${days} days 🎉`;
+                countdownText.innerHTML = `💑 ${daysTogether} days together &nbsp;·&nbsp; 🎉 Next anniversary in ${days} days`;
+                if (loginDays) loginDays.textContent = daysTogether;
+                if (loginNext) loginNext.textContent = days;
             }
-            
+
+            // ---------- LOGIN ----------
+            togglePw.addEventListener('click', () => {
+                const isPw = passwordInput.type === 'password';
+                passwordInput.type = isPw ? 'text' : 'password';
+                togglePw.textContent = isPw ? '🙈' : '👁️';
+            });
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                login();
+            });
+
             function login() {
                 const password = passwordInput.value;
                 if (!password) {
-                    loginError.textContent = 'Please enter the password';
-                    loginError.style.display = 'block';
+                    showLoginError('Please enter the password');
                     return;
                 }
-                if (password === CORRECT_PASSWORD) {
-                    loginBox.style.display = 'none';
-                    mainApp.style.display = 'block';
-                    memoryDate.value = new Date().toISOString().split('T')[0];
-                    updateCountdown();
-                    setInterval(updateCountdown, 86400000);
-                    loadMemories();
-                    loginError.style.display = 'none';
-                } else {
-                    loginError.textContent = 'Wrong password. Only Kevin & Celine can enter.';
-                    loginError.style.display = 'block';
-                }
+                loginBtn.disabled = true;
+                loginBtn.innerHTML = '<span>Unlocking our story…</span><span>♡</span>';
+
+                setTimeout(() => {
+                    if (password === CORRECT_PASSWORD) {
+                        loginStage.style.display = 'none';
+                        mainApp.style.display = 'block';
+                        memoryDate.value = new Date().toISOString().split('T')[0];
+                        updateCountdown();
+                        setInterval(updateCountdown, 86400000);
+                        loadMemories();
+                        loginError.style.display = 'none';
+                        toast('Welcome back 💕', 'success');
+                    } else {
+                        showLoginError('Wrong password. Only Kevin & Celine can enter.');
+                        loginBtn.disabled = false;
+                        loginBtn.innerHTML = '<span>Open Our Story</span><span>→</span>';
+                    }
+                }, 200);
             }
-            
+
+            function showLoginError(msg) {
+                loginError.textContent = msg;
+                loginError.style.display = 'block';
+                loginBox.classList.add('shake');
+                setTimeout(() => loginBox.classList.remove('shake'), 400);
+            }
+
             function logout() {
-                loginBox.style.display = 'block';
+                loginStage.style.display = 'flex';
                 mainApp.style.display = 'none';
                 passwordInput.value = '';
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<span>Open Our Story</span><span>→</span>';
             }
-            
+
+            // ---------- UPLOAD COLLAPSE ----------
+            uploadToggle.addEventListener('click', () => {
+                uploadCard.classList.toggle('collapsed');
+            });
+
+            // ---------- FILE PREVIEW ----------
+            let selectedFiles = [];
+            fileInput.addEventListener('change', function(e) {
+                selectedFiles = Array.from(e.target.files);
+                renderPreview();
+            });
+
+            function renderPreview() {
+                preview.innerHTML = '';
+                selectedFiles.forEach((file, idx) => {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'preview-item';
+                    const isVideo = file.type.startsWith('video/');
+                    let src;
+                    if (isVideo) {
+                        src = URL.createObjectURL(file);
+                        const vid = document.createElement('video');
+                        vid.src = src;
+                        vid.className = 'preview-img';
+                        vid.muted = true;
+                        wrap.appendChild(vid);
+                    } else {
+                        const img = document.createElement('img');
+                        img.src = URL.createObjectURL(file);
+                        img.className = 'preview-img';
+                        wrap.appendChild(img);
+                    }
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'preview-remove';
+                    removeBtn.textContent = '×';
+                    removeBtn.type = 'button';
+                    removeBtn.onclick = () => {
+                        selectedFiles.splice(idx, 1);
+                        renderPreview();
+                    };
+                    wrap.appendChild(removeBtn);
+                    preview.appendChild(wrap);
+                });
+            }
+
+            // ---------- UPLOAD ----------
+            async function uploadToStorage(file) {
+                const ext = file.name.split('.').pop();
+                const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${ext}`;
+                const filePath = `memories/${fileName}`;
+                const { error } = await supabase.storage.from(BUCKET_NAME).upload(filePath, file);
+                if (error) throw error;
+                const { data: { publicUrl } } = supabase.storage.from(BUCKET_NAME).getPublicUrl(filePath);
+                return publicUrl;
+            }
+
+            async function addMemory() {
+                const date = memoryDate.value;
+                const title = memoryTitle.value.trim();
+                const note = memoryNote.value.trim();
+                const tags = memoryTags.value.trim();
+                const location = memoryLocation.value.trim();
+                const type = eventType.value;
+
+                if (!date) { toast('Please pick a date', 'error'); return; }
+                if (!title) { toast('Please give a title', 'error'); return; }
+                if (selectedFiles.length === 0) { toast('Please select photos or videos', 'error'); return; }
+
+                progressBar.style.display = 'block';
+                publishBtn.disabled = true;
+                publishBtn.textContent = 'Uploading...';
+
+                try {
+                    const mediaUrls = [];
+                    for (let i = 0; i < selectedFiles.length; i++) {
+                        progressFill.style.width = `${(i / selectedFiles.length) * 100}%`;
+                        const url = await uploadToStorage(selectedFiles[i]);
+                        mediaUrls.push(url);
+                    }
+                    progressFill.style.width = '100%';
+
+                    const { error } = await supabase.from('memories').insert({
+                        user_id: 'kevine_couple',
+                        date: date,
+                        title: title,
+                        note: note || 'A beautiful memory',
+                        tags: tags,
+                        location: location,
+                        event_type: type,
+                        media_urls: JSON.stringify(mediaUrls),
+                        created_at: new Date().toISOString()
+                    });
+                    if (error) throw error;
+
+                    memoryTitle.value = '';
+                    memoryNote.value = '';
+                    memoryTags.value = '';
+                    memoryLocation.value = '';
+                    fileInput.value = '';
+                    selectedFiles = [];
+                    preview.innerHTML = '';
+
+                    await loadMemories();
+                    toast('Memory saved 💙💗', 'success');
+                    uploadCard.classList.add('collapsed');
+
+                    setTimeout(() => {
+                        publishBtn.textContent = "💗 Add to Our Story 💙";
+                        publishBtn.disabled = false;
+                        progressBar.style.display = 'none';
+                        progressFill.style.width = '0%';
+                    }, 800);
+                } catch (err) {
+                    toast('Error: ' + err.message, 'error');
+                    publishBtn.disabled = false;
+                    publishBtn.textContent = "💗 Add to Our Story 💙";
+                    progressBar.style.display = 'none';
+                }
+            }
+
+            // ---------- LOAD / RENDER ----------
+            async function loadMemories() {
+                memoriesGrid.innerHTML = '<div class="loading"><div class="spinner"></div><div>Loading your memories...</div></div>';
+                const { data, error } = await supabase
+                    .from('memories')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                if (error) {
+                    memoriesGrid.innerHTML = '<div class="loading">Error loading memories 😢</div>';
+                    toast('Failed to load memories', 'error');
+                    return;
+                }
+                allMemories = data || [];
+                renderMemories();
+                updateStoryDashboard();
+            }
+
+            function renderMemories() {
+                let filtered = allMemories;
+                if (currentFilter !== 'all') {
+                    filtered = filtered.filter(m => m.event_type === currentFilter);
+                }
+                if (currentSearch) {
+                    const q = currentSearch;
+                    filtered = filtered.filter(m =>
+                        (m.title || '').toLowerCase().includes(q) ||
+                        (m.note || '').toLowerCase().includes(q) ||
+                        (m.tags || '').toLowerCase().includes(q) ||
+                        (m.location || '').toLowerCase().includes(q)
+                    );
+                }
+
+                if (filtered.length === 0) {
+                    memoriesGrid.innerHTML = `
+                        <div class="empty-state">
+                            <span class="emoji">🌸</span>
+                            <div>${allMemories.length === 0 ? 'No memories yet. Add your first beautiful moment!' : 'No memories match your search.'}</div>
+                        </div>`;
+                    return;
+                }
+
+                let html = '';
+                for (const mem of filtered) {
+                    let mediaArray = [];
+                    try { mediaArray = JSON.parse(mem.media_urls || '[]'); } catch (e) { mediaArray = []; }
+                    if (mediaArray.length === 0) continue;
+
+                    const displayDate = new Date(mem.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+                    const tags = mem.tags ? mem.tags.split(',').map(t => t.trim()).filter(Boolean) : [];
+                    const firstIsVideo = /\.(mp4|webm|mov|ogg)(\?|$)/i.test(mediaArray[0]);
+                    const safeTitle = escapeHtml(mem.title);
+
+                    html += `
+                        <div class="memory-card">
+                            <div class="memory-media">
+                                ${firstIsVideo
+                                    ? `<video class="memory-img" muted playsinline preload="metadata" data-memory="${mem.id}" data-index="0"><source src="${mediaArray[0]}"></video>
+                                       <div class="play-badge">▶</div>`
+                                    : `<img class="memory-img" loading="lazy" src="${mediaArray[0]}" alt="${safeTitle}" data-memory="${mem.id}" data-index="0"
+                                        onerror="this.src='https://placehold.co/400x300/4a90e2/white?text=❤️'">`
+                                }
+                                ${mediaArray.length > 1 ? `<div class="media-count">📷 ${mediaArray.length}</div>` : ''}
+                            </div>
+                            <div class="memory-info">
+                                <div class="memory-date">📆 ${displayDate}</div>
+                                <div class="memory-title">✨ ${safeTitle}</div>
+                                ${mem.event_type ? `<div class="memory-tags"><span class="tag">${escapeHtml(mem.event_type)}</span>${mem.location ? `<span class="tag blue">📍 ${escapeHtml(mem.location)}</span>` : ''}</div>` : (mem.location ? `<div class="memory-tags"><span class="tag blue">📍 ${escapeHtml(mem.location)}</span></div>` : '')}
+                                ${tags.length ? `<div class="memory-tags">${tags.map(t => `<span class="tag blue">#${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+                                <div class="memory-note">💬 ${escapeHtml(mem.note || '')}</div>
+                                <div class="btn-group">
+                                    <button class="delete-btn" data-action="delete" data-id="${mem.id}" data-title="${safeTitle}">🗑️ Remove</button>
+                                    <button class="video-btn" data-action="video" data-id="${mem.id}">🎬 Video</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                memoriesGrid.innerHTML = html;
+                updateStoryDashboard();
+                document.querySelectorAll(".memory-card").forEach((card, i) => { card.classList.add("fade-up"); card.style.animationDelay = `${Math.min(i * 35, 350)}ms`; });
+            }
+
+            // Event delegation for memory card actions
+            memoriesGrid.addEventListener('click', (e) => {
+                const img = e.target.closest('.memory-img');
+                if (img) {
+                    const memId = img.getAttribute('data-memory');
+                    const idx = parseInt(img.getAttribute('data-index') || '0', 10);
+                    openLightbox(memId, idx);
+                    return;
+                }
+                const btn = e.target.closest('button[data-action]');
+                if (!btn) return;
+                const action = btn.getAttribute('data-action');
+                if (action === 'delete') {
+                    deleteMemory(btn.getAttribute('data-id'), btn.getAttribute('data-title'));
+                } else if (action === 'video') {
+                    openVideoCreatorWithMemory(btn.getAttribute('data-id'));
+                }
+            });
+
+            async function deleteMemory(id, title) {
+                if (!confirm(`Remove "${title}"?`)) return;
+                const { error } = await supabase.from('memories').delete().eq('id', id);
+                if (!error) {
+                    toast('Memory removed', 'success');
+                    await loadMemories();
+                } else {
+                    toast('Error: ' + error.message, 'error');
+                }
+            }
+
+            // ---------- LIGHTBOX ----------
+            let lightboxMedia = [];
+            let lightboxIndex = 0;
+            let lightboxCaption = '';
+
+            function openLightbox(memoryId, index) {
+                const mem = allMemories.find(m => String(m.id) === String(memoryId));
+                if (!mem) return;
+                try { lightboxMedia = JSON.parse(mem.media_urls || '[]'); } catch { lightboxMedia = []; }
+                lightboxIndex = index || 0;
+                lightboxCaption = mem.title || '';
+                renderLightbox();
+                $('mediaModal').classList.add('active');
+            }
+
+            function renderLightbox() {
+                const src = lightboxMedia[lightboxIndex];
+                const isVideo = /\.(mp4|webm|mov|ogg)(\?|$)/i.test(src);
+                const img = $('modalImage');
+                const container = img.parentElement;
+                // Replace with appropriate media element
+                const existingVideo = container.querySelector('video.lightbox-media');
+                if (existingVideo) existingVideo.remove();
+
+                if (isVideo) {
+                    img.style.display = 'none';
+                    const vid = document.createElement('video');
+                    vid.src = src;
+                    vid.controls = true;
+                    vid.autoplay = true;
+                    vid.className = 'lightbox-media';
+                    container.insertBefore(vid, img);
+                } else {
+                    img.style.display = 'block';
+                    img.src = src;
+                }
+                $('lightboxCaption').textContent = lightboxCaption;
+                $('lightboxCounter').textContent = lightboxMedia.length > 1 ? `${lightboxIndex + 1} / ${lightboxMedia.length}` : '';
+                $('lightboxPrev').style.display = lightboxMedia.length > 1 ? 'flex' : 'none';
+                $('lightboxNext').style.display = lightboxMedia.length > 1 ? 'flex' : 'none';
+            }
+
+            function lightboxNext() {
+                if (lightboxMedia.length < 2) return;
+                lightboxIndex = (lightboxIndex + 1) % lightboxMedia.length;
+                renderLightbox();
+            }
+            function lightboxPrev() {
+                if (lightboxMedia.length < 2) return;
+                lightboxIndex = (lightboxIndex - 1 + lightboxMedia.length) % lightboxMedia.length;
+                renderLightbox();
+            }
+
+            $('lightboxNext').addEventListener('click', lightboxNext);
+            $('lightboxPrev').addEventListener('click', lightboxPrev);
+            $('closeLightbox').addEventListener('click', () => {
+                $('mediaModal').classList.remove('active');
+                const existingVideo = document.querySelector('#mediaModal video');
+                if (existingVideo) existingVideo.pause();
+            });
+            $('mediaModal').addEventListener('click', (e) => {
+                if (e.target === $('mediaModal')) {
+                    $('mediaModal').classList.remove('active');
+                }
+            });
+            document.addEventListener('keydown', (e) => {
+                if (!$('mediaModal').classList.contains('active')) return;
+                if (e.key === 'ArrowRight') lightboxNext();
+                if (e.key === 'ArrowLeft') lightboxPrev();
+                if (e.key === 'Escape') $('mediaModal').classList.remove('active');
+            });
+
+            // ---------- VIDEO CREATOR ----------
+            function openVideoCreatorWithMemory(memoryId) {
+                const modal = $('videoCreatorModal');
+                modal.classList.add('active');
+                $('videoStartDate').value = '';
+                $('videoEndDate').value = '';
+                $('photoCountDisplay').innerHTML = '';
+                $('photoCountDisplay').className = 'photo-count';
+                currentVideoImages = [];
+
+                if (memoryId) {
+                    const memory = allMemories.find(m => String(m.id) === String(memoryId));
+                    if (memory) {
+                        $('videoStartDate').value = memory.date;
+                        $('videoEndDate').value = memory.date;
+                        $('videoTitleInput').value = memory.title;
+                    }
+                } else {
+                    $('videoTitleInput').value = 'Our Love Story';
+                }
+            }
+
+            function autoPickPhotos() {
+                const startDate = $('videoStartDate').value;
+                const endDate = $('videoEndDate').value;
+                const display = $('photoCountDisplay');
+
+                if (!startDate || !endDate) {
+                    display.textContent = '⚠️ Please select both start and end dates';
+                    display.className = 'photo-count warn';
+                    return;
+                }
+                if (startDate > endDate) {
+                    display.textContent = '⚠️ Start date must be before end date';
+                    display.className = 'photo-count warn';
+                    return;
+                }
+
+                const filtered = allMemories.filter(m => m.date >= startDate && m.date <= endDate);
+                let allImages = [];
+                for (const mem of filtered) {
+                    try {
+                        const media = JSON.parse(mem.media_urls || '[]');
+                        allImages.push(...media.filter(url => !/\.(mp4|webm|mov|ogg)(\?|$)/i.test(url)));
+                    } catch {}
+                }
+
+                if (allImages.length === 0) {
+                    display.textContent = '❌ No photos found in this date range';
+                    display.className = 'photo-count error';
+                    currentVideoImages = [];
+                    return;
+                }
+
+                currentVideoImages = allImages;
+                display.textContent = `✅ Found ${allImages.length} photo${allImages.length > 1 ? 's' : ''} — click Preview`;
+                display.className = 'photo-count success';
+
+                if ($('videoTitleInput').value === 'Our Love Story') {
+                    $('videoTitleInput').value = `Our Memories`;
+                }
+            }
+
+            async function startVideoPreview() {
+                const canvas = $('videoCanvas');
+                const ctx = canvas.getContext('2d');
+                const images = currentVideoImages;
+                const title = $('videoTitleInput').value || 'Our Love Story';
+
+                if (!images || images.length === 0) {
+                    toast('Pick photos first with Auto Pick Photos', 'error');
+                    return;
+                }
+
+                if (videoAnimationId) {
+                    clearTimeout(videoAnimationId);
+                    videoAnimationId = null;
+                }
+
+                const loadedImages = [];
+                await Promise.all(images.map(src => new Promise((resolve) => {
+                    const img = new Image();
+                    img.crossOrigin = 'Anonymous';
+                    img.onload = () => { loadedImages.push(img); resolve(); };
+                    img.onerror = () => resolve();
+                    img.src = src;
+                })));
+
+                if (loadedImages.length === 0) {
+                    toast('Failed to load images', 'error');
+                    return;
+                }
+
+                let currentIndex = 0;
+                function drawFrame() {
+                    const img = loadedImages[currentIndex % loadedImages.length];
+                    if (img) {
+                        const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+                        const x = (canvas.width - img.width * scale) / 2;
+                        const y = (canvas.height - img.height * scale) / 2;
+                        ctx.fillStyle = '#000';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
+                        // Gradient overlay for text
+                        const grad = ctx.createLinearGradient(0, 0, 0, 80);
+                        grad.addColorStop(0, 'rgba(0,0,0,0.55)');
+                        grad.addColorStop(1, 'rgba(0,0,0,0)');
+                        ctx.fillStyle = grad;
+                        ctx.fillRect(0, 0, canvas.width, 80);
+
+                        const gradBottom = ctx.createLinearGradient(0, canvas.height - 60, 0, canvas.height);
+                        gradBottom.addColorStop(0, 'rgba(0,0,0,0)');
+                        gradBottom.addColorStop(1, 'rgba(0,0,0,0.55)');
+                        ctx.fillStyle = gradBottom;
+                        ctx.fillRect(0, canvas.height - 60, canvas.width, 60);
+
+                        ctx.fillStyle = 'white';
+                        ctx.font = 'bold 26px "Segoe UI"';
+                        ctx.textAlign = 'center';
+                        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                        ctx.shadowBlur = 6;
+                        ctx.fillText(title, canvas.width / 2, 46);
+
+                        ctx.font = '16px "Segoe UI"';
+                        ctx.fillText(new Date().toLocaleDateString(), canvas.width / 2, canvas.height - 24);
+                        ctx.shadowBlur = 0;
+                    }
+                }
+
+                function animate() {
+                    drawFrame();
+                    currentIndex = (currentIndex + 1) % loadedImages.length;
+                    videoAnimationId = setTimeout(() => requestAnimationFrame(animate), 3000);
+                }
+
+                drawFrame();
+                animate();
+
+                return loadedImages;
+            }
+
+            async function generateVideo() {
+                const images = currentVideoImages;
+                const title = $('videoTitleInput').value || 'Our Love Story';
+                if (!images || images.length === 0) {
+                    toast('Pick photos first', 'error');
+                    return;
+                }
+
+                const canvas = $('videoCanvas');
+                const ctx = canvas.getContext('2d');
+                const progressDiv = $('videoProgressBar');
+                const progressFill = $('videoProgressFill');
+                const statusText = $('videoStatus');
+
+                if (videoAnimationId) clearTimeout(videoAnimationId);
+
+                const loadedImages = [];
+                await Promise.all(images.map(src => new Promise((resolve) => {
+                    const img = new Image();
+                    img.crossOrigin = 'Anonymous';
+                    img.onload = () => { loadedImages.push(img); resolve(); };
+                    img.onerror = () => resolve();
+                    img.src = src;
+                })));
+
+                if (loadedImages.length === 0) {
+                    toast('Failed to load images', 'error');
+                    return;
+                }
+
+                progressDiv.style.display = 'block';
+
+                let mimeType = 'video/webm';
+                if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) mimeType = 'video/webm;codecs=vp9';
+                else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) mimeType = 'video/webm;codecs=vp8';
+                else if (MediaRecorder.isTypeSupported('video/mp4')) mimeType = 'video/mp4';
+
+                const stream = canvas.captureStream(30);
+                const recorder = new MediaRecorder(stream, { mimeType });
+                const chunks = [];
+
+                recorder.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
+                recorder.onstop = () => {
+                    const blob = new Blob(chunks, { type: mimeType });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
+                    a.download = `kevine_${title.replace(/[^a-z0-9]/gi, '_')}.${ext}`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    progressDiv.style.display = 'none';
+                    stream.getTracks().forEach(t => t.stop());
+                    toast('Video downloaded 💕', 'success');
+                };
+
+                recorder.start();
+
+                const perImageMs = 3000;
+                const totalDuration = loadedImages.length * perImageMs;
+                let elapsed = 0;
+                let idx = 0;
+
+                function drawAt(i) {
+                    const img = loadedImages[i % loadedImages.length];
+                    if (!img) return;
+                    const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+                    const x = (canvas.width - img.width * scale) / 2;
+                    const y = (canvas.height - img.height * scale) / 2;
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
+                    const grad = ctx.createLinearGradient(0, 0, 0, 80);
+                    grad.addColorStop(0, 'rgba(0,0,0,0.55)');
+                    grad.addColorStop(1, 'rgba(0,0,0,0)');
+                    ctx.fillStyle = grad;
+                    ctx.fillRect(0, 0, canvas.width, 80);
+
+                    ctx.fillStyle = 'white';
+                    ctx.font = 'bold 26px "Segoe UI"';
+                    ctx.textAlign = 'center';
+                    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                    ctx.shadowBlur = 6;
+                    ctx.fillText(title, canvas.width / 2, 46);
+                    ctx.font = '16px "Segoe UI"';
+                    ctx.fillText(new Date().toLocaleDateString(), canvas.width / 2, canvas.height - 24);
+                    ctx.shadowBlur = 0;
+                }
+
+                drawAt(0);
+
+                const interval = setInterval(() => {
+                    elapsed += 100;
+                    const pct = Math.min(100, (elapsed / totalDuration) * 100);
+                    progressFill.style.width = `${pct}%`;
+                    statusText.textContent = `Recording... ${Math.floor(pct)}%`;
+                    // Advance frame every perImageMs
+                    const newIdx = Math.floor(elapsed / perImageMs);
+                    if (newIdx !== idx && newIdx < loadedImages.length) {
+                        idx = newIdx;
+                        drawAt(idx);
+                    }
+                    if (elapsed >= totalDuration) {
+                        clearInterval(interval);
+                        recorder.stop();
+                    }
+                }, 100);
+            }
+
+            // ---------- EXPORT ----------
             function exportMemories() {
                 const data = JSON.stringify(allMemories, null, 2);
                 const blob = new Blob([data], { type: 'application/json' });
@@ -374,377 +1615,87 @@
                 a.download = `kevine_memories_backup_${new Date().toISOString().split('T')[0]}.json`;
                 a.click();
                 URL.revokeObjectURL(url);
-                alert('✅ Memories exported successfully!');
+                toast('Memories exported ✅', 'success');
             }
-            
-            fileInput.addEventListener('change', function(e) {
-                preview.innerHTML = '';
-                Array.from(e.target.files).forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        const img = document.createElement('img');
-                        img.src = event.target.result;
-                        img.className = 'preview-img';
-                        preview.appendChild(img);
-                    };
-                    reader.readAsDataURL(file);
-                });
-            });
-            
-            async function uploadToStorage(file) {
-                const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${file.name.split('.').pop()}`;
-                const filePath = `memories/${fileName}`;
-                const { error } = await supabase.storage.from(BUCKET_NAME).upload(filePath, file);
-                if (error) throw error;
-                const { data: { publicUrl } } = supabase.storage.from(BUCKET_NAME).getPublicUrl(filePath);
-                return publicUrl;
+
+            // ---------- HELPERS ----------
+            function escapeHtml(str) {
+                if (str == null) return '';
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
             }
-            
-            async function addMemory() {
-                const date = memoryDate.value;
-                const title = memoryTitle.value.trim();
-                const note = memoryNote.value.trim();
-                const tags = memoryTags.value.trim();
-                const location = memoryLocation.value.trim();
-                const type = eventType.value;
-                const files = fileInput.files;
-                
-                if (!date) { alert("Please pick a date"); return; }
-                if (!title) { alert("Please give a title"); return; }
-                if (files.length === 0) { alert("Please select photos or videos"); return; }
-                
-                progressBar.style.display = 'block';
-                publishBtn.disabled = true;
-                publishBtn.textContent = 'Uploading...';
-                
-                try {
-                    const mediaUrls = [];
-                    for (let i = 0; i < files.length; i++) {
-                        progressFill.style.width = `${(i / files.length) * 100}%`;
-                        const url = await uploadToStorage(files[i]);
-                        mediaUrls.push(url);
-                    }
-                    
-                    const { error } = await supabase.from('memories').insert({
-                        user_id: 'kevine_couple', date: date, title: title, note: note || 'A beautiful memory',
-                        tags: tags, location: location, event_type: type,
-                        media_urls: JSON.stringify(mediaUrls), created_at: new Date().toISOString()
-                    });
-                    if (error) throw error;
-                    
-                    memoryTitle.value = ''; memoryNote.value = ''; memoryTags.value = ''; memoryLocation.value = '';
-                    fileInput.value = ''; preview.innerHTML = '';
-                    await loadMemories();
-                    
-                    publishBtn.textContent = "Saved! 💙💗";
-                    setTimeout(() => {
-                        publishBtn.textContent = "Add to Our Story";
-                        publishBtn.disabled = false;
-                        progressBar.style.display = 'none';
-                        progressFill.style.width = '0%';
-                    }, 2000);
-                } catch (err) {
-                    alert('Error: ' + err.message);
-                    publishBtn.disabled = false;
-                    publishBtn.textContent = "Add to Our Story";
-                    progressBar.style.display = 'none';
-                }
-            }
-            
-            async function deleteMemory(id, title) {
-                if (confirm(`Remove "${title}"?`)) {
-                    const { error } = await supabase.from('memories').delete().eq('id', id);
-                    if (!error) await loadMemories();
-                    else alert('Error: ' + error.message);
-                }
-            }
-            
-            async function loadMemories() {
-                memoriesGrid.innerHTML = '<div class="loading">Loading your memories...</div>';
-                const { data, error } = await supabase.from('memories').select('*').order('created_at', { ascending: false });
-                if (error) { memoriesGrid.innerHTML = '<div class="loading">Error loading memories</div>'; return; }
-                allMemories = data;
-                renderMemories();
-            }
-            
-            function renderMemories() {
-                let filtered = allMemories;
-                if (currentFilter !== 'all') filtered = filtered.filter(m => m.event_type === currentFilter);
-                if (currentSearch) filtered = filtered.filter(m => 
-                    m.title.toLowerCase().includes(currentSearch) || (m.note && m.note.toLowerCase().includes(currentSearch)) ||
-                    (m.tags && m.tags.toLowerCase().includes(currentSearch)));
-                
-                if (filtered.length === 0) {
-                    memoriesGrid.innerHTML = '<div class="loading">🌸 No memories found... upload your first beautiful moment! 🌸</div>';
-                    return;
-                }
-                
-                let html = '';
-                for (let mem of filtered) {
-                    let mediaArray = JSON.parse(mem.media_urls);
-                    const displayDate = new Date(mem.date).toLocaleDateString();
-                    const tags = mem.tags ? mem.tags.split(',').map(t => t.trim()) : [];
-                    html += `
-                        <div class="memory-card">
-                            <img class="memory-img" src="${mediaArray[0]}" onclick="showImage('${mediaArray[0]}')" onerror="this.src='https://placehold.co/400x300/4a90e2/white?text=❤️'">
-                            <div class="memory-info">
-                                <div class="memory-date">📆 ${displayDate}</div>
-                                <div class="memory-title">✨ ${escapeHtml(mem.title)}</div>
-                                <div class="event-tag">${mem.event_type || 'General'}</div>
-                                ${tags.length ? `<div class="event-tag" style="background:#4a90e2; color:white;">#${tags.join(' #')}</div>` : ''}
-                                ${mem.location ? `<div class="event-tag" style="background:#ff69b4; color:white;">📍 ${escapeHtml(mem.location)}</div>` : ''}
-                                <div class="memory-note">💬 ${escapeHtml(mem.note)}</div>
-                                <div class="btn-group">
-                                    <button class="delete-btn" onclick="deleteMemory('${mem.id}', '${escapeHtml(mem.title)}')">🗑️ Remove</button>
-                                    <button class="video-btn" onclick="openVideoCreatorWithMemory('${mem.id}')">🎬 Create Video</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-                memoriesGrid.innerHTML = html;
-            }
-            
-            // NEW: Open video creator with date range selection
-            window.openVideoCreatorWithMemory = function(memoryId) {
-                const modal = document.getElementById('videoCreatorModal');
-                modal.style.display = 'flex';
-                
-                // Clear previous selections
-                document.getElementById('videoStartDate').value = '';
-                document.getElementById('videoEndDate').value = '';
-                document.getElementById('photoCountDisplay').innerHTML = '';
-                currentVideoImages = [];
-                
-                // Optional: If a specific memory was clicked, suggest its date range
-                if (memoryId) {
-                    const memory = allMemories.find(m => m.id == memoryId);
-                    if (memory) {
-                        document.getElementById('videoStartDate').value = memory.date;
-                        document.getElementById('videoEndDate').value = memory.date;
-                        document.getElementById('videoTitleInput').value = memory.title;
-                    }
-                } else {
-                    document.getElementById('videoTitleInput').value = 'Our Love Story';
-                }
-            };
-            
-            // Auto pick photos from selected date range
-            window.autoPickPhotos = function() {
-                const startDate = document.getElementById('videoStartDate').value;
-                const endDate = document.getElementById('videoEndDate').value;
-                const photoCountDisplay = document.getElementById('photoCountDisplay');
-                
-                if (!startDate || !endDate) {
-                    photoCountDisplay.innerHTML = '⚠️ Please select both start and end dates';
-                    photoCountDisplay.style.color = '#e74c3c';
-                    return;
-                }
-                
-                // Filter memories by date range
-                const filteredMemories = allMemories.filter(mem => {
-                    return mem.date >= startDate && mem.date <= endDate;
-                });
-                
-                // Collect all images from the date range
-                let allImages = [];
-                for (let mem of filteredMemories) {
-                    let mediaArray = JSON.parse(mem.media_urls);
-                    let images = mediaArray.filter(url => !url.match(/\.(mp4|webm|mov)/i));
-                    allImages.push(...images);
-                }
-                
-                if (allImages.length === 0) {
-                    photoCountDisplay.innerHTML = '❌ No photos found in this date range';
-                    photoCountDisplay.style.color = '#e74c3c';
-                    currentVideoImages = [];
-                    return;
-                }
-                
-                currentVideoImages = allImages;
-                photoCountDisplay.innerHTML = `✅ Found ${allImages.length} photos from ${startDate} to ${endDate}! Click Preview to see them.`;
-                photoCountDisplay.style.color = '#27ae60';
-                
-                // Auto-set video title
-                const title = document.getElementById('videoTitleInput').value;
-                if (title === 'Our Love Story') {
-                    document.getElementById('videoTitleInput').value = `Our Memories ${startDate} to ${endDate}`;
-                }
-            };
-            
-            // Open video creator with selected images
-            async function openVideoCreator(images, title) {
-                const canvas = document.getElementById('videoCanvas');
-                const ctx = canvas.getContext('2d');
-                
-                if (!images || images.length === 0) {
-                    alert('No images selected! Use date range and click "Auto Pick Photos" first.');
-                    return;
-                }
-                
-                let loadedImages = [];
-                let currentIndex = 0;
-                
-                const progressDiv = document.getElementById('videoProgressBar');
-                progressDiv.style.display = 'none';
-                
-                // Load all images
-                await Promise.all(images.map(src => {
-                    return new Promise((resolve) => {
-                        const img = new Image();
-                        img.crossOrigin = 'Anonymous';
-                        img.onload = () => { loadedImages.push(img); resolve(); };
-                        img.onerror = () => resolve();
-                        img.src = src;
-                    });
-                }));
-                
-                if (loadedImages.length === 0) {
-                    alert('Failed to load images');
-                    return;
-                }
-                
-                function drawFrame() {
-                    const img = loadedImages[currentIndex % loadedImages.length];
-                    if (img) {
-                        const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
-                        const x = (canvas.width - img.width * scale) / 2;
-                        const y = (canvas.height - img.height * scale) / 2;
-                        ctx.fillStyle = '#4a90e2';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-                        ctx.fillStyle = 'white';
-                        ctx.font = 'bold 24px "Segoe UI"';
-                        ctx.textAlign = 'center';
-                        ctx.fillText(title || 'Our Love Story', canvas.width / 2, 50);
-                        ctx.font = '16px "Segoe UI"';
-                        ctx.fillText(new Date().toLocaleDateString(), canvas.width / 2, canvas.height - 30);
-                    }
-                }
-                
-                function animate() {
-                    drawFrame();
-                    currentIndex = (currentIndex + 1) % loadedImages.length;
-                    videoAnimationId = setTimeout(() => requestAnimationFrame(animate), 3000);
-                }
-                
-                // Preview button
-                const previewBtn = document.getElementById('previewVideoBtn');
-                previewBtn.onclick = () => {
-                    if (videoAnimationId) clearTimeout(videoAnimationId);
-                    currentIndex = 0;
-                    animate();
-                };
-                
-                // Generate button
-                const generateBtn = document.getElementById('generateVideoBtn');
-                generateBtn.onclick = async () => {
-                    const videoTitle = document.getElementById('videoTitleInput').value || 'Our Love Story';
-                    const progressFill = document.getElementById('videoProgressFill');
-                    const statusText = document.getElementById('videoStatus');
-                    
-                    if (videoAnimationId) clearTimeout(videoAnimationId);
-                    currentIndex = 0;
-                    drawFrame();
-                    
-                    progressDiv.style.display = 'block';
-                    const stream = canvas.captureStream(30);
-                    const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-                    const chunks = [];
-                    
-                    recorder.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
-                    recorder.onstop = () => {
-                        const blob = new Blob(chunks, { type: 'video/webm' });
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = `kevine_${videoTitle.replace(/[^a-z0-9]/gi, '_')}.webm`;
-                        a.click();
-                        URL.revokeObjectURL(url);
-                        progressDiv.style.display = 'none';
-                        stream.getTracks().forEach(t => t.stop());
-                    };
-                    
-                    recorder.start();
-                    const totalDuration = loadedImages.length * 3000;
-                    let elapsed = 0;
-                    const interval = setInterval(() => {
-                        elapsed += 100;
-                        progressFill.style.width = `${(elapsed / totalDuration) * 100}%`;
-                        statusText.textContent = `Recording... ${Math.floor((elapsed / totalDuration) * 100)}%`;
-                        if (elapsed >= totalDuration) {
-                            clearInterval(interval);
-                            recorder.stop();
-                        }
-                    }, 100);
-                };
-                
-                // Start preview automatically
-                animate();
-            }
-            
-            // Button handlers for video creator
-            document.getElementById('autoPickPhotosBtn').onclick = () => {
-                autoPickPhotos();
-                if (currentVideoImages.length > 0) {
-                    const title = document.getElementById('videoTitleInput').value;
-                    openVideoCreator(currentVideoImages, title);
-                }
-            };
-            
-            // Also allow manual preview with current images
-            const oldPreviewHandler = document.getElementById('previewVideoBtn').onclick;
-            
+
             function setFilter(filter) {
                 currentFilter = filter;
                 renderMemories();
                 document.querySelectorAll('.filter-btn').forEach(btn => {
-                    if (btn.getAttribute('data-filter') === filter) btn.classList.add('active');
-                    else btn.classList.remove('active');
+                    btn.classList.toggle('active', btn.getAttribute('data-filter') === filter);
                 });
             }
-            
-            searchInput.addEventListener('input', (e) => {
-                currentSearch = e.target.value.toLowerCase();
-                renderMemories();
-            });
-            
-            window.showImage = function(src) {
-                document.getElementById('modalImage').src = src;
-                document.getElementById('mediaModal').style.display = 'flex';
-            };
-            
-            function escapeHtml(str) {
-                if (!str) return '';
-                return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+
+            // ---------- STORY DASHBOARD ----------
+            function updateStoryDashboard() {
+                const memoryCount = allMemories.length;
+                let mediaCount = 0;
+                const places = new Set();
+                allMemories.forEach(m => {
+                    try { mediaCount += JSON.parse(m.media_urls || '[]').length; } catch {}
+                    if (m.location && m.location.trim()) places.add(m.location.trim().toLowerCase());
+                });
+                const days = Math.max(0, Math.floor((new Date() - START_DATE) / 86400000));
+                $('statMemories').textContent = memoryCount;
+                $('statDays').textContent = days;
+                $('statMedia').textContent = mediaCount;
+                $('statPlaces').textContent = places.size;
+                const visibleCount = document.querySelectorAll('.memory-card').length;
+                $('resultCount').textContent = `${visibleCount} ${visibleCount === 1 ? 'memory' : 'memories'}`;
+                const recent = [...allMemories].sort((a,b) => new Date(b.date || b.created_at) - new Date(a.date || a.created_at)).slice(0,4);
+                $('recentList').innerHTML = recent.length ? recent.map(m => `
+                    <div class="side-item"><span>💗</span><div><b>${escapeHtml(m.title || 'Untitled memory')}</b><small>${m.date ? new Date(m.date).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}) : ''}</small></div></div>`).join('') : '<div class="side-item"><span>🌸</span><div><b>Your story starts here</b><small>Add your first memory</small></div></div>';
             }
-            
-            // Event listeners
-            loginBtn.onclick = login;
+
+            // ---------- EVENT WIRING ----------
             logoutBtn.onclick = logout;
             publishBtn.onclick = addMemory;
             exportBtn.onclick = exportMemories;
-            passwordInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') login(); });
-            
+            searchInput.addEventListener('input', (e) => {
+                currentSearch = e.target.value.toLowerCase().trim();
+                renderMemories();
+            });
             document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.onclick = () => setFilter(btn.getAttribute('data-filter'));
+                btn.addEventListener('click', () => setFilter(btn.getAttribute('data-filter')));
             });
-            
-            const closeModalButtons = document.querySelectorAll('.close-modal');
-            closeModalButtons.forEach(el => {
-                el.onclick = () => {
-                    document.getElementById('mediaModal').style.display = 'none';
-                    document.getElementById('videoCreatorModal').style.display = 'none';
-                    if (videoAnimationId) clearTimeout(videoAnimationId);
-                };
-            });
-            
-            document.getElementById('closeVideoCreatorBtn').onclick = () => {
-                document.getElementById('videoCreatorModal').style.display = 'none';
-                if (videoAnimationId) clearTimeout(videoAnimationId);
+
+            $('autoPickPhotosBtn').onclick = () => {
+                autoPickPhotos();
+                if (currentVideoImages.length > 0) {
+                    startVideoPreview();
+                }
             };
-            
-            window.deleteMemory = deleteMemory;
+            $('previewVideoBtn').onclick = () => startVideoPreview();
+            $('generateVideoBtn').onclick = generateVideo;
+            $('closeVideoModal').onclick = closeVideoCreator;
+            $('closeVideoCreatorBtn').onclick = closeVideoCreator;
+
+            function closeVideoCreator() {
+                $('videoCreatorModal').classList.remove('active');
+                if (videoAnimationId) {
+                    clearTimeout(videoAnimationId);
+                    videoAnimationId = null;
+                }
+            }
+
+            $('jumpUploadBtn').onclick = () => { uploadCard.classList.remove('collapsed'); uploadCard.scrollIntoView({behavior:'smooth', block:'start'}); };
+            $('jumpTopBtn').onclick = () => window.scrollTo({top:0, behavior:'smooth'});
+            const scrollTopBtn = $('scrollTopBtn');
+            window.addEventListener('scroll', () => scrollTopBtn.classList.toggle('show', window.scrollY > 500), {passive:true});
+            scrollTopBtn.onclick = () => window.scrollTo({top:0,behavior:'smooth'});
+            window.addEventListener('resize', () => { /* reserved */ });
         })();
     </script>
 </body>
