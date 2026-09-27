@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kevine · Kevin & Celine's Love Story</title>
+    <title>KEVLINE · Kevin & Celine's Love Story</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -693,7 +693,7 @@
             .video-creator-content { padding: 1.25rem; border-radius: 1.5rem; }
         }
     
-/* ===== KEVINE V2 ENHANCEMENTS ===== */
+/* ===== KEVLINE V2 ENHANCEMENTS ===== */
 body{padding:0;background:#faf8fb;color:#24212a;overflow-x:hidden}
 body.app-active{overflow-y:auto!important;overflow-x:hidden!important;height:auto!important;min-height:100vh!important;overscroll-behavior:auto}
 html{min-height:100%;height:auto;overflow-x:hidden;overflow-y:scroll}
@@ -747,6 +747,20 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
 @media(max-width:900px){.content-shell{grid-template-columns:1fr}.side-card{position:static}.story-stats{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.container{padding:0 .8rem}.header{padding-top:1.5rem}.header-actions{align-self:flex-start}.header h1{font-size:2rem}.story-stats{gap:.55rem}.stat-card{padding:.8rem}.stat-value{font-size:1.25rem}.memories-panel{padding:.7rem}.memories-grid{grid-template-columns:1fr}.memory-media{height:230px}.anniversary-banner{padding:1.2rem}.login-box{margin:2rem auto}}
 
+
+/* KEVLINE STORY EXPERIENCE */
+.story-nav{display:flex;gap:.55rem;overflow-x:auto;padding:.35rem 0 1rem;scrollbar-width:none;position:sticky;top:0;z-index:20;background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.82));backdrop-filter:blur(12px)}
+.story-nav::-webkit-scrollbar{display:none}.story-nav button{flex:0 0 auto;border:1px solid rgba(255,105,180,.18);background:#fff;border-radius:999px;padding:.65rem .95rem;font-weight:700;color:var(--muted);cursor:pointer;box-shadow:0 4px 16px rgba(50,50,90,.06);transition:.2s}.story-nav button:hover,.story-nav button.active{background:var(--grad);color:#fff;transform:translateY(-1px)}
+.story-hero{margin:0 0 1.25rem;padding:1.6rem;border-radius:24px;background:linear-gradient(135deg,rgba(74,144,226,.12),rgba(255,105,180,.15));border:1px solid rgba(255,255,255,.8);box-shadow:0 16px 40px rgba(50,50,90,.08)}
+.story-hero .eyebrow{text-transform:uppercase;letter-spacing:.16em;font-size:.72rem;font-weight:800;color:var(--pink);margin-bottom:.45rem}.story-hero h2{font-size:clamp(1.5rem,4vw,2.3rem);margin-bottom:.45rem}.story-hero p{color:var(--muted);line-height:1.65}.story-hero .hero-date{margin-top:.8rem;font-weight:700;color:#4a5b72}
+.story-hub{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.25rem}.hub-card{padding:1.15rem;border-radius:20px;background:#fff;border:1px solid #f0e1e8;box-shadow:0 10px 28px rgba(50,50,90,.06)}.hub-icon{font-size:1.7rem}.hub-card h3{margin:.45rem 0 .3rem}.hub-card p{color:var(--muted);font-size:.88rem;line-height:1.5}.hub-value{font-size:1.25rem;font-weight:800;margin-top:.5rem}
+.story-section{margin:0 0 1.5rem;scroll-margin-top:75px}.story-section-head{display:flex;justify-content:space-between;align-items:end;gap:1rem;margin-bottom:.8rem}.story-section-head h2{margin:0}.story-section-head span{font-size:.82rem;color:var(--muted)}
+.timeline{position:relative;padding-left:1.5rem}.timeline:before{content:'';position:absolute;left:.43rem;top:.3rem;bottom:.3rem;width:2px;background:linear-gradient(var(--blue),var(--pink))}.timeline-item{position:relative;margin-bottom:1rem;padding:1rem 1.05rem;border-radius:18px;background:#fff;border:1px solid #f0e1e8;box-shadow:0 8px 22px rgba(50,50,90,.05)}.timeline-item:before{content:'♥';position:absolute;left:-1.55rem;top:1rem;width:1rem;height:1rem;color:var(--pink);font-size:.8rem}.timeline-date{font-size:.75rem;font-weight:800;color:var(--pink);text-transform:uppercase;letter-spacing:.06em}.timeline-item h3{margin:.25rem 0}.timeline-item p{color:var(--muted);font-size:.9rem;line-height:1.5}.timeline-meta{margin-top:.5rem;font-size:.78rem;color:#607080}
+.places-grid{display:flex;flex-wrap:wrap;gap:.65rem}.place-chip{padding:.7rem .9rem;border-radius:14px;background:linear-gradient(135deg,#fff,#fff3f8);border:1px solid #f3d7e5;font-weight:700}.empty-soft{padding:1.25rem;border-radius:18px;background:#fff;border:1px dashed #e5ccd8;color:var(--muted);text-align:center}
+.letters-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}.letter-card{padding:1.1rem;border-radius:20px;background:#fff;border:1px solid #f0e1e8;box-shadow:0 8px 22px rgba(50,50,90,.05)}.letter-card h3{margin-bottom:.6rem}.letter-card textarea{width:100%;min-height:130px;resize:vertical;border:1px solid #ead7df;border-radius:14px;padding:.8rem;font:inherit;outline:none}.letter-card textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,105,180,.1)}.letter-save{margin-top:.55rem;border:0;border-radius:12px;padding:.65rem .9rem;background:var(--grad);color:#fff;font-weight:800;cursor:pointer}
+.future-list{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem}.future-item{display:flex;align-items:center;gap:.7rem;padding:.9rem 1rem;background:#fff;border:1px solid #f0e1e8;border-radius:16px}.future-item input{width:18px;height:18px;accent-color:var(--pink)}.future-item.done span{text-decoration:line-through;opacity:.55}
+@media(max-width:760px){.story-hub,.letters-grid,.future-list{grid-template-columns:1fr}.story-hero{padding:1.2rem}.story-nav{margin-left:-.2rem;margin-right:-.2rem}}
+
     </style>
 </head>
 <body class="login-screen">
@@ -759,7 +773,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
             <div class="heart-field" aria-hidden="true"><span>♥</span><span>♡</span><span>♥</span><span>♡</span><span>♥</span></div>
             <div id="loginBox" class="login-box">
                 <div class="login-lock">🔐</div>
-                <h1>KEVINE</h1>
+                <h1>KEVLINE</h1>
                 <div class="login-names">Kevin <span class="heart">♡</span> Celine</div>
                 <div class="login-sub">Our little corner of the world</div>
                 <div class="since-pill">💗 Together since March 15, 2026</div>
@@ -784,7 +798,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
         <div id="mainApp" class="main-app">
             <div class="header">
                 <button id="logoutBtn" class="logout-btn">🔒 Exit</button>
-                <h1>💙 KEVINE 💗</h1>
+                <h1>💙 KEVLINE 💗</h1>
                 <p>Kevin 🤝 Celine — our journey, our memories</p>
             </div>
 
@@ -800,6 +814,57 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
                 <div class="stat-card"><div class="stat-icon">🎬</div><div class="stat-value" id="statMedia">0</div><div class="stat-label">Photos & videos</div></div>
                 <div class="stat-card"><div class="stat-icon">📍</div><div class="stat-value" id="statPlaces">0</div><div class="stat-label">Places remembered</div></div>
             </div>
+
+
+            <nav class="story-nav" aria-label="Our story navigation">
+                <button class="active" data-story-target="storyHome">🏠 Our Story</button>
+                <button data-story-target="memoriesSection">📸 Memories</button>
+                <button data-story-target="timelineSection">📖 Timeline</button>
+                <button data-story-target="placesSection">📍 Places</button>
+                <button data-story-target="lettersSection">💌 Letters</button>
+                <button data-story-target="futureSection">🌱 Our Future</button>
+            </nav>
+
+            <section id="storyHome" class="story-hero story-section">
+                <div class="eyebrow">OUR LITTLE CORNER OF THE WORLD</div>
+                <h2>Kevin ♡ Celine</h2>
+                <p>Every photo, every place, every ordinary day and every beautiful moment belongs to one story — ours.</p>
+                <div class="hero-date">💗 Together since March 15, 2026</div>
+            </section>
+
+            <div class="story-hub">
+                <div class="hub-card"><div class="hub-icon">✨</div><h3>On This Day</h3><p id="onThisDayText">Looking through your story...</p><div class="hub-value" id="onThisDayValue">♡</div></div>
+                <div class="hub-card"><div class="hub-icon">📍</div><h3>Our Places</h3><p>The places that became part of your story.</p><div class="hub-value" id="hubPlaces">0 places</div></div>
+                <div class="hub-card"><div class="hub-icon">💌</div><h3>Little Things</h3><p>Keep words here that you never want to lose.</p><div class="hub-value">Always us ♡</div></div>
+            </div>
+
+            <section id="timelineSection" class="story-section">
+                <div class="story-section-head"><h2>📖 Our Timeline</h2><span id="timelineCount">0 moments</span></div>
+                <div id="timelineList" class="timeline"><div class="empty-soft">Your timeline will grow with every memory you add. 💗</div></div>
+            </section>
+
+            <section id="placesSection" class="story-section">
+                <div class="story-section-head"><h2>📍 Places We've Been</h2><span id="placesCount">0 places</span></div>
+                <div id="placesGrid" class="places-grid"><div class="empty-soft" style="width:100%">Add a location to a memory and it will appear here.</div></div>
+            </section>
+
+            <section id="lettersSection" class="story-section">
+                <div class="story-section-head"><h2>💌 Love Letters</h2><span>Saved privately in this browser</span></div>
+                <div class="letters-grid">
+                    <div class="letter-card"><h3>💗 A letter for Celine</h3><textarea id="letterCeline" placeholder="Write something you want Celine to keep forever..."></textarea><button class="letter-save" data-letter="Celine">Save letter</button></div>
+                    <div class="letter-card"><h3>💙 A letter for Kevin</h3><textarea id="letterKevin" placeholder="Write something you want Kevin to keep forever..."></textarea><button class="letter-save" data-letter="Kevin">Save letter</button></div>
+                </div>
+            </section>
+
+            <section id="futureSection" class="story-section">
+                <div class="story-section-head"><h2>🌱 Our Future</h2><span>Little plans, big memories</span></div>
+                <div class="future-list" id="futureList">
+                    <label class="future-item"><input type="checkbox" data-future="Take a road trip together"><span>🚗 Take a road trip together</span></label>
+                    <label class="future-item"><input type="checkbox" data-future="Watch a sunrise together"><span>🌅 Watch a sunrise together</span></label>
+                    <label class="future-item"><input type="checkbox" data-future="Have a special dinner date"><span>🍽️ Have a special dinner date</span></label>
+                    <label class="future-item"><input type="checkbox" data-future="Create our next love story video"><span>🎬 Create our next love story video</span></label>
+                </div>
+            </section>
 
             <!-- Upload card (collapsible) -->
             <div class="upload-card collapsed" id="uploadCard">
@@ -876,7 +941,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
             </div>
 
             <div class="content-shell">
-                <section class="memories-panel">
+                <section id="memoriesSection" class="memories-panel story-section">
                     <div class="section-head"><h2>💞 Our memories</h2><span id="resultCount">0 memories</span></div>
                     <div id="memoriesGrid" class="memories-grid">
                 <div class="loading"><div class="spinner"></div><div>Loading your memories... 💙💗</div></div>
@@ -1261,6 +1326,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
                 allMemories = data || [];
                 renderMemories();
                 updateStoryDashboard();
+                renderStoryExtras();
             }
 
             function renderMemories() {
@@ -1620,7 +1686,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
                     const a = document.createElement('a');
                     a.href = url;
                     const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
-                    a.download = `kevine_${title.replace(/[^a-z0-9]/gi, '_')}.${ext}`;
+                    a.download = `kevline_${title.replace(/[^a-z0-9]/gi, '_')}.${ext}`;
                     a.click();
                     URL.revokeObjectURL(url);
                     progressDiv.style.display = 'none';
@@ -1689,7 +1755,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `kevine_memories_backup_${new Date().toISOString().split('T')[0]}.json`;
+                a.download = `kevline_memories_backup_${new Date().toISOString().split('T')[0]}.json`;
                 a.click();
                 URL.revokeObjectURL(url);
                 toast('Memories exported ✅', 'success');
@@ -1735,6 +1801,44 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background:rad
                 $('recentList').innerHTML = recent.length ? recent.map(m => `
                     <div class="side-item"><span>💗</span><div><b>${escapeHtml(m.title || 'Untitled memory')}</b><small>${m.date ? new Date(m.date).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}) : ''}</small></div></div>`).join('') : '<div class="side-item"><span>🌸</span><div><b>Your story starts here</b><small>Add your first memory</small></div></div>';
             }
+
+
+            // ---------- KEVLINE STORY EXPERIENCE ----------
+            function renderStoryExtras() {
+                const sorted = [...allMemories].sort((a,b) => new Date(a.date || a.created_at) - new Date(b.date || b.created_at));
+                const timeline = $('timelineList');
+                $('timelineCount').textContent = `${sorted.length} ${sorted.length === 1 ? 'moment' : 'moments'}`;
+                if (!sorted.length) {
+                    timeline.innerHTML = '<div class="empty-soft">Your timeline will grow with every memory you add. 💗</div>';
+                } else {
+                    timeline.innerHTML = sorted.map(m => {
+                        const d = m.date ? new Date(m.date).toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'}) : '';
+                        const media = (() => { try { return JSON.parse(m.media_urls || '[]').length; } catch { return 0; } })();
+                        return `<article class="timeline-item"><div class="timeline-date">${escapeHtml(d)}</div><h3>${escapeHtml(m.title || 'Untitled memory')}</h3><p>${escapeHtml(m.note || '')}</p><div class="timeline-meta">${m.location ? '📍 '+escapeHtml(m.location)+' · ' : ''}📸 ${media} ${media === 1 ? 'item' : 'items'}</div></article>`;
+                    }).join('');
+                }
+                const placeMap = new Map();
+                allMemories.forEach(m => { const p=(m.location||'').trim(); if(p) placeMap.set(p.toLowerCase(),p); });
+                const places = [...placeMap.values()].sort((a,b)=>a.localeCompare(b));
+                $('placesCount').textContent = `${places.length} ${places.length === 1 ? 'place' : 'places'}`;
+                $('hubPlaces').textContent = `${places.length} ${places.length === 1 ? 'place' : 'places'}`;
+                $('placesGrid').innerHTML = places.length ? places.map(p=>`<div class="place-chip">📍 ${escapeHtml(p)}</div>`).join('') : '<div class="empty-soft" style="width:100%">Add a location to a memory and it will appear here.</div>';
+                const today = new Date();
+                const md = `${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+                const match = allMemories.filter(m => (m.date||'').slice(5,10) === md).sort((a,b)=>new Date(b.date)-new Date(a.date));
+                if(match.length){ $('onThisDayText').textContent = `${match.length} memory ${match.length===1?'from':'s from'} this date in your story.`; $('onThisDayValue').textContent = match[0].title || 'A beautiful moment'; }
+                else { $('onThisDayText').textContent = 'No memory from this date yet. Maybe today becomes one.'; $('onThisDayValue').textContent = 'Create a memory ♡'; }
+            }
+
+            document.querySelectorAll('[data-story-target]').forEach(btn => btn.addEventListener('click', () => {
+                document.querySelectorAll('[data-story-target]').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+                const target=$(btn.dataset.storyTarget); if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+            }));
+            document.querySelectorAll('.letter-save').forEach(btn => btn.addEventListener('click', () => {
+                const person=btn.dataset.letter; const el=$('letter'+person); localStorage.setItem('kevline_letter_'+person,el.value); toast('Letter saved privately 💌','success');
+            }));
+            ['Celine','Kevin'].forEach(person => { const el=$('letter'+person); const saved=localStorage.getItem('kevline_letter_'+person); if(saved) el.value=saved; });
+            document.querySelectorAll('[data-future]').forEach(box => { const key='kevline_future_'+box.dataset.future; box.checked=localStorage.getItem(key)==='true'; box.closest('.future-item').classList.toggle('done',box.checked); box.addEventListener('change',()=>{localStorage.setItem(key,box.checked);box.closest('.future-item').classList.toggle('done',box.checked);}); });
 
             // ---------- EVENT WIRING ----------
             logoutBtn.onclick = logout;
